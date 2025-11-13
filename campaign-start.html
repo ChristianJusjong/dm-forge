@@ -26,14 +26,6 @@
       text-shadow: 0 0 20px rgba(212, 175, 55, 0.8), 3px 3px 6px rgba(0, 0, 0, 0.9);
     }
 
-    .campaign-options {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 2rem;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
     .campaign-option-card {
       background: linear-gradient(135deg, rgba(26, 15, 10, 0.95) 0%, rgba(13, 8, 6, 0.95) 100%);
       border: 3px solid rgba(212, 175, 55, 0.6);
@@ -158,27 +150,24 @@
         </p>
       </div>
 
-      <div class="campaign-options">
-        <!-- New Campaign -->
+      <!-- New Campaign Card -->
+      <div style="max-width: 600px; margin: 0 auto 3rem auto;">
         <div class="campaign-option-card" onclick="showNewCampaignModal()">
           <div class="campaign-option-icon">🎲</div>
           <h2 data-i18n="newCampaign">New Campaign</h2>
           <p data-i18n="newCampaignDesc">Start a fresh adventure. Create your party, manage encounters, and forge your legend.</p>
           <button class="btn btn-primary" data-i18n="startNew">Start New Campaign</button>
         </div>
-
-        <!-- Enter Campaign Code (Fallback) -->
-        <div class="campaign-option-card" onclick="showLoadCampaignModal()">
-          <div class="campaign-option-icon">🔑</div>
-          <h2>Enter Campaign Code</h2>
-          <p>Have a campaign code from another device or player? Enter it here to join.</p>
-          <button class="btn btn-secondary">Enter Code</button>
-        </div>
       </div>
 
       <!-- Recent Campaigns -->
-      <div id="recent-campaigns" class="card" style="max-width: 1200px; margin: 3rem auto; display: none;">
-        <h2 style="color: #d4af37; margin-bottom: 1.5rem;">📚 Your Recent Campaigns</h2>
+      <div id="recent-campaigns" class="card" style="max-width: 1200px; margin: 0 auto 3rem auto; display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+          <h2 style="color: #d4af37; margin: 0;">📚 Your Campaigns</h2>
+          <button onclick="showLoadCampaignModal()" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+            🔑 Enter Code
+          </button>
+        </div>
         <div id="recent-campaigns-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem;"></div>
       </div>
     </main>
