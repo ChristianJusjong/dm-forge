@@ -61,6 +61,82 @@
           </div>
         </div>
 
+        <!-- AI Settings -->
+        <div class="card" style="margin-bottom: 2rem;">
+          <h3 style="color: #d4af37; margin-bottom: 1.5rem;">🤖 AI Settings</h3>
+          <p style="color: #e8d5b7; line-height: 1.8; margin-bottom: 1.5rem;">
+            Configure AI features like NPC generation, content creation, and translation.
+          </p>
+
+          <!-- Groq API Key -->
+          <div class="input-group" style="margin-bottom: 1.5rem;">
+            <label class="input-label">Groq API Key</label>
+            <div style="display: flex; gap: 0.5rem; align-items: flex-start; flex-wrap: wrap;">
+              <input
+                id="groq-api-key"
+                type="password"
+                placeholder="Enter your Groq API key"
+                class="input"
+                style="flex: 1; min-width: 250px;"
+              >
+              <button onclick="toggleApiKeyVisibility()" class="btn" style="padding: 0.75rem 1rem;">
+                👁️ Show
+              </button>
+              <button onclick="saveApiKey()" class="btn btn-primary" style="padding: 0.75rem 1.5rem;">
+                💾 Save
+              </button>
+            </div>
+            <div id="api-key-status" style="margin-top: 0.5rem; font-size: 0.9rem;"></div>
+          </div>
+
+          <!-- Setup Guide -->
+          <details style="background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+            <summary style="color: #d4af37; cursor: pointer; font-weight: 600; margin-bottom: 0.5rem;">
+              📖 How to get a Groq API Key (Free)
+            </summary>
+            <div style="color: #e8d5b7; line-height: 1.8; padding-top: 1rem;">
+              <ol style="margin-left: 1.5rem;">
+                <li style="margin-bottom: 1rem;">
+                  <strong>Visit Groq Console:</strong> Go to
+                  <a href="https://console.groq.com" target="_blank" rel="noopener" style="color: #f0d06b; text-decoration: underline;">
+                    console.groq.com
+                  </a>
+                </li>
+                <li style="margin-bottom: 1rem;">
+                  <strong>Create Account:</strong> Sign up with Google, GitHub, or email (it's free!)
+                </li>
+                <li style="margin-bottom: 1rem;">
+                  <strong>Generate API Key:</strong> Click on "API Keys" in the sidebar, then "Create API Key"
+                </li>
+                <li style="margin-bottom: 1rem;">
+                  <strong>Copy & Paste:</strong> Copy your new API key and paste it in the field above
+                </li>
+                <li style="margin-bottom: 0.5rem;">
+                  <strong>Save:</strong> Click the "Save" button to store your key securely in your campaign
+                </li>
+              </ol>
+              <div style="background: rgba(139, 0, 0, 0.2); border: 1px solid rgba(139, 0, 0, 0.5); border-radius: 6px; padding: 1rem; margin-top: 1rem;">
+                <strong style="color: #ff6b6b;">🔒 Security Note:</strong>
+                <p style="color: #e8d5b7; margin-top: 0.5rem; font-size: 0.9rem;">
+                  Your API key is stored locally in your browser only. Never share your API key with anyone.
+                  Groq offers generous free tier limits for personal use.
+                </p>
+              </div>
+            </div>
+          </details>
+
+          <!-- Features List -->
+          <div style="background: rgba(212, 175, 55, 0.05); border-radius: 8px; padding: 1rem;">
+            <p style="color: #b8956a; font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>AI Features:</strong></p>
+            <ul style="color: #e8d5b7; font-size: 0.9rem; line-height: 1.8; margin-left: 1.5rem;">
+              <li>Generate detailed NPCs with personalities and backstories</li>
+              <li>Create encounter descriptions and scenarios</li>
+              <li>Translate content to multiple languages</li>
+              <li>Generate campaign ideas and plot hooks</li>
+            </ul>
+          </div>
+        </div>
+
         <!-- Backup & Export -->
         <div class="card" style="margin-bottom: 2rem;">
           <h3 style="color: #d4af37; margin-bottom: 1.5rem;">💾 Backup & Export</h3>
@@ -236,7 +312,97 @@
         // User will be redirected to login
         throw new Error('Authentication required');
       }
+
+      // Load saved API key
+      loadApiKey();
     });
+
+    // ========================================
+    // API KEY MANAGEMENT
+    // ========================================
+
+    // Save API key to campaign settings
+    function saveApiKey() {
+      const apiKeyInput = document.getElementById('groq-api-key');
+      const statusDiv = document.getElementById('api-key-status');
+      const apiKey = apiKeyInput.value.trim();
+
+      if (!apiKey) {
+        statusDiv.innerHTML = '<span style="color: #ff6b6b;">⚠️ Please enter an API key</span>';
+        return;
+      }
+
+      // Validate API key format (basic check)
+      if (!apiKey.startsWith('gsk_')) {
+        statusDiv.innerHTML = '<span style="color: #ff9800;">⚠️ Warning: Groq API keys usually start with "gsk_"</span>';
+        // Don't return - let them save anyway in case format changed
+      }
+
+      // Get active campaign
+      const campaign = getActiveCampaign();
+      if (!campaign) {
+        statusDiv.innerHTML = '<span style="color: #ff6b6b;">⚠️ No active campaign found</span>';
+        return;
+      }
+
+      // Initialize apiKeys object if it doesn't exist
+      if (!campaign.settings) {
+        campaign.settings = {};
+      }
+      if (!campaign.settings.apiKeys) {
+        campaign.settings.apiKeys = {};
+      }
+
+      // Save API key
+      campaign.settings.apiKeys.groq = apiKey;
+      saveCampaign();
+
+      statusDiv.innerHTML = '<span style="color: #4caf50;">✓ API key saved successfully!</span>';
+
+      // Clear status after 3 seconds
+      setTimeout(() => {
+        statusDiv.innerHTML = '';
+      }, 3000);
+    }
+
+    // Load API key from campaign settings
+    function loadApiKey() {
+      const campaign = getActiveCampaign();
+      if (!campaign || !campaign.settings || !campaign.settings.apiKeys) {
+        return;
+      }
+
+      const apiKeyInput = document.getElementById('groq-api-key');
+      if (campaign.settings.apiKeys.groq) {
+        apiKeyInput.value = campaign.settings.apiKeys.groq;
+      }
+    }
+
+    // Toggle API key visibility
+    function toggleApiKeyVisibility() {
+      const apiKeyInput = document.getElementById('groq-api-key');
+      const btn = event.target;
+
+      if (apiKeyInput.type === 'password') {
+        apiKeyInput.type = 'text';
+        btn.textContent = '🙈 Hide';
+      } else {
+        apiKeyInput.type = 'password';
+        btn.textContent = '👁️ Show';
+      }
+    }
+
+    // Get Groq API key from campaign settings
+    function getGroqApiKey() {
+      const campaign = getActiveCampaign();
+      if (campaign && campaign.settings && campaign.settings.apiKeys && campaign.settings.apiKeys.groq) {
+        return campaign.settings.apiKeys.groq;
+      }
+      return null;
+    }
+
+    // Export to window for use in other files
+    window.getGroqApiKey = getGroqApiKey;
 
     // ========================================
     // PARTY SETUP

@@ -14,14 +14,53 @@ function t(key) {
   return translations[currentLanguage]?.[key] || key;
 }
 
-// Groq Translation function - DISABLED for security
-// Returns original text without translation
+// Groq Translation function - Uses user-provided API key
 async function translateWithGroq(text, targetLang = null) {
-  // Translation feature disabled - API key was exposed in client-side code
-  // This is a security vulnerability that has been fixed
-  // To re-enable: implement backend proxy server for API calls
-  console.warn('Translation feature disabled - API key removed for security');
-  return text;
+  // Get API key from campaign settings
+  const apiKey = typeof window.getGroqApiKey === 'function' ? window.getGroqApiKey() : null;
+
+  if (!apiKey) {
+    console.warn('Translation feature disabled - No Groq API key configured. Add your API key in Configuration > AI Settings');
+    return text; // Return original text if no API key
+  }
+
+  try {
+    const lang = targetLang || currentLanguage;
+
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: 'llama-3.1-70b-versatile',
+        messages: [
+          {
+            role: 'system',
+            content: `You are a translator. Translate the following text to ${lang}. Only return the translated text, nothing else.`
+          },
+          {
+            role: 'user',
+            content: text
+          }
+        ],
+        temperature: 0.3,
+        max_tokens: 500
+      })
+    });
+
+    if (!response.ok) {
+      console.error('Translation API error:', response.status);
+      return text;
+    }
+
+    const data = await response.json();
+    return data.choices[0].message.content.trim();
+  } catch (error) {
+    console.error('Translation error:', error);
+    return text; // Return original text on error
+  }
 }
 
 // Get current language
@@ -257,10 +296,11 @@ function updateNavCampaignInfo() {
   }
 }
 
-// Export translation function to window for use in inline scripts
+// Export translation functions to window for use in inline scripts
 window.t = t;
 window.getCurrentLanguage = getCurrentLanguage;
 window.updateTranslations = updateTranslations;
+window.translateWithGroq = translateWithGroq;
 
 // Call this after DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeNav);
