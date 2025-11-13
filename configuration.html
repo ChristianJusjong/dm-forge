@@ -327,6 +327,8 @@
       const statusDiv = document.getElementById('api-key-status');
       const apiKey = apiKeyInput.value.trim();
 
+      console.log('saveApiKey called with key:', apiKey ? 'key present' : 'no key');
+
       if (!apiKey) {
         statusDiv.innerHTML = '<span style="color: #ff6b6b;">⚠️ Please enter an API key</span>';
         return;
@@ -338,8 +340,20 @@
         // Don't return - let them save anyway in case format changed
       }
 
+      // Check if auth functions are available
+      if (typeof getCurrentUser !== 'function' || typeof saveUserApiKey !== 'function') {
+        console.error('Auth functions not available:', {
+          getCurrentUser: typeof getCurrentUser,
+          saveUserApiKey: typeof saveUserApiKey
+        });
+        statusDiv.innerHTML = '<span style="color: #ff6b6b;">⚠️ Auth system not loaded. Please refresh the page.</span>';
+        return;
+      }
+
       // Get current user
       const currentUser = getCurrentUser();
+      console.log('Current user:', currentUser ? currentUser.username : 'not logged in');
+
       if (!currentUser) {
         statusDiv.innerHTML = '<span style="color: #ff6b6b;">⚠️ User not logged in</span>';
         return;
@@ -347,11 +361,14 @@
 
       // Save API key to user profile
       const result = saveUserApiKey(currentUser.username, apiKey);
+      console.log('Save result:', result);
 
       if (result.success) {
         statusDiv.innerHTML = '<span style="color: #4caf50;">✓ API key saved to your profile!</span>';
+        console.log('✅ API key saved successfully');
       } else {
-        statusDiv.innerHTML = '<span style="color: #ff6b6b;">⚠️ Failed to save API key</span>';
+        statusDiv.innerHTML = '<span style="color: #ff6b6b;">⚠️ Failed to save API key: ' + (result.message || 'Unknown error') + '</span>';
+        console.error('❌ Failed to save API key:', result);
       }
 
       // Clear status after 3 seconds
@@ -390,18 +407,38 @@
 
     // Get Groq API key from user profile
     function getGroqApiKey() {
+      console.log('getGroqApiKey called');
+
+      if (typeof getCurrentUser !== 'function') {
+        console.error('getCurrentUser not available');
+        return null;
+      }
+
       const currentUser = getCurrentUser();
+      console.log('Current user in getGroqApiKey:', currentUser ? currentUser.username : 'not logged in');
+
       if (!currentUser) {
+        console.warn('No current user, cannot get API key');
         return null;
       }
 
       // Try to get from current user session first (faster)
       if (currentUser.apiKey) {
+        console.log('✅ API key found in current user session');
         return currentUser.apiKey;
       }
 
+      console.log('API key not in session, checking localStorage...');
+
       // Fallback to reading from localStorage
-      return getUserApiKey(currentUser.username);
+      if (typeof getUserApiKey !== 'function') {
+        console.error('getUserApiKey not available');
+        return null;
+      }
+
+      const apiKey = getUserApiKey(currentUser.username);
+      console.log('API key from localStorage:', apiKey ? 'found' : 'not found');
+      return apiKey;
     }
 
     // Export to window for use in other files

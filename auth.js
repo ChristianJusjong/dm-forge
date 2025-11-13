@@ -189,6 +189,8 @@ async function changePassword(oldPassword, newPassword) {
 
 // Save API key to user profile
 function saveUserApiKey(username, apiKey) {
+  console.log('saveUserApiKey called for user:', username);
+
   const users = getUsers();
   const userIndex = users.findIndex(u => u.username.toLowerCase() === username.toLowerCase());
 
@@ -197,30 +199,44 @@ function saveUserApiKey(username, apiKey) {
     return { success: false, message: 'User not found' };
   }
 
+  console.log('Saving API key to user profile...');
+
   // Save API key to user profile
   users[userIndex].apiKey = apiKey;
   saveUsers(users);
+
+  console.log('API key saved to users array, updating current user session...');
 
   // Also update current user session
   const currentUser = getCurrentUser();
   if (currentUser && currentUser.username.toLowerCase() === username.toLowerCase()) {
     currentUser.apiKey = apiKey;
     localStorage.setItem('dm_codex_current_user', JSON.stringify(currentUser));
+    console.log('✅ Current user session updated with API key');
+  } else {
+    console.warn('Current user not matching or not found');
   }
 
+  console.log('✅ API key saved successfully');
   return { success: true, message: 'API key saved to profile' };
 }
 
 // Get API key from user profile
 function getUserApiKey(username) {
+  console.log('getUserApiKey called for user:', username);
+
   const users = getUsers();
   const user = users.find(u => u.username.toLowerCase() === username.toLowerCase());
 
   if (!user) {
+    console.warn('User not found:', username);
     return null;
   }
 
-  return user.apiKey || null;
+  const apiKey = user.apiKey || null;
+  console.log('API key for user:', apiKey ? 'found' : 'not found');
+
+  return apiKey;
 }
 
 // Get user's campaigns
