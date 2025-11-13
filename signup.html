@@ -188,70 +188,74 @@
 
   <script type="module" src="auth.js"></script>
   <script>
-    document.getElementById('signup-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const username = document.getElementById('username').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      const confirmPassword = document.getElementById('confirm-password').value;
-
-      const errorDiv = document.getElementById('error-message');
-      const successDiv = document.getElementById('success-message');
-
-      errorDiv.style.display = 'none';
-      successDiv.style.display = 'none';
-
-      // Validation
-      if (!username || !email || !password || !confirmPassword) {
-        errorDiv.textContent = 'Please fill out all fields';
-        errorDiv.style.display = 'block';
-        return;
+    // Wait for modules to load
+    window.addEventListener('load', () => {
+      // Check if already logged in
+      if (typeof isLoggedIn === 'function' && isLoggedIn()) {
+        window.location.href = 'campaign-start.html';
       }
 
-      if (username.length < 3 || username.length > 20) {
-        errorDiv.textContent = 'Username must be between 3 and 20 characters';
-        errorDiv.style.display = 'block';
-        return;
-      }
+      // Setup form submit handler
+      document.getElementById('signup-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-      if (!email.includes('@') || !email.includes('.')) {
-        errorDiv.textContent = 'Please enter a valid email address';
-        errorDiv.style.display = 'block';
-        return;
-      }
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
 
-      if (password.length < 8) {
-        errorDiv.textContent = 'Password must be at least 8 characters long';
-        errorDiv.style.display = 'block';
-        return;
-      }
+        const errorDiv = document.getElementById('error-message');
+        const successDiv = document.getElementById('success-message');
 
-      if (password !== confirmPassword) {
-        errorDiv.textContent = 'Passwords do not match';
-        errorDiv.style.display = 'block';
-        return;
-      }
+        errorDiv.style.display = 'none';
+        successDiv.style.display = 'none';
 
-      const result = await signup(username, email, password);
+        // Validation
+        if (!username || !email || !password || !confirmPassword) {
+          errorDiv.textContent = 'Please fill out all fields';
+          errorDiv.style.display = 'block';
+          return;
+        }
 
-      if (result.success) {
-        successDiv.textContent = 'Account created successfully! Redirecting...';
-        successDiv.style.display = 'block';
+        if (username.length < 3 || username.length > 20) {
+          errorDiv.textContent = 'Username must be between 3 and 20 characters';
+          errorDiv.style.display = 'block';
+          return;
+        }
 
-        setTimeout(() => {
-          window.location.href = 'campaign-start.html';
-        }, 2000);
-      } else {
-        errorDiv.textContent = result.message;
-        errorDiv.style.display = 'block';
-      }
+        if (!email.includes('@') || !email.includes('.')) {
+          errorDiv.textContent = 'Please enter a valid email address';
+          errorDiv.style.display = 'block';
+          return;
+        }
+
+        if (password.length < 8) {
+          errorDiv.textContent = 'Password must be at least 8 characters long';
+          errorDiv.style.display = 'block';
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          errorDiv.textContent = 'Passwords do not match';
+          errorDiv.style.display = 'block';
+          return;
+        }
+
+        const result = await signup(username, email, password);
+
+        if (result.success) {
+          successDiv.textContent = 'Account created successfully! Redirecting...';
+          successDiv.style.display = 'block';
+
+          setTimeout(() => {
+            window.location.href = 'campaign-start.html';
+          }, 2000);
+        } else {
+          errorDiv.textContent = result.message;
+          errorDiv.style.display = 'block';
+        }
+      });
     });
-
-    // Check if already logged in
-    if (isLoggedIn()) {
-      window.location.href = 'campaign-start.html';
-    }
   </script>
 </body>
 </html>

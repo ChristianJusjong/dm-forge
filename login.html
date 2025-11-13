@@ -137,43 +137,47 @@
 
   <script type="module" src="auth.js"></script>
   <script>
-    document.getElementById('login-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const emailOrUsername = document.getElementById('email-username').value.trim();
-      const password = document.getElementById('password').value;
-
-      const errorDiv = document.getElementById('error-message');
-      const successDiv = document.getElementById('success-message');
-
-      errorDiv.style.display = 'none';
-      successDiv.style.display = 'none';
-
-      if (!emailOrUsername || !password) {
-        errorDiv.textContent = 'Please fill out all fields';
-        errorDiv.style.display = 'block';
-        return;
+    // Wait for modules to load
+    window.addEventListener('load', () => {
+      // Check if already logged in
+      if (typeof isLoggedIn === 'function' && isLoggedIn()) {
+        window.location.href = 'campaign-start.html';
       }
 
-      const result = await login(emailOrUsername, password);
+      // Setup form submit handler
+      document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-      if (result.success) {
-        successDiv.textContent = 'Login successful! Redirecting...';
-        successDiv.style.display = 'block';
+        const emailOrUsername = document.getElementById('email-username').value.trim();
+        const password = document.getElementById('password').value;
 
-        setTimeout(() => {
-          window.location.href = 'campaign-start.html';
-        }, 1000);
-      } else {
-        errorDiv.textContent = result.message;
-        errorDiv.style.display = 'block';
-      }
+        const errorDiv = document.getElementById('error-message');
+        const successDiv = document.getElementById('success-message');
+
+        errorDiv.style.display = 'none';
+        successDiv.style.display = 'none';
+
+        if (!emailOrUsername || !password) {
+          errorDiv.textContent = 'Please fill out all fields';
+          errorDiv.style.display = 'block';
+          return;
+        }
+
+        const result = await login(emailOrUsername, password);
+
+        if (result.success) {
+          successDiv.textContent = 'Login successful! Redirecting...';
+          successDiv.style.display = 'block';
+
+          setTimeout(() => {
+            window.location.href = 'campaign-start.html';
+          }, 1000);
+        } else {
+          errorDiv.textContent = result.message;
+          errorDiv.style.display = 'block';
+        }
+      });
     });
-
-    // Check if already logged in
-    if (isLoggedIn()) {
-      window.location.href = 'campaign-start.html';
-    }
   </script>
 </body>
 </html>
