@@ -191,7 +191,7 @@
     // Wait for auth module to be fully loaded
     function waitForAuth() {
       return new Promise((resolve) => {
-        if (typeof signup === 'function' && typeof isLoggedIn === 'function') {
+        if (typeof signup === 'function' && typeof login === 'function' && typeof isLoggedIn === 'function') {
           resolve();
         } else {
           setTimeout(() => waitForAuth().then(resolve), 50);
@@ -256,14 +256,28 @@
         }
 
         const result = await signup(username, email, password);
+        console.log('Signup result:', result);
 
         if (result.success) {
           successDiv.textContent = 'Account created successfully! Redirecting...';
           successDiv.style.display = 'block';
 
-          setTimeout(() => {
-            window.location.href = 'campaign-start.html';
-          }, 2000);
+          // Auto-login after successful signup
+          console.log('Attempting auto-login...');
+          const loginResult = await login(email, password);
+          console.log('Login result:', loginResult);
+
+          if (loginResult.success) {
+            setTimeout(() => {
+              console.log('Redirecting to campaign-start.html');
+              window.location.href = 'campaign-start.html';
+            }, 1500);
+          } else {
+            // Signup succeeded but login failed - redirect to login page
+            setTimeout(() => {
+              window.location.href = 'login.html';
+            }, 2000);
+          }
         } else {
           errorDiv.textContent = result.message;
           errorDiv.style.display = 'block';
