@@ -42,6 +42,12 @@ function createCampaign(name, settings = {}) {
   activeCampaign = campaign;
   localStorage.setItem('activeCampaignCode', code);
 
+  // Add campaign to user's list
+  const currentUser = window.getCurrentUser ? window.getCurrentUser() : null;
+  if (currentUser && window.addUserCampaign) {
+    window.addUserCampaign(currentUser.username, campaign.code, campaign.name);
+  }
+
   return campaign;
 }
 
@@ -63,6 +69,12 @@ function loadCampaign(code) {
   // Set as active
   activeCampaign = campaign;
   localStorage.setItem('activeCampaignCode', normalizedCode);
+
+  // Add campaign to user's list (to track it was accessed)
+  const currentUser = window.getCurrentUser ? window.getCurrentUser() : null;
+  if (currentUser && window.addUserCampaign) {
+    window.addUserCampaign(currentUser.username, campaign.code, campaign.name);
+  }
 
   return campaign;
 }

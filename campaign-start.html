@@ -79,6 +79,70 @@
       letter-spacing: 0.3rem;
       text-transform: uppercase;
     }
+
+    .recent-campaign-card {
+      background: linear-gradient(135deg, rgba(26, 15, 10, 0.95) 0%, rgba(13, 8, 6, 0.95) 100%);
+      border: 2px solid rgba(212, 175, 55, 0.4);
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .recent-campaign-card:hover {
+      transform: translateY(-3px);
+      border-color: #d4af37;
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+    }
+
+    .recent-campaign-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .recent-campaign-name {
+      color: #d4af37;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem 0;
+      font-family: 'Cinzel', serif;
+    }
+
+    .recent-campaign-code {
+      font-family: 'Courier New', monospace;
+      color: #8b7355;
+      font-size: 0.9rem;
+      letter-spacing: 0.1rem;
+    }
+
+    .recent-campaign-date {
+      color: #8b7355;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .recent-campaign-footer {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: auto;
+    }
+
+    .btn-small {
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      flex: 1;
+    }
+
+    @media (max-width: 768px) {
+      #recent-campaigns-list {
+        grid-template-columns: 1fr !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -103,19 +167,19 @@
           <button class="btn btn-primary" data-i18n="startNew">Start New Campaign</button>
         </div>
 
-        <!-- Load Campaign -->
+        <!-- Enter Campaign Code (Fallback) -->
         <div class="campaign-option-card" onclick="showLoadCampaignModal()">
-          <div class="campaign-option-icon">📜</div>
-          <h2 data-i18n="loadCampaign">Load Campaign</h2>
-          <p data-i18n="loadCampaignDesc">Continue your existing adventure using your campaign code.</p>
-          <button class="btn btn-secondary" data-i18n="loadExisting">Load Existing Campaign</button>
+          <div class="campaign-option-icon">🔑</div>
+          <h2>Enter Campaign Code</h2>
+          <p>Have a campaign code from another device or player? Enter it here to join.</p>
+          <button class="btn btn-secondary">Enter Code</button>
         </div>
       </div>
 
       <!-- Recent Campaigns -->
-      <div id="recent-campaigns" class="card" style="max-width: 900px; margin: 3rem auto; display: none;">
-        <h2 style="color: #d4af37; margin-bottom: 1.5rem;">📚 Recent Campaigns</h2>
-        <div id="recent-campaigns-list"></div>
+      <div id="recent-campaigns" class="card" style="max-width: 1200px; margin: 3rem auto; display: none;">
+        <h2 style="color: #d4af37; margin-bottom: 1.5rem;">📚 Your Recent Campaigns</h2>
+        <div id="recent-campaigns-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem;"></div>
       </div>
     </main>
 
@@ -314,6 +378,111 @@
       }, 5000);
     }
 
+    // Load and display user's campaigns
+    function loadUserCampaigns() {
+      const currentUser = getCurrentUser();
+      if (!currentUser) {
+        return;
+      }
+
+      const campaigns = getUserCampaigns(currentUser.username);
+      const recentCampaignsSection = document.getElementById('recent-campaigns');
+      const recentCampaignsList = document.getElementById('recent-campaigns-list');
+
+      if (campaigns.length === 0) {
+        recentCampaignsSection.style.display = 'none';
+        return;
+      }
+
+      // Show the section
+      recentCampaignsSection.style.display = 'block';
+
+      // Clear existing content
+      recentCampaignsList.innerHTML = '';
+
+      // Create campaign cards
+      campaigns.forEach(campaign => {
+        const card = document.createElement('div');
+        card.className = 'recent-campaign-card';
+
+        const lastAccessedDate = new Date(campaign.lastAccessed);
+        const formattedDate = formatRelativeTime(lastAccessedDate);
+
+        card.innerHTML = `
+          <div>
+            <div class="recent-campaign-header">
+              <div>
+                <h3 class="recent-campaign-name">${escapeHtml(campaign.name)}</h3>
+                <div class="recent-campaign-code">Code: ${campaign.code}</div>
+              </div>
+            </div>
+            <div class="recent-campaign-date">Last played: ${formattedDate}</div>
+          </div>
+          <div class="recent-campaign-footer">
+            <button class="btn btn-primary btn-small" onclick="loadCampaignByCode('${campaign.code}')">
+              ⚔️ Select Campaign
+            </button>
+          </div>
+        `;
+
+        recentCampaignsList.appendChild(card);
+      });
+    }
+
+    // Load campaign by code and redirect
+    function loadCampaignByCode(code) {
+      const campaign = loadCampaign(code);
+
+      if (!campaign) {
+        alert('Campaign not found. It may have been deleted.');
+        loadUserCampaigns(); // Refresh the list
+        return;
+      }
+
+      // Redirect to party setup or directly to campaign dashboard
+      if (!campaign.party || campaign.party.length === 0) {
+        window.location.href = 'configuration.html';
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+
+    // Format relative time (e.g., "2 hours ago", "3 days ago")
+    function formatRelativeTime(date) {
+      const now = new Date();
+      const diffMs = now - date;
+      const diffSecs = Math.floor(diffMs / 1000);
+      const diffMins = Math.floor(diffSecs / 60);
+      const diffHours = Math.floor(diffMins / 60);
+      const diffDays = Math.floor(diffHours / 24);
+
+      if (diffSecs < 60) {
+        return 'Just now';
+      } else if (diffMins < 60) {
+        return `${diffMins} minute${diffMins === 1 ? '' : 's'} ago`;
+      } else if (diffHours < 24) {
+        return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
+      } else if (diffDays < 7) {
+        return `${diffDays} day${diffDays === 1 ? '' : 's'} ago`;
+      } else if (diffDays < 30) {
+        const weeks = Math.floor(diffDays / 7);
+        return `${weeks} week${weeks === 1 ? '' : 's'} ago`;
+      } else if (diffDays < 365) {
+        const months = Math.floor(diffDays / 30);
+        return `${months} month${months === 1 ? '' : 's'} ago`;
+      } else {
+        const years = Math.floor(diffDays / 365);
+        return `${years} year${years === 1 ? '' : 's'} ago`;
+      }
+    }
+
+    // Escape HTML to prevent XSS
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
     // Auto-format code input
     document.addEventListener('DOMContentLoaded', () => {
       const codeInput = document.getElementById('campaign-code-input');
@@ -336,6 +505,9 @@
       document.getElementById('campaign-code-input').addEventListener('keyup', (e) => {
         if (e.key === 'Enter') loadExistingCampaign();
       });
+
+      // Load user's recent campaigns
+      loadUserCampaigns();
 
       // Check if there's already an active campaign
       const activeCampaign = getActiveCampaign();

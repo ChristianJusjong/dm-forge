@@ -187,6 +187,60 @@ async function changePassword(oldPassword, newPassword) {
   return { success: true, message: 'Password changed successfully' };
 }
 
+// Get user's campaigns
+function getUserCampaigns(username) {
+  const users = getUsers();
+  const user = users.find(u => u.username.toLowerCase() === username.toLowerCase());
+
+  if (!user) {
+    return [];
+  }
+
+  // Return campaigns array, or empty array if none exist
+  return user.campaigns || [];
+}
+
+// Add campaign to user's list
+function addUserCampaign(username, campaignCode, campaignName) {
+  const users = getUsers();
+  const userIndex = users.findIndex(u => u.username.toLowerCase() === username.toLowerCase());
+
+  if (userIndex === -1) {
+    console.error('User not found:', username);
+    return { success: false, message: 'User not found' };
+  }
+
+  // Initialize campaigns array if it doesn't exist
+  if (!users[userIndex].campaigns) {
+    users[userIndex].campaigns = [];
+  }
+
+  // Check if campaign already exists in user's list
+  const existingCampaignIndex = users[userIndex].campaigns.findIndex(
+    c => c.code === campaignCode
+  );
+
+  if (existingCampaignIndex !== -1) {
+    // Update existing campaign's last accessed time
+    users[userIndex].campaigns[existingCampaignIndex].lastAccessed = Date.now();
+    users[userIndex].campaigns[existingCampaignIndex].name = campaignName;
+  } else {
+    // Add new campaign
+    users[userIndex].campaigns.push({
+      code: campaignCode,
+      name: campaignName,
+      lastAccessed: Date.now()
+    });
+  }
+
+  // Sort campaigns by last accessed (most recent first)
+  users[userIndex].campaigns.sort((a, b) => b.lastAccessed - a.lastAccessed);
+
+  saveUsers(users);
+
+  return { success: true, message: 'Campaign added to user list' };
+}
+
 // Export functions to window for use in inline scripts
 window.signup = signup;
 window.login = login;
@@ -196,3 +250,5 @@ window.getCurrentUser = getCurrentUser;
 window.requireAuth = requireAuth;
 window.updateUserProfile = updateUserProfile;
 window.changePassword = changePassword;
+window.getUserCampaigns = getUserCampaigns;
+window.addUserCampaign = addUserCampaign;
