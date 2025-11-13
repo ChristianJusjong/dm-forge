@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Main shield background -->
+  <defs>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0d06b;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#d4af37;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#b8941f;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="darkGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a0f0a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d0806;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Shield shape -->
+  <path d="M 100 20 L 170 50 L 170 120 Q 170 160 100 180 Q 30 160 30 120 L 30 50 Z"
+        fill="url(#darkGradient)"
+        stroke="url(#goldGradient)"
+        stroke-width="4"/>
+
+  <!-- Open book in center -->
+  <g filter="url(#glow)">
+    <!-- Left page -->
+    <path d="M 70 80 Q 65 85 65 95 L 65 130 Q 65 135 70 137 L 95 137 L 95 80 Z"
+          fill="#e8d5b7"
+          stroke="#d4af37"
+          stroke-width="1.5"/>
+
+    <!-- Right page -->
+    <path d="M 105 80 L 105 137 L 130 137 Q 135 135 135 130 L 135 95 Q 135 85 130 80 Z"
+          fill="#e8d5b7"
+          stroke="#d4af37"
+          stroke-width="1.5"/>
+
+    <!-- Book spine -->
+    <rect x="97" y="80" width="6" height="57" fill="url(#goldGradient)"/>
+
+    <!-- D20 on left page -->
+    <circle cx="80" cy="100" r="12" fill="none" stroke="#8b0000" stroke-width="1.5"/>
+    <text x="80" y="105" font-size="12" font-weight="bold" text-anchor="middle" fill="#8b0000">20</text>
+
+    <!-- Sword on right page -->
+    <g>
+      <rect x="117" y="95" width="3" height="25" fill="#8b0000"/>
+      <path d="M 112 95 L 124 95 L 121 92 L 115 92 Z" fill="#d4af37"/>
+      <rect x="116" y="119" width="5" height="3" rx="1" fill="#d4af37"/>
+    </g>
+
+    <!-- Page lines -->
+    <line x1="70" y1="110" x2="92" y2="110" stroke="#b8956a" stroke-width="0.5"/>
+    <line x1="70" y1="115" x2="92" y2="115" stroke="#b8956a" stroke-width="0.5"/>
+    <line x1="70" y1="120" x2="92" y2="120" stroke="#b8956a" stroke-width="0.5"/>
+  </g>
+
+  <!-- Decorative corner elements -->
+  <circle cx="100" cy="35" r="3" fill="url(#goldGradient)"/>
+  <circle cx="155" cy="70" r="3" fill="url(#goldGradient)"/>
+  <circle cx="45" cy="70" r="3" fill="url(#goldGradient)"/>
+
+  <!-- Banner at bottom -->
+  <path d="M 50 155 L 50 165 L 100 170 L 150 165 L 150 155 Z"
+        fill="url(#goldGradient)"
+        stroke="#b8941f"
+        stroke-width="1"/>
+  <text x="100" y="164" font-size="10" font-weight="bold" font-family="serif" text-anchor="middle" fill="#0d0806">FORGE</text>
+</svg>

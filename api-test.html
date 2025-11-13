@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Test - DM Codex</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="design-system.css">
+  <style>
+    .test-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+    }
+
+    .test-item {
+      background: var(--parchment);
+      border: 2px solid var(--wood-brown);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .test-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .test-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--leather-brown);
+    }
+
+    .test-status {
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .status-pending {
+      background: var(--parchment-dark);
+      color: var(--text-secondary);
+    }
+
+    .status-testing {
+      background: var(--gold-light);
+      color: var(--leather-brown);
+      animation: pulse 1.5s infinite;
+    }
+
+    .status-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .status-error {
+      background: var(--danger);
+      color: white;
+    }
+
+    .test-details {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .test-result {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      background: rgba(0,0,0,0.05);
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .run-all-btn {
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+
+    .summary {
+      background: var(--wood-brown);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .summary h2 {
+      margin: 0;
+      font-family: 'Cinzel', serif;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- Navigation will be inserted here by nav.js -->
+
+    <main class="page-content">
+      <div class="page-header">
+        <h1 class="page-title">🔧 API Test</h1>
+        <p class="page-subtitle">Test forbindelse til alle eksterne API'er</p>
+      </div>
+
+      <div class="test-container">
+        <button id="run-all-btn" class="btn btn-large run-all-btn">▶️ Test Alle API'er</button>
+
+        <div class="summary" id="summary" style="display: none;">
+          <h2 id="summary-text"></h2>
+        </div>
+
+        <!-- Groq API Test -->
+        <div class="test-item" id="test-groq">
+          <div class="test-header">
+            <div class="test-name">🚀 Groq API (Llama 3.1)</div>
+            <div class="test-status status-pending" id="status-groq">Venter...</div>
+          </div>
+          <div class="test-details">
+            Primær AI model til NPC generation, encounters og oversættelser
+          </div>
+          <div class="test-result" id="result-groq" style="display: none;"></div>
+        </div>
+
+        <!-- Gemini API Test -->
+        <div class="test-item" id="test-gemini">
+          <div class="test-header">
+            <div class="test-name">🔄 Gemini API (Backup)</div>
+            <div class="test-status status-pending" id="status-gemini">Venter...</div>
+          </div>
+          <div class="test-details">
+            Backup AI model hvis Groq fejler
+          </div>
+          <div class="test-result" id="result-gemini" style="display: none;"></div>
+        </div>
+
+        <!-- Open5e API Test -->
+        <div class="test-item" id="test-open5e">
+          <div class="test-header">
+            <div class="test-name">🐉 Open5e API</div>
+            <div class="test-status status-pending" id="status-open5e">Venter...</div>
+          </div>
+          <div class="test-details">
+            D&D 5e SRD monster database
+          </div>
+          <div class="test-result" id="result-open5e" style="display: none;"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="auth.js"></script>
+  <script src="translations.js"></script>
+  <script src="campaign-manager.js"></script>
+  <script src="nav.js"></script>
+  <script>
+    // Require authentication
+    if (!requireAuth()) {
+      throw new Error('Authentication required');
+    }
+
+    // GROQ_API_KEY is already declared in nav.js
+    const GEMINI_API_KEY = 'AIzaSyC_FPJb1pVXl4x8_cWd8xX9T-c1z238wiI';
+
+    const tests = {
+      groq: { passed: false, message: '' },
+      gemini: { passed: false, message: '' },
+      open5e: { passed: false, message: '' }
+    };
+
+    function updateStatus(testId, status, message = '') {
+      const statusEl = document.getElementById(`status-${testId}`);
+      const resultEl = document.getElementById(`result-${testId}`);
+
+      statusEl.className = `test-status status-${status}`;
+
+      if (status === 'pending') {
+        statusEl.textContent = 'Venter...';
+      } else if (status === 'testing') {
+        statusEl.textContent = 'Tester...';
+      } else if (status === 'success') {
+        statusEl.textContent = '✅ Success';
+        tests[testId].passed = true;
+      } else if (status === 'error') {
+        statusEl.textContent = '❌ Fejl';
+        tests[testId].passed = false;
+      }
+
+      if (message) {
+        resultEl.style.display = 'block';
+        resultEl.textContent = message;
+        tests[testId].message = message;
+      }
+    }
+
+    async function testGroqAPI() {
+      updateStatus('groq', 'testing');
+      try {
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${GROQ_API_KEY}`
+          },
+          body: JSON.stringify({
+            model: 'llama-3.1-8b-instant',
+            messages: [{ role: 'user', content: 'Say hello in one word' }],
+            max_tokens: 10
+          })
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(`Status ${response.status}: ${error.error?.message || 'Unknown error'}`);
+        }
+
+        const data = await response.json();
+        const reply = data.choices[0].message.content;
+
+        updateStatus('groq', 'success', `Response: "${reply}"\nModel: llama-3.1-8b-instant\nLatency: Fast ⚡`);
+        return true;
+      } catch (error) {
+        updateStatus('groq', 'error', `Error: ${error.message}\n\nCheck:\n- API key er korrekt\n- Internet forbindelse\n- Groq service status`);
+        return false;
+      }
+    }
+
+    async function testGeminiAPI() {
+      updateStatus('gemini', 'testing');
+      try {
+        const response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-goog-api-key': GEMINI_API_KEY
+            },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: 'Say hello in one word' }] }]
+            })
+          }
+        );
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(`Status ${response.status}: ${error.error?.message || 'Unknown error'}`);
+        }
+
+        const data = await response.json();
+        const reply = data.candidates[0].content.parts[0].text;
+
+        updateStatus('gemini', 'success', `Response: "${reply}"\nModel: gemini-2.0-flash-lite\nNote: Brugt som backup`);
+        return true;
+      } catch (error) {
+        updateStatus('gemini', 'error', `Error: ${error.message}\n\nCheck:\n- API key er korrekt\n- Rate limits (15 req/min)\n- Google service status`);
+        return false;
+      }
+    }
+
+    async function testOpen5eAPI() {
+      updateStatus('open5e', 'testing');
+      try {
+        const response = await fetch('https://api.open5e.com/v1/monsters/?search=goblin&limit=1');
+
+        if (!response.ok) {
+          throw new Error(`Status ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        if (data.results && data.results.length > 0) {
+          const monster = data.results[0];
+          updateStatus('open5e', 'success',
+            `Found: ${monster.name}\n` +
+            `CR: ${monster.challenge_rating}\n` +
+            `HP: ${monster.hit_points}\n` +
+            `AC: ${monster.armor_class}\n` +
+            `Database: D&D 5e SRD`
+          );
+          return true;
+        } else {
+          throw new Error('No results returned');
+        }
+      } catch (error) {
+        updateStatus('open5e', 'error', `Error: ${error.message}\n\nCheck:\n- Internet forbindelse\n- open5e.com service status`);
+        return false;
+      }
+    }
+
+    function showSummary() {
+      const summary = document.getElementById('summary');
+      const summaryText = document.getElementById('summary-text');
+
+      const totalTests = Object.keys(tests).length;
+      const passedTests = Object.values(tests).filter(t => t.passed).length;
+
+      summary.style.display = 'block';
+
+      if (passedTests === totalTests) {
+        summary.style.background = 'var(--success)';
+        summaryText.textContent = `🎉 Alle ${totalTests} API'er virker!`;
+      } else if (passedTests > 0) {
+        summary.style.background = 'var(--warning)';
+        summaryText.textContent = `⚠️ ${passedTests}/${totalTests} API'er virker`;
+      } else {
+        summary.style.background = 'var(--danger)';
+        summaryText.textContent = `❌ Ingen API'er virker - Check internet forbindelse`;
+      }
+    }
+
+    async function runAllTests() {
+      document.getElementById('run-all-btn').disabled = true;
+      document.getElementById('run-all-btn').textContent = '⏳ Tester...';
+      document.getElementById('summary').style.display = 'none';
+
+      // Reset all statuses
+      updateStatus('groq', 'pending');
+      updateStatus('gemini', 'pending');
+      updateStatus('open5e', 'pending');
+
+      // Run tests sequentially
+      await testGroqAPI();
+      await new Promise(resolve => setTimeout(resolve, 500)); // Small delay
+
+      await testGeminiAPI();
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      await testOpen5eAPI();
+
+      // Show summary
+      showSummary();
+
+      document.getElementById('run-all-btn').disabled = false;
+      document.getElementById('run-all-btn').textContent = '▶️ Test Alle API\'er Igen';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('run-all-btn').addEventListener('click', runAllTests);
+    });
+  </script>
+</body>
+</html>

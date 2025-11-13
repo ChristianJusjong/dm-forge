@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="diceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff4444"/>
+      <stop offset="100%" style="stop-color:#cc0000"/>
+    </linearGradient>
+  </defs>
+
+  <!-- D20 (icosahedron) -->
+  <!-- Front faces -->
+  <path d="M 32 8 L 52 24 L 42 42 Z" fill="url(#diceGrad)" stroke="#000" stroke-width="1.5"/>
+  <path d="M 32 8 L 12 24 L 22 42 Z" fill="#cc0000" stroke="#000" stroke-width="1.5"/>
+  <path d="M 32 8 L 22 42 L 42 42 Z" fill="#aa0000" stroke="#000" stroke-width="1.5"/>
+
+  <!-- Bottom faces -->
+  <path d="M 12 24 L 22 42 L 32 56 Z" fill="#880000" stroke="#000" stroke-width="1.5"/>
+  <path d="M 52 24 L 42 42 L 32 56 Z" fill="#990000" stroke="#000" stroke-width="1.5"/>
+  <path d="M 22 42 L 42 42 L 32 56 Z" fill="#770000" stroke="#000" stroke-width="1.5"/>
+
+  <!-- Number 20 on front face -->
+  <text x="32" y="30" font-size="12" font-weight="bold" text-anchor="middle" fill="#fff">20</text>
+
+  <!-- Small dots for detail on other faces -->
+  <circle cx="18" cy="32" r="1.5" fill="#fff"/>
+  <circle cx="46" cy="32" r="1.5" fill="#fff"/>
+  <circle cx="32" cy="48" r="1.5" fill="#fff"/>
+</svg>

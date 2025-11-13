@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support Dungeon Master Forge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .support-card {
+      background: linear-gradient(135deg, rgba(10, 6, 4, 0.8) 0%, rgba(26, 15, 10, 0.8) 100%);
+      border: 2px solid rgba(212, 175, 55, 0.5);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      transition: all 0.3s ease;
+    }
+
+    .support-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(212, 175, 55, 0.3);
+      border-color: rgba(212, 175, 55, 0.8);
+    }
+
+    .support-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
+    }
+
+    .support-button {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+      color: #0a0604;
+      text-decoration: none;
+      font-weight: 700;
+      font-family: 'Cinzel', serif;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+      font-size: 1.1rem;
+    }
+
+    .support-button:hover {
+      background: linear-gradient(135deg, #f0d06b 0%, #d4af37 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 1.5rem 0;
+    }
+
+    .feature-list li {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+      color: #e8d5b7;
+      line-height: 1.8;
+    }
+
+    .feature-list li:before {
+      content: "⚔️";
+      margin-right: 0.75rem;
+      color: #d4af37;
+    }
+
+    .thank-you-banner {
+      background: linear-gradient(135deg, rgba(139, 0, 0, 0.3) 0%, rgba(212, 175, 55, 0.3) 100%);
+      border: 2px solid rgba(212, 175, 55, 0.5);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- Navigation will be inserted here by nav.js -->
+
+    <main class="page-content">
+      <div class="page-header">
+        <h1 class="page-title">💰 Support Dungeon Master Forge</h1>
+        <p class="page-subtitle">Help keep this tool free and growing</p>
+      </div>
+
+      <div class="thank-you-banner">
+        <h2 style="color: #d4af37; font-size: 2rem; margin-bottom: 1rem;">Thank You! 🙏</h2>
+        <p style="font-size: 1.2rem; line-height: 1.8; max-width: 700px; margin: 0 auto;">
+          DM Codex is free to use and will always be. Your support helps cover server costs, API fees, and allows me to dedicate more time to adding new features and improvements.
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; max-width: 1100px; margin: 0 auto 3rem;">
+        <!-- Ko-fi Support -->
+        <div class="support-card">
+          <div class="support-icon">☕</div>
+          <h2 style="color: #d4af37; margin-bottom: 1rem;">Buy Me a Coffee</h2>
+          <p style="line-height: 1.8; margin-bottom: 1.5rem;">
+            Support with a one-time donation. Every coffee helps keep the servers running and new features coming!
+          </p>
+          <a href="https://ko-fi.com/YOURKOFIUSERNAME" target="_blank" class="support-button">
+            ☕ Support on Ko-fi
+          </a>
+        </div>
+
+        <!-- Patreon Support -->
+        <div class="support-card">
+          <div class="support-icon">🛡️</div>
+          <h2 style="color: #d4af37; margin-bottom: 1rem;">Become a Patron</h2>
+          <p style="line-height: 1.8; margin-bottom: 1.5rem;">
+            Get exclusive benefits and help shape the future of DM Codex with monthly support.
+          </p>
+          <a href="https://www.patreon.com/YOURPATREONUSERNAME" target="_blank" class="support-button">
+            🛡️ Join on Patreon
+          </a>
+        </div>
+      </div>
+
+      <!-- What Your Support Enables -->
+      <div class="card" style="max-width: 900px; margin: 0 auto 3rem auto;">
+        <h2 style="color: #d4af37; margin-bottom: 1.5rem; text-align: center;">⚔️ What Your Support Enables</h2>
+        <ul class="feature-list">
+          <li><strong>Server & Hosting Costs:</strong> Keeping DM Codex online and fast</li>
+          <li><strong>AI API Costs:</strong> Groq & Gemini credits for unlimited NPC generation</li>
+          <li><strong>New Features:</strong> More generators, tools, and integrations</li>
+          <li><strong>Mobile App:</strong> Native iOS/Android apps (planned)</li>
+          <li><strong>Cloud Sync:</strong> Sync campaigns across devices (planned)</li>
+          <li><strong>Custom Content:</strong> Import custom monsters, races, classes (planned)</li>
+          <li><strong>PDF Export:</strong> Export encounters, NPCs, and notes to PDF (planned)</li>
+          <li><strong>Community Requests:</strong> Your feature requests get priority!</li>
+        </ul>
+      </div>
+
+      <!-- Supporter Benefits -->
+      <div class="card" style="max-width: 900px; margin: 0 auto 3rem auto;">
+        <h2 style="color: #d4af37; margin-bottom: 1.5rem; text-align: center;">🏆 Supporter Benefits (Coming Soon)</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+          <div>
+            <h3 style="color: #f0d06b; margin-bottom: 1rem;">☕ Coffee Tier ($3/mo)</h3>
+            <ul style="line-height: 1.8; padding-left: 1.5rem; color: #e8d5b7;">
+              <li>Supporter badge 🎖️</li>
+              <li>Early access to features</li>
+              <li>Vote on new features</li>
+              <li>Ad-free experience</li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="color: #f0d06b; margin-bottom: 1rem;">⚔️ Adventurer ($5/mo)</h3>
+            <ul style="line-height: 1.8; padding-left: 1.5rem; color: #e8d5b7;">
+              <li>All Coffee tier benefits</li>
+              <li>Cloud sync (unlimited devices)</li>
+              <li>PDF export unlimited</li>
+              <li>Priority support</li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="color: #f0d06b; margin-bottom: 1rem;">🐉 Dragon Master ($10/mo)</h3>
+            <ul style="line-height: 1.8; padding-left: 1.5rem; color: #e8d5b7;">
+              <li>All Adventurer benefits</li>
+              <li>Custom themes</li>
+              <li>Import custom content</li>
+              <li>Name in credits</li>
+              <li>Exclusive Discord role</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Other Ways to Help -->
+      <div class="card" style="max-width: 900px; margin: 0 auto;">
+        <h2 style="color: #d4af37; margin-bottom: 1.5rem; text-align: center;">💪 Other Ways to Help</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+          <div style="padding: 1.5rem; background: rgba(212, 175, 55, 0.05); border-radius: 8px; border-left: 4px solid #d4af37;">
+            <h3 style="color: #f0d06b; margin-bottom: 0.75rem;">⭐ Share & Recommend</h3>
+            <p style="line-height: 1.8; color: #e8d5b7;">
+              Share DM Codex with your D&D group, on Reddit, Discord servers, or social media. Word of mouth is huge!
+            </p>
+          </div>
+          <div style="padding: 1.5rem; background: rgba(212, 175, 55, 0.05); border-radius: 8px; border-left: 4px solid #d4af37;">
+            <h3 style="color: #f0d06b; margin-bottom: 0.75rem;">🐛 Report Bugs</h3>
+            <p style="line-height: 1.8; color: #e8d5b7;">
+              Found a bug? Report it on GitHub or send feedback. Help make DM Codex better for everyone!
+            </p>
+          </div>
+          <div style="padding: 1.5rem; background: rgba(212, 175, 55, 0.05); border-radius: 8px; border-left: 4px solid #d4af37;">
+            <h3 style="color: #f0d06b; margin-bottom: 0.75rem;">💡 Suggest Features</h3>
+            <p style="line-height: 1.8; color: #e8d5b7;">
+              Have ideas for new features? Open an issue on GitHub or join the Discord to share your thoughts!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="card" style="max-width: 900px; margin: 3rem auto 0 auto;">
+        <h2 style="color: #d4af37; margin-bottom: 1.5rem; text-align: center;">❓ Frequently Asked Questions</h2>
+
+        <div style="margin-bottom: 2rem;">
+          <h3 style="color: #f0d06b; margin-bottom: 0.75rem;">Will DM Codex always be free?</h3>
+          <p style="line-height: 1.8; color: #e8d5b7;">
+            Yes! The core features will always be free. Supporter benefits are optional extras, not paywalls.
+          </p>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+          <h3 style="color: #f0d06b; margin-bottom: 0.75rem;">What happens if I can't afford to donate?</h3>
+          <p style="line-height: 1.8; color: #e8d5b7;">
+            No problem at all! DM Codex is designed to be useful for everyone. Sharing it with others helps just as much! 😊
+          </p>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+          <h3 style="color: #f0d06b; margin-bottom: 0.75rem;">How do I cancel my subscription?</h3>
+          <p style="line-height: 1.8; color: #e8d5b7;">
+            You can cancel anytime through Ko-fi or Patreon. No hard feelings - thanks for the support while it lasted!
+          </p>
+        </div>
+
+        <div>
+          <h3 style="color: #f0d06b; margin-bottom: 0.75rem;">Is my payment secure?</h3>
+          <p style="line-height: 1.8; color: #e8d5b7;">
+            Yes! Payments are processed through Ko-fi and Patreon - trusted platforms with secure payment processing. We never see your payment details.
+          </p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="translations.js"></script>
+  <script src="nav.js"></script>
+  <script src="ads.js"></script>
+</body>
+</html>

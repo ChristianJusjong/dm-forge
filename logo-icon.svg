@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0d06b;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#d4af37;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#b8941f;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="darkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a0f0a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d0806;stop-opacity:1" />
+    </linearGradient>
+    <filter id="iconGlow">
+      <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Shield background -->
+  <path d="M 50 10 L 85 25 L 85 60 Q 85 80 50 90 Q 15 80 15 60 L 15 25 Z"
+        fill="url(#darkGrad)"
+        stroke="url(#goldGrad)"
+        stroke-width="3"/>
+
+  <!-- Open book -->
+  <g filter="url(#iconGlow)">
+    <!-- Left page -->
+    <path d="M 35 40 Q 32 42 32 47 L 32 65 Q 32 67 35 68 L 47 68 L 47 40 Z"
+          fill="#e8d5b7"
+          stroke="#d4af37"
+          stroke-width="1.5"/>
+
+    <!-- Right page -->
+    <path d="M 53 40 L 53 68 L 65 68 Q 68 67 68 65 L 68 47 Q 68 42 65 40 Z"
+          fill="#e8d5b7"
+          stroke="#d4af37"
+          stroke-width="1.5"/>
+
+    <!-- Book spine -->
+    <rect x="48" y="40" width="4" height="28" fill="url(#goldGrad)"/>
+
+    <!-- D20 -->
+    <circle cx="41" cy="52" r="8" fill="none" stroke="#8b0000" stroke-width="1.5"/>
+    <text x="41" y="56" font-size="9" font-weight="bold" text-anchor="middle" fill="#8b0000">20</text>
+
+    <!-- Sword -->
+    <rect x="58" y="48" width="2" height="14" fill="#8b0000"/>
+    <path d="M 55 48 L 61 48 L 59 46 L 57 46 Z" fill="#d4af37"/>
+    <rect x="57" y="61" width="3" height="2" rx="1" fill="#d4af37"/>
+  </g>
+</svg>

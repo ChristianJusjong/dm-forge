@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dungeon Master Forge - Performance Optimized</title>
+
+  <!-- Favicon and Icons -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#d4af37">
+
+  <!-- Resource Hints - Preconnect to external domains -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://api.open5e.com">
+
+  <!-- Critical CSS - Inline for fastest first paint -->
+  <style>
+    /* Critical styles from critical-css.css */
+    :root {
+      --parchment: #f4e8d0;
+      --leather-brown: #4a3728;
+      --gold: #d4af37;
+      --text-color: #e8d5b7;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Lato', 'Georgia', serif;
+      background: linear-gradient(180deg, #0a0604 0%, #1a0f0a 50%, #0d0806 100%);
+      color: #e8d5b7;
+      min-height: 100vh;
+    }
+
+    .navbar {
+      background: linear-gradient(180deg, #2d1f15 0%, #1a1308 100%);
+      padding: 1rem 2rem;
+      border-bottom: 2px solid #d4af37;
+    }
+
+    /* Loading skeleton for deferred content */
+    .skeleton {
+      background: linear-gradient(90deg, #2d1f15 0%, #3a2818 50%, #2d1f15 100%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s ease-in-out infinite;
+      border-radius: 4px;
+      height: 20px;
+    }
+
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+
+  <!-- Preload critical fonts -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"></noscript>
+
+  <!-- Async load non-critical CSS -->
+  <link rel="preload" href="styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="design-system.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="medieval-theme.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="responsive-design.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <!-- Fallback for browsers without JS -->
+  <noscript>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="medieval-theme.css">
+    <link rel="stylesheet" href="responsive-design.css">
+  </noscript>
+</head>
+<body>
+  <div id="app">
+    <!-- Navigation placeholder with skeleton -->
+    <nav id="nav-placeholder" class="navbar">
+      <div class="skeleton" style="width: 200px; height: 30px;"></div>
+    </nav>
+
+    <!-- Main content -->
+    <main>
+      <!-- Your page content here -->
+    </main>
+  </div>
+
+  <!-- Performance Loader - Load immediately -->
+  <script type="module">
+    import {
+      lazyLoadModule,
+      lazyLoadOnVisible,
+      lazyLoadOnIdle,
+      initSmartLoader
+    } from './performance-loader.js';
+
+    // Smart loader configuration
+    initSmartLoader({
+      modulesConfig: {
+        // Critical modules - load immediately
+        'nav': {
+          path: './nav.js',
+          strategy: 'immediate'
+        },
+        'auth': {
+          path: './auth.js',
+          strategy: 'immediate'
+        },
+        'storage': {
+          path: './storage-utils.js',
+          strategy: 'immediate'
+        },
+
+        // Non-critical modules - load on idle
+        'campaign-manager': {
+          path: './campaign-manager.js',
+          strategy: 'idle'
+        },
+        'translations': {
+          path: './translations.js',
+          strategy: 'idle'
+        }
+      },
+      enableMetrics: true,
+      enablePrefetch: true
+    });
+
+    // Register service worker for offline support
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => {
+            console.log('✅ Service Worker registered:', reg);
+
+            // Check for updates every hour
+            setInterval(() => {
+              reg.update();
+            }, 60 * 60 * 1000);
+          })
+          .catch(err => console.error('❌ SW registration failed:', err));
+
+        // Handle service worker updates
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          console.log('🔄 New service worker activated');
+
+          // Optional: Show update notification
+          if (confirm('New version available! Reload to update?')) {
+            window.location.reload();
+          }
+        });
+      });
+    }
+  </script>
+
+  <!-- Page-specific scripts - Load async/defer -->
+  <script defer>
+    // Page-specific initialization code
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('✅ Page loaded and ready');
+
+      // Initialize page-specific features
+      initializePage();
+    });
+
+    function initializePage() {
+      // Your page initialization logic here
+    }
+  </script>
+
+  <!-- PWA Install Prompt (optional) -->
+  <script type="module">
+    let deferredPrompt;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+
+      // Show custom install button
+      const installBanner = document.createElement('div');
+      installBanner.className = 'install-banner';
+      installBanner.innerHTML = `
+        <div class="install-content">
+          <span>📱 Install Dungeon Master Forge for quick access!</span>
+          <button id="install-btn" class="btn btn-primary">Install</button>
+          <button id="dismiss-btn" class="btn btn-text">Not now</button>
+        </div>
+      `;
+      installBanner.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #2d1f15 0%, #1a1308 100%);
+        border: 2px solid #d4af37;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        z-index: 10000;
+        max-width: 90%;
+      `;
+
+      document.body.appendChild(installBanner);
+
+      document.getElementById('install-btn').addEventListener('click', async () => {
+        installBanner.remove();
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`Install prompt result: ${outcome}`);
+        deferredPrompt = null;
+      });
+
+      document.getElementById('dismiss-btn').addEventListener('click', () => {
+        installBanner.remove();
+      });
+    });
+
+    window.addEventListener('appinstalled', () => {
+      console.log('✅ PWA installed successfully!');
+      deferredPrompt = null;
+    });
+  </script>
+</body>
+</html>

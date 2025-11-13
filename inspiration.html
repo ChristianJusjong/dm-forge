@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inspiration & Random Tables - Dungeon Master Forge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="design-system.css">
+  <link rel="stylesheet" href="medieval-theme.css">
+  <link rel="stylesheet" href="responsive-design.css">
+  <link rel="stylesheet" href="global-overrides.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Navigation will be inserted here by nav.js -->
+
+    <!-- Inspiration Content -->
+    <main class="page-content">
+      <div class="random-tables">
+        <h2>✨ <span data-i18n="randomTables">Random Tables</span></h2>
+
+        <!-- Notes Context Settings -->
+        <div class="notes-context-box">
+          <h4>📋 Use Session Notes as Context</h4>
+          <div class="checkbox-grid">
+            <label>
+              <input type="checkbox" id="use-notes-in-npcs" checked>
+              <span>NPC Generation</span>
+            </label>
+            <label>
+              <input type="checkbox" id="use-notes-in-plots" checked>
+              <span>Plot Hooks</span>
+            </label>
+            <label>
+              <input type="checkbox" id="use-notes-in-encounters" checked>
+              <span>Random Encounters</span>
+            </label>
+            <label>
+              <input type="checkbox" id="use-notes-in-rumors" checked>
+              <span>Tavern Rumors</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="generators-grid">
+          <!-- NPC Names -->
+          <div class="generator-card">
+            <h3 data-i18n="npcNames">NPC Names</h3>
+            <select id="name-type" class="input">
+              <option value="human" data-i18n="human">Human</option>
+              <option value="elf" data-i18n="elf">Elf</option>
+              <option value="dwarf" data-i18n="dwarf">Dwarf</option>
+              <option value="halfling" data-i18n="halfling">Halfling</option>
+              <option value="orc" data-i18n="orc">Orc</option>
+            </select>
+            <select id="name-tone" class="input" style="margin-top: 0.5rem;">
+              <option value="normal">Normal</option>
+              <option value="funny">Funny/Comedic</option>
+              <option value="quirky">Quirky/Absurd</option>
+              <option value="serious">Serious/Dark</option>
+              <option value="happy">Happy/Optimistic</option>
+              <option value="mysterious">Mysterious</option>
+              <option value="tragic">Tragic</option>
+              <option value="heroic">Heroic</option>
+            </select>
+            <label style="margin-top: 0.5rem; font-size: 0.9rem;">
+              <input type="checkbox" id="npc-link-to-character">
+              <span>Link to party character</span>
+            </label>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="btn generate-name-btn" data-i18n="generate" style="flex: 1;">Generate</button>
+              <button class="btn btn-secondary save-name-btn" style="display: none;">📝 Save</button>
+            </div>
+            <div class="result name-result"></div>
+          </div>
+
+          <!-- Tavern Names -->
+          <div class="generator-card">
+            <h3 data-i18n="tavernNames">Tavern Names</h3>
+            <select id="tavern-type" class="input">
+              <option value="tavern" data-i18n="tavern">Tavern</option>
+              <option value="shop" data-i18n="shop">Shop</option>
+              <option value="inn" data-i18n="inn">Inn</option>
+            </select>
+            <select id="tavern-tone" class="input" style="margin-top: 0.5rem;">
+              <option value="normal">Normal</option>
+              <option value="funny">Funny/Comedic</option>
+              <option value="quirky">Quirky/Absurd</option>
+              <option value="serious">Serious/Dark</option>
+              <option value="cozy">Cozy/Warm</option>
+              <option value="mysterious">Mysterious</option>
+              <option value="elegant">Elegant/Refined</option>
+            </select>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="btn generate-tavern-btn" data-i18n="generate" style="flex: 1;">Generate</button>
+              <button class="btn btn-secondary save-tavern-btn" style="display: none;">📝 Save</button>
+              <button class="btn btn-secondary translate-tavern-btn" style="display: none;" title="Translate description">
+                <span>🌐</span> <span data-i18n="translate">Translate</span>
+              </button>
+            </div>
+            <div class="result tavern-result"></div>
+          </div>
+
+          <!-- Plot Hooks -->
+          <div class="generator-card">
+            <h3 data-i18n="plotHooks">Plot Hooks</h3>
+            <select id="plot-tone" class="input">
+              <option value="normal">Normal</option>
+              <option value="funny">Funny/Comedic</option>
+              <option value="serious">Serious/Dark</option>
+              <option value="mysterious">Mysterious</option>
+              <option value="tragic">Tragic</option>
+              <option value="heroic">Heroic</option>
+              <option value="horror">Horror/Scary</option>
+              <option value="romantic">Romantic</option>
+            </select>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="btn generate-plot-btn" data-i18n="generate" style="flex: 1;">Generate</button>
+              <button class="btn btn-secondary save-plot-btn" style="display: none;">📝 Save</button>
+              <button class="btn btn-secondary translate-plot-btn" style="display: none;" title="Translate description">
+                <span>🌐</span> <span data-i18n="translate">Translate</span>
+              </button>
+            </div>
+            <div class="result plot-result"></div>
+          </div>
+
+          <!-- Treasure -->
+          <div class="generator-card">
+            <h3 data-i18n="treasure">Treasure</h3>
+            <select id="treasure-type" class="input">
+              <option value="minor" data-i18n="minor">Minor</option>
+              <option value="moderate" data-i18n="moderate">Moderate</option>
+              <option value="major" data-i18n="major">Major</option>
+            </select>
+            <button class="btn generate-treasure-btn" data-i18n="generate">Generate</button>
+            <div class="result treasure-result"></div>
+          </div>
+
+          <!-- Random Encounters -->
+          <div class="generator-card">
+            <h3 data-i18n="randomEncounter">Random Encounter</h3>
+            <select id="encounter-environment" class="input">
+              <option value="forest" data-i18n="forest">Forest</option>
+              <option value="dungeon" data-i18n="dungeon">Dungeon</option>
+              <option value="city" data-i18n="city">City</option>
+              <option value="mountain" data-i18n="mountain">Mountain</option>
+              <option value="swamp" data-i18n="swamp">Swamp</option>
+            </select>
+            <select id="encounter-tone" class="input" style="margin-top: 0.5rem;">
+              <option value="normal">Normal</option>
+              <option value="funny">Funny/Comedic</option>
+              <option value="serious">Serious/Dangerous</option>
+              <option value="mysterious">Mysterious</option>
+              <option value="peaceful">Peaceful</option>
+              <option value="tense">Tense</option>
+            </select>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="btn generate-encounter-btn" data-i18n="generate" style="flex: 1;">Generate</button>
+              <button class="btn btn-secondary save-encounter-btn" style="display: none;">📝 Save</button>
+              <button class="btn btn-secondary translate-encounter-btn" style="display: none;" title="Translate description">
+                <span>🌐</span> <span data-i18n="translate">Translate</span>
+              </button>
+            </div>
+            <div class="result encounter-result"></div>
+          </div>
+
+          <!-- Rumors -->
+          <div class="generator-card">
+            <h3 data-i18n="tavernRumors">Tavern Rumors</h3>
+            <select id="rumor-tone" class="input">
+              <option value="normal">Normal</option>
+              <option value="funny">Funny/Unlikely</option>
+              <option value="serious">Serious/Dark</option>
+              <option value="mysterious">Mysterious</option>
+              <option value="scary">Scary</option>
+              <option value="gossip">Gossip</option>
+            </select>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="btn generate-rumor-btn" data-i18n="generate" style="flex: 1;">Generate</button>
+              <button class="btn btn-secondary save-rumor-btn" style="display: none;">📝 Save</button>
+              <button class="btn btn-secondary translate-rumor-btn" style="display: none;" title="Translate description">
+                <span>🌐</span> <span data-i18n="translate">Translate</span>
+              </button>
+            </div>
+            <div class="result rumor-result"></div>
+          </div>
+
+          <!-- Magic Items -->
+          <div class="generator-card">
+            <h3 data-i18n="magicItem">Magic Item</h3>
+            <select id="item-rarity" class="input">
+              <option value="common" data-i18n="common">Common</option>
+              <option value="uncommon" data-i18n="uncommon">Uncommon</option>
+              <option value="rare" data-i18n="rare">Rare</option>
+              <option value="very-rare" data-i18n="veryRare">Very Rare</option>
+            </select>
+            <select id="item-tone" class="input" style="margin-top: 0.5rem;">
+              <option value="normal">Normal</option>
+              <option value="funny">Funny/Quirky</option>
+              <option value="serious">Serious/Powerful</option>
+              <option value="cursed">Cursed</option>
+              <option value="elegant">Elegant/Beautiful</option>
+              <option value="mysterious">Mysterious</option>
+            </select>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="btn generate-magic-btn" data-i18n="generate" style="flex: 1;">Generate</button>
+              <button class="btn btn-secondary save-magic-btn" style="display: none;">📝 Save</button>
+              <button class="btn btn-secondary translate-magic-btn" style="display: none;" title="Translate description">
+                <span>🌐</span> <span data-i18n="translate">Translate</span>
+              </button>
+            </div>
+            <div class="result magic-result"></div>
+          </div>
+
+          <!-- Weather -->
+          <div class="generator-card">
+            <h3 data-i18n="weather">Weather</h3>
+            <button class="btn generate-weather-btn" data-i18n="generate">Generate</button>
+            <div class="result weather-result"></div>
+          </div>
+        </div>
+
+        <!-- Dice Roller -->
+        <div class="dice-roller">
+          <h3 data-i18n="diceRoller">Dice Roller</h3>
+          <div class="dice-buttons">
+            <button class="btn-dice" data-die="d4">d4</button>
+            <button class="btn-dice" data-die="d6">d6</button>
+            <button class="btn-dice" data-die="d8">d8</button>
+            <button class="btn-dice" data-die="d10">d10</button>
+            <button class="btn-dice" data-die="d12">d12</button>
+            <button class="btn-dice" data-die="d20">d20</button>
+            <button class="btn-dice" data-die="d100">d100</button>
+          </div>
+          <div class="dice-custom">
+            <input id="custom-dice" type="text" data-i18n-placeholder="customDicePlaceholder" placeholder="e.g., 2d6+3" class="input">
+            <button id="roll-custom-dice-btn" class="btn" data-i18n="roll">Roll</button>
+          </div>
+          <div id="dice-result" class="dice-result" style="display: none;">
+            <strong id="dice-result-text"></strong>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="auth.js"></script>
+  <script src="translations.js"></script>
+  <script src="campaign-manager.js"></script>
+  <script src="nav.js"></script>
+  <script src="ads.js"></script>
+  <script src="random-data.js"></script>
+  <script>
+    // Require authentication
+    if (!requireAuth()) {
+      throw new Error('Authentication required');
+    }
+
+    // ========================================
+    // RANDOM TABLES GENERATORS WITH AI
+    // ========================================
+
+    // GROQ_API_KEY is already declared in nav.js
+    const USE_AI = true; // Set to true for AI-enhanced generation
+
+    // ========================================
+    // TRANSLATION SYSTEM
+    // ========================================
+
+    // Translation tracking
+    const translationStates = {
+      tavern: { isTranslated: false, original: '' },
+      plot: { isTranslated: false, original: '' },
+      encounter: { isTranslated: false, original: '' },
+      rumor: { isTranslated: false, original: '' },
+      magic: { isTranslated: false, original: '' }
+    };
+
+    async function translateWithGroq(text, targetLang) {
+      if (!GROQ_API_KEY) return text;
+
+      const translatePrompt = `Translate this D&D content from English to ${targetLang === 'da' ? 'Danish' : targetLang}.
+
+CRITICAL RULES:
+1. Translate ALL narrative text and descriptions
+2. Keep proper names in their current form (already translated if needed)
+3. Keep ALL game mechanics in English: HP, AC, CR, gold pieces (GP), spell names, item types
+4. Keep numbers and stats unchanged
+
+Text to translate:
+${text}`;
+
+      try {
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${GROQ_API_KEY}`
+          },
+          body: JSON.stringify({
+            model: 'llama-3.1-8b-instant',
+            messages: [{ role: 'user', content: translatePrompt }],
+            temperature: 0.3,
+            max_tokens: 500
+          })
+        });
+
+        if (!response.ok) return text;
+
+        const data = await response.json();
+        return data.choices[0].message.content.trim();
+      } catch (error) {
+        console.error('Translation error:', error);
+        return text;
+      }
+    }
+
+    async function toggleTranslation(type, resultEl, translateBtn) {
+      const state = translationStates[type];
+
+      if (!state.isTranslated) {
+        // Store original and translate
+        const contentDiv = resultEl.querySelector('[data-translatable]');
+        if (!contentDiv) return;
+
+        state.original = contentDiv.innerHTML;
+
+        // Show loading
+        translateBtn.innerHTML = '<span>⏳</span> <span data-i18n="translate">Translate</span>';
+        translateBtn.disabled = true;
+
+        const translated = await translateWithGroq(contentDiv.textContent, 'da');
+        contentDiv.textContent = translated;
+
+        state.isTranslated = true;
+        translateBtn.innerHTML = '<span>🔙</span> <span data-i18n="showOriginal">Show Original</span>';
+        translateBtn.disabled = false;
+      } else {
+        // Restore original
+        const contentDiv = resultEl.querySelector('[data-translatable]');
+        if (!contentDiv) return;
+
+        contentDiv.innerHTML = state.original;
+        state.isTranslated = false;
+        translateBtn.innerHTML = '<span>🌐</span> <span data-i18n="translate">Translate</span>';
+      }
+    }
+
+    // ========================================
+    // NOTES INTEGRATION
+    // ========================================
+
+    function saveToNotes(content, category) {
+      const sessions = JSON.parse(localStorage.getItem('session_notes') || '[]');
+
+      if (sessions.length === 0) {
+        alert('Please create a session in Notes first!');
+        window.location.href = 'notes.html';
+        return;
+      }
+
+      // Get or create the most recent session
+      const currentSession = sessions[0];
+
+      // Find or create appropriate section
+      let section = currentSession.sections.find(s =>
+        s.title.toLowerCase().includes(category.toLowerCase())
+      );
+
+      if (!section) {
+        // Create new section
+        section = { title: category, content: '' };
+        currentSession.sections.push(section);
+      }
+
+      // Append content with timestamp
+      const timestamp = new Date().toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      section.content += (section.content ? '\n\n' : '') + `[${timestamp}]\n${content}`;
+
+      localStorage.setItem('session_notes', JSON.stringify(sessions));
+      alert('Saved to Notes!');
+    }
+
+    function getAllNotesContent() {
+      const sessions = JSON.parse(localStorage.getItem('session_notes') || '[]');
+      let allContent = '';
+
+      sessions.forEach(session => {
+        session.sections.forEach(section => {
+          if (section.content.trim()) {
+            allContent += `${section.title}:\n${section.content}\n\n`;
+          }
+        });
+        session.quickNotes.forEach(note => {
+          allContent += `${note.text}\n`;
+        });
+      });
+
+      return allContent.trim();
+    }
+
+    // Track last generated content for saving
+    let lastGeneratedContent = {
+      name: '',
+      tavern: '',
+      plot: '',
+      encounter: '',
+      rumor: '',
+      magic: ''
+    };
+
+    function roll(num, sides) {
+      let total = 0;
+      for (let i = 0; i < num; i++) {
+        total += Math.floor(Math.random() * sides) + 1;
+      }
+      return total;
+    }
+
+    function randomFrom(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    async function generateWithAI(prompt) {
+      if (!USE_AI || !GROQ_API_KEY) {
+        return null;
+      }
+
+      try {
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${GROQ_API_KEY}`
+          },
+          body: JSON.stringify({
+            model: 'llama-3.1-8b-instant',
+            messages: [{ role: 'user', content: prompt }],
+            temperature: 0.9,
+            max_tokens: 200
+          })
+        });
+
+        if (!response.ok) return null;
+
+        const data = await response.json();
+        return data.choices[0].message.content.trim();
+      } catch (error) {
+        console.error('AI generation error:', error);
+        return null;
+      }
+    }
+
+    async function generateName() {
+      const nameType = document.getElementById('name-type').value;
+      const tone = document.getElementById('name-tone').value;
+      const linkToCharacter = document.getElementById('npc-link-to-character').checked;
+      const useNotes = document.getElementById('use-notes-in-npcs').checked;
+      const resultEl = document.querySelector('.name-result');
+
+      resultEl.innerHTML = '<em style="color: var(--gold);">Generating...</em>';
+
+      const raceTranslation = {
+        'human': 'menneske',
+        'elf': 'elver',
+        'dwarf': 'dværg',
+        'halfling': 'halvling',
+        'orc': 'ork'
+      };
+
+      const toneInstructions = {
+        'normal': '',
+        'funny': 'Make the character funny and comedic with a humorous name.',
+        'quirky': 'Make the character quirky and absurd with an unusual name.',
+        'serious': 'Make the character serious and dark with a grave name.',
+        'happy': 'Make the character happy and optimistic with a cheerful name.',
+        'mysterious': 'Make the character mysterious and enigmatic with a cryptic name.',
+        'tragic': 'Make the character tragic and sorrowful with a melancholic name.',
+        'heroic': 'Make the character heroic and noble with a valiant name.'
+      };
+
+      const toneInstruction = toneInstructions[tone] || '';
+
+      // Get party character context if enabled
+      let characterContext = '';
+      if (linkToCharacter) {
+        const partyData = JSON.parse(localStorage.getItem('party_setup') || '[]');
+        if (partyData.length > 0) {
+          const randomChar = partyData[Math.floor(Math.random() * partyData.length)];
+          characterContext = `\n\nIMPORTANT: This NPC has a connection to party member "${randomChar.name}" (${randomChar.class}, Level ${randomChar.level}). The NPC should be somehow related to this character - could be family, old friend, rival, mentor, former colleague, etc. Make sure the description and at least one quest reflects this connection.`;
+        }
+      }
+
+      // Get notes context if enabled
+      let notesContext = '';
+      if (useNotes) {
+        const notes = getAllNotesContent();
+        if (notes) {
+          notesContext = `\n\nSession Notes for context:\n${notes.substring(0, 500)}...`;
+        }
+      }
+
+      const prompt = `Generate a name for a D&D ${nameType} NPC with description and 3 subquests in ENGLISH. ${toneInstruction}${characterContext}${notesContext}
+
+Format:
+Name: [name matching the tone]
+Description: [personality, appearance, or quirk in ENGLISH]
+
+Quest 1:
+Dialog: [NPC's quest offer in ENGLISH]
+Mission: [mission description in ENGLISH]
+Reward: [reward description in ENGLISH]
+
+Quest 2:
+Dialog: [NPC's quest offer in ENGLISH]
+Mission: [mission description in ENGLISH]
+Reward: [reward description in ENGLISH]
+
+Quest 3:
+Dialog: [NPC's quest offer in ENGLISH]
+Mission: [mission description in ENGLISH]
+Reward: [reward description in ENGLISH]
+
+Example:
+Name: Bjorn Stonehammer
+Description: An elderly blacksmith with graying beard and strong hands. Always singing old dwarven songs while working.
+
+Quest 1:
+Dialog: "My hammer was stolen by the goblins in the mountains! Can you retrieve it?"
+Mission: Find Bjorn's stolen hammer in the goblin cave
+Reward: A masterwork weapon of choice, forged by Bjorn himself
+
+Quest 2:
+Dialog: "I need mithril thread to finish an order. The merchant should have some."
+Mission: Buy mithril thread from the merchant in the next town
+Reward: 50 gold pieces and a discount on future smithing services
+
+Quest 3:
+Dialog: "My son disappeared three days ago. Last seen at the old mine."
+Mission: Find Bjorn's missing son at the abandoned mine
+Reward: A magical +1 shield with dwarven runes of protection`;
+
+      const aiResult = await generateWithAI(prompt);
+
+      if (aiResult) {
+        // Parse AI result (now in English)
+        const nameMatch = aiResult.match(/Name:\s*(.+)/i);
+        const descMatch = aiResult.match(/Description:\s*(.+?)(?=Quest 1:|$)/is);
+
+        // Parse quests
+        const quest1Match = aiResult.match(/Quest 1:\s*Dialog:\s*(.+?)\s*Mission:\s*(.+?)\s*Reward:\s*(.+?)(?=Quest 2:|$)/is);
+        const quest2Match = aiResult.match(/Quest 2:\s*Dialog:\s*(.+?)\s*Mission:\s*(.+?)\s*Reward:\s*(.+?)(?=Quest 3:|$)/is);
+        const quest3Match = aiResult.match(/Quest 3:\s*Dialog:\s*(.+?)\s*Mission:\s*(.+?)\s*Reward:\s*(.+?)(?=$)/is);
+
+        if (nameMatch) {
+          const name = nameMatch[1].trim();
+          const desc = descMatch ? descMatch[1].trim() : '';
+
+          // Translate dialog and mission to current language if not English
+          const translateQuest = async (match) => {
+            if (!match) return null;
+            const dialog = match[1].trim().replace(/^["']|["']$/g, '');
+            const mission = match[2].trim();
+            const reward = match[3].trim();
+
+            // Keep everything in English - no translation
+            return { dialog, mission, reward };
+          };
+
+          // Translate quests if needed
+          const translatedQuests = await Promise.all([
+            translateQuest(quest1Match),
+            translateQuest(quest2Match),
+            translateQuest(quest3Match)
+          ]);
+
+          let questsHTML = '';
+          if (translatedQuests.some(q => q !== null)) {
+            questsHTML = '<div style="margin-top: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 8px;"><strong style="color: var(--gold); display: block; margin-bottom: 0.5rem;">📜 Subquests:</strong>';
+
+            translatedQuests.forEach((quest, i) => {
+              if (quest) {
+                questsHTML += `
+                  <div style="margin-bottom: 0.75rem; padding: 0.75rem; background: rgba(255,255,255,0.05); border-left: 3px solid var(--gold); border-radius: 4px;">
+                    <div style="color: var(--gold); font-weight: 600; margin-bottom: 0.25rem;">Quest ${i + 1}:</div>
+                    <div style="font-style: italic; color: var(--color-text-primary); margin-bottom: 0.25rem;">"${quest.dialog}"</div>
+                    <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.25rem;"><strong>Mission:</strong> ${quest.mission}</div>
+                    <div style="color: var(--text-secondary); font-size: 0.9rem;"><strong>Reward:</strong> ${quest.reward}</div>
+                  </div>
+                `;
+              }
+            });
+            questsHTML += '</div>';
+          }
+
+          resultEl.innerHTML = `
+            <div style="font-size: 1.3rem; font-weight: 700; color: var(--gold); margin-bottom: 0.5rem;">${name}</div>
+            ${desc ? `<div style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 0.5rem;">${desc}</div>` : ''}
+            ${questsHTML}
+          `;
+
+          // Store for saving and show save button
+          lastGeneratedContent.name = `NPC: ${name}\n${desc}\n\n${translatedQuests.filter(q => q !== null).map((q, i) => `Quest ${i+1}:\n${q.dialog}\n${q.mission}\n${q.reward}`).join('\n\n')}`;
+          document.querySelector('.save-name-btn').style.display = 'block';
+        } else {
+          fallbackRandomName(nameType, resultEl);
+        }
+      } else {
+        fallbackRandomName(nameType, resultEl);
+      }
+    }
+
+    function fallbackRandomName(nameType, resultEl) {
+      const type = names[currentLanguage][nameType];
+      const first = randomFrom(type.first);
+      const last = randomFrom(type.last);
+      resultEl.innerHTML = `
+        <div style="font-size: 1.3rem; font-weight: 700; color: var(--gold);">${first} ${last}</div>
+        <div style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic; margin-top: 0.25rem;">Randomly generated</div>
+      `;
+    }
+
+    async function generateTavern() {
+      const tavernType = document.getElementById('tavern-type').value;
+      const tone = document.getElementById('tavern-tone').value;
+      const resultEl = document.querySelector('.tavern-result');
+
+      resultEl.innerHTML = '<em style="color: var(--gold);">Generating...</em>';
+
+      const typeTranslation = {
+        'tavern': 'kro',
+        'shop': 'butik',
+        'inn': 'værtshus'
+      };
+
+      const toneInstructions = {
+        'normal': '',
+        'funny': 'Make it funny and comedic with a humorous name.',
+        'quirky': 'Make it quirky and absurd with an unusual name.',
+        'serious': 'Make it serious and dark with a grim name.',
+        'cozy': 'Make it cozy and warm with a welcoming name.',
+        'mysterious': 'Make it mysterious and enigmatic with a cryptic name.',
+        'elegant': 'Make it elegant and refined with a sophisticated name.'
+      };
+
+      const toneInstruction = toneInstructions[tone] || '';
+
+      const prompt = `Generate a name for a D&D ${tavernType} with a short description (1-2 sentences) in ENGLISH. ${toneInstruction}
+
+Format:
+Name: [name matching the tone]
+Description: [atmosphere, what they're known for, or the owner in ENGLISH]
+
+Example:
+Name: The Golden Griffin
+Description: A cozy tavern with a warm fireplace and homebrewed ale. Known for their lamb roast and the owner's old adventure stories.`;
+
+      const aiResult = await generateWithAI(prompt);
+
+      if (aiResult) {
+        const nameMatch = aiResult.match(/Name:\s*(.+)/i);
+        const descMatch = aiResult.match(/Description:\s*(.+)/i);
+
+        if (nameMatch) {
+          let name = nameMatch[1].trim();
+          let desc = descMatch ? descMatch[1].trim() : '';
+
+          // Translate ONLY the name if Danish (keep description in English)
+          if (getCurrentLanguage() === 'da') {
+            name = await translateWithGroq(name, 'da');
+          }
+
+          resultEl.innerHTML = `
+            <div style="font-size: 1.3rem; font-weight: 700; color: var(--gold); margin-bottom: 0.5rem;">${name}</div>
+            ${desc ? `<div data-translatable style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.4;">${desc}</div>` : ''}
+          `;
+
+          // Store for saving and show buttons
+          lastGeneratedContent.tavern = `Location: ${name}\n${desc}`;
+          document.querySelector('.save-tavern-btn').style.display = 'block';
+          if (desc) {
+            document.querySelector('.translate-tavern-btn').style.display = 'block';
+            translationStates.tavern.isTranslated = false;
+          }
+        } else {
+          fallbackRandomTavern(tavernType, resultEl);
+        }
+      } else {
+        fallbackRandomTavern(tavernType, resultEl);
+      }
+    }
+
+    function fallbackRandomTavern(tavernType, resultEl) {
+      const options = tavernNames[currentLanguage][tavernType];
+      resultEl.innerHTML = `
+        <div style="font-size: 1.3rem; font-weight: 700; color: var(--gold);">${randomFrom(options)}</div>
+        <div style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic; margin-top: 0.25rem;">Randomly generated</div>
+      `;
+    }
+
+    async function generatePlotHook() {
+      const tone = document.getElementById('plot-tone').value;
+      const useNotes = document.getElementById('use-notes-in-plots').checked;
+      const resultEl = document.querySelector('.plot-result');
+      resultEl.innerHTML = '<em style="color: var(--gold);">Generating...</em>';
+
+      const toneInstructions = {
+        'normal': '',
+        'funny': 'Make it funny and comedic with humor.',
+        'serious': 'Make it serious and dark with danger.',
+        'mysterious': 'Make it mysterious and enigmatic with intrigue.',
+        'tragic': 'Make it tragic and sorrowful with loss.',
+        'heroic': 'Make it heroic and noble with valor.',
+        'horror': 'Make it horrific and scary with dread.',
+        'romantic': 'Make it romantic with love and passion.'
+      };
+
+      const toneInstruction = toneInstructions[tone] || '';
+
+      // Get notes context if enabled
+      let notesContext = '';
+      if (useNotes) {
+        const notes = getAllNotesContent();
+        if (notes) {
+          notesContext = `\n\nSession Notes for context (use these to make the plot hook relevant to the campaign):\n${notes.substring(0, 500)}...`;
+        }
+      }
+
+      const prompt = `Generate a D&D plot hook in ENGLISH (1-2 sentences). Include mystery, action, or moral dilemma. ${toneInstruction}${notesContext}
+
+Example: "A mysterious messenger arrives at midnight with a bloody note: 'They know what you did in Ravenshollow.' Who sent the note, and what happened?"`;
+
+      const aiResult = await generateWithAI(prompt);
+
+      if (aiResult) {
+        resultEl.innerHTML = `<div data-translatable style="font-size: 1rem; color: var(--color-text-primary); line-height: 1.5;">${aiResult}</div>`;
+        lastGeneratedContent.plot = `Plot Hook:\n${aiResult}`;
+        document.querySelector('.save-plot-btn').style.display = 'block';
+        document.querySelector('.translate-plot-btn').style.display = 'block';
+        translationStates.plot.isTranslated = false;
+      } else {
+        const hooks = plotHooks[currentLanguage];
+        const hook = randomFrom(hooks);
+        resultEl.innerHTML = `<div data-translatable style="font-size: 1rem; color: var(--color-text-primary);">${hook}</div>`;
+        lastGeneratedContent.plot = `Plot Hook:\n${hook}`;
+        document.querySelector('.save-plot-btn').style.display = 'block';
+        document.querySelector('.translate-plot-btn').style.display = 'block';
+        translationStates.plot.isTranslated = false;
+      }
+    }
+
+    function generateTreasure() {
+      const treasureType = document.getElementById('treasure-type').value;
+
+      let treasure = '';
+      if (currentLanguage === 'da') {
+        if (treasureType === 'minor') {
+          treasure = `${roll(2, 6) * 10} GP<br>${roll(1, 4)} Ædelsten (10 GP hver)`;
+        } else if (treasureType === 'moderate') {
+          treasure = `${roll(4, 6) * 100} GP<br>${roll(2, 6)} Ædelsten (50 GP hver)<br>1 Kunstgenstand (250 GP)<br>Rul på Magisk Genstand Tabel B`;
+        } else {
+          treasure = `${roll(1, 8) * 1000} GP<br>${roll(3, 6)} Ædelsten (500 GP hver)<br>${roll(1, 4)} Kunstgenstande (2500 GP hver)<br>Rul på Magisk Genstand Tabel F`;
+        }
+      } else {
+        if (treasureType === 'minor') {
+          treasure = `${roll(2, 6) * 10} GP<br>${roll(1, 4)} Gems (10 GP each)`;
+        } else if (treasureType === 'moderate') {
+          treasure = `${roll(4, 6) * 100} GP<br>${roll(2, 6)} Gems (50 GP each)<br>1 Art Object (250 GP)<br>Roll on Magic Item Table B`;
+        } else {
+          treasure = `${roll(1, 8) * 1000} GP<br>${roll(3, 6)} Gems (500 GP each)<br>${roll(1, 4)} Art Objects (2500 GP each)<br>Roll on Magic Item Table F`;
+        }
+      }
+
+      document.querySelector('.treasure-result').innerHTML = treasure;
+    }
+
+    async function generateEncounter() {
+      const environment = document.getElementById('encounter-environment').value;
+      const tone = document.getElementById('encounter-tone').value;
+      const useNotes = document.getElementById('use-notes-in-encounters').checked;
+      const resultEl = document.querySelector('.encounter-result');
+
+      resultEl.innerHTML = '<em style="color: var(--gold);">Generating...</em>';
+
+      const envTranslation = {
+        'forest': 'skov',
+        'dungeon': 'fangehul',
+        'city': 'by',
+        'mountain': 'bjerg',
+        'swamp': 'sump'
+      };
+
+      const toneInstructions = {
+        'normal': '',
+        'funny': 'Make it funny and comedic.',
+        'serious': 'Make it serious and dangerous.',
+        'mysterious': 'Make it mysterious and intriguing.',
+        'peaceful': 'Make it peaceful and non-hostile.',
+        'tense': 'Make it tense and suspenseful.'
+      };
+
+      const toneInstruction = toneInstructions[tone] || '';
+
+      // Get notes context if enabled
+      let notesContext = '';
+      if (useNotes) {
+        const notes = getAllNotesContent();
+        if (notes) {
+          notesContext = `\n\nSession Notes for context (use these to make the encounter relevant to the campaign):\n${notes.substring(0, 500)}...`;
+        }
+      }
+
+      const prompt = `Generate a short D&D encounter in a ${envTranslation[environment]} in ENGLISH (1-2 sentences). Include what the players meet and what happens. ${toneInstruction}${notesContext}
+
+Example: "The players encounter a group of goblin raiders plundering a merchant wagon. The goblins have taken a family hostage."`;
+
+      const aiResult = await generateWithAI(prompt);
+
+      if (aiResult) {
+        resultEl.innerHTML = `<div data-translatable style="font-size: 1rem; color: var(--color-text-primary); line-height: 1.5;">${aiResult}</div>`;
+        lastGeneratedContent.encounter = `Encounter:\n${aiResult}`;
+        document.querySelector('.save-encounter-btn').style.display = 'block';
+        document.querySelector('.translate-encounter-btn').style.display = 'block';
+        translationStates.encounter.isTranslated = false;
+      } else {
+        const options = encounters[currentLanguage][environment];
+        const enc = randomFrom(options);
+        resultEl.innerHTML = `<div data-translatable style="font-size: 1rem; color: var(--color-text-primary);">${enc}</div>`;
+        lastGeneratedContent.encounter = `Encounter:\n${enc}`;
+        document.querySelector('.save-encounter-btn').style.display = 'block';
+        document.querySelector('.translate-encounter-btn').style.display = 'block';
+        translationStates.encounter.isTranslated = false;
+      }
+    }
+
+    async function generateRumor() {
+      const tone = document.getElementById('rumor-tone').value;
+      const useNotes = document.getElementById('use-notes-in-rumors').checked;
+      const resultEl = document.querySelector('.rumor-result');
+      resultEl.innerHTML = '<em style="color: var(--gold);">Generating...</em>';
+
+      const toneInstructions = {
+        'normal': '',
+        'funny': 'Make it funny and unlikely.',
+        'serious': 'Make it serious and dark.',
+        'mysterious': 'Make it mysterious and enigmatic.',
+        'scary': 'Make it scary and frightening.',
+        'gossip': 'Make it gossipy and scandalous.'
+      };
+
+      const toneInstruction = toneInstructions[tone] || '';
+
+      // Get notes context if enabled
+      let notesContext = '';
+      if (useNotes) {
+        const notes = getAllNotesContent();
+        if (notes) {
+          notesContext = `\n\nSession Notes for context (use these to create rumors about NPCs, locations, or events from the campaign):\n${notes.substring(0, 500)}...`;
+        }
+      }
+
+      const prompt = `Generate a tavern rumor in ENGLISH (1-2 sentences). Can be true, false, or partially true. Include some mystery. ${toneInstruction}${notesContext}
+
+Example: "They say the mayor meets cloaked figures in secret at night. Some believe he's selling the town's secrets to the Thieves' Guild."`;
+
+      const aiResult = await generateWithAI(prompt);
+
+      if (aiResult) {
+        resultEl.innerHTML = `<div data-translatable style="font-size: 1rem; color: var(--color-text-primary); line-height: 1.5;">${aiResult}</div>`;
+        lastGeneratedContent.rumor = `Rumor:\n${aiResult}`;
+        document.querySelector('.save-rumor-btn').style.display = 'block';
+        document.querySelector('.translate-rumor-btn').style.display = 'block';
+        translationStates.rumor.isTranslated = false;
+      } else {
+        const rumorList = rumors[currentLanguage];
+        const rumor = randomFrom(rumorList);
+        resultEl.innerHTML = `<div data-translatable style="font-size: 1rem; color: var(--color-text-primary);">${rumor}</div>`;
+        lastGeneratedContent.rumor = `Rumor:\n${rumor}`;
+        document.querySelector('.save-rumor-btn').style.display = 'block';
+        document.querySelector('.translate-rumor-btn').style.display = 'block';
+        translationStates.rumor.isTranslated = false;
+      }
+    }
+
+    async function generateMagicItem() {
+      const rarity = document.getElementById('item-rarity').value;
+      const tone = document.getElementById('item-tone').value;
+      const resultEl = document.querySelector('.magic-result');
+
+      resultEl.innerHTML = '<em style="color: var(--gold);">Generating...</em>';
+
+      const rarityTranslation = {
+        'common': 'almindelig',
+        'uncommon': 'ualmindelig',
+        'rare': 'sjælden',
+        'very-rare': 'meget sjælden'
+      };
+
+      const toneInstructions = {
+        'normal': '',
+        'funny': 'Make it funny and quirky.',
+        'serious': 'Make it serious and powerful.',
+        'cursed': 'Make it cursed with drawbacks.',
+        'elegant': 'Make it elegant and beautiful.',
+        'mysterious': 'Make it mysterious and enigmatic.'
+      };
+
+      const toneInstruction = toneInstructions[tone] || '';
+
+      const prompt = `Generate a ${rarity} magic item for D&D in ENGLISH. ${toneInstruction}
+
+Format:
+Name: [item name]
+Description: [what it does and how it looks in ENGLISH]
+
+Example:
+Name: Ring of Shadow Step
+Description: A silver ring with a dark amethyst. The wearer can teleport 30 feet through shadows once per day.`;
+
+      const aiResult = await generateWithAI(prompt);
+
+      if (aiResult) {
+        const nameMatch = aiResult.match(/Name:\s*(.+)/i);
+        const descMatch = aiResult.match(/Description:\s*(.+)/i);
+
+        if (nameMatch) {
+          let name = nameMatch[1].trim();
+          const desc = descMatch ? descMatch[1].trim() : '';
+
+          // Keep item names in English (items are game mechanics)
+          // No translation for magic items
+
+          resultEl.innerHTML = `
+            <div style="font-size: 1.2rem; font-weight: 700; color: var(--gold); margin-bottom: 0.5rem;">${name}</div>
+            ${desc ? `<div data-translatable style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.4;">${desc}</div>` : ''}
+          `;
+
+          // Store for saving and show buttons
+          lastGeneratedContent.magic = `Magic Item: ${name}\n${desc}`;
+          document.querySelector('.save-magic-btn').style.display = 'block';
+          if (desc) {
+            document.querySelector('.translate-magic-btn').style.display = 'block';
+            translationStates.magic.isTranslated = false;
+          }
+        } else {
+          fallbackMagicItem(rarity, resultEl);
+        }
+      } else {
+        fallbackMagicItem(rarity, resultEl);
+      }
+    }
+
+    function fallbackMagicItem(rarity, resultEl) {
+      const options = magicItems[currentLanguage][rarity];
+      resultEl.innerHTML = `<div style="font-size: 1.2rem; font-weight: 700; color: var(--gold);">${randomFrom(options)}</div>`;
+    }
+
+    function generateWeather() {
+      const weatherList = weather[currentLanguage];
+      document.querySelector('.weather-result').textContent = randomFrom(weatherList);
+    }
+
+    function rollDice(die) {
+      const sides = parseInt(die.substring(1));
+      const result = roll(1, sides);
+      document.getElementById('dice-result-text').textContent = `${die}: ${result}`;
+      document.getElementById('dice-result').style.display = 'block';
+    }
+
+    function rollCustomDice() {
+      const customDice = document.getElementById('custom-dice').value.trim();
+      try {
+        const match = customDice.match(/(\d+)[dt](\d+)([+-]\d+)?/);
+        if (match) {
+          const num = parseInt(match[1]);
+          const sides = parseInt(match[2]);
+          const modifier = match[3] ? parseInt(match[3]) : 0;
+          const result = roll(num, sides) + modifier;
+          document.getElementById('dice-result-text').textContent = `${customDice}: ${result}`;
+          document.getElementById('dice-result').style.display = 'block';
+        } else {
+          document.getElementById('dice-result-text').textContent = t('invalidDiceFormat');
+          document.getElementById('dice-result').style.display = 'block';
+        }
+      } catch (e) {
+        document.getElementById('dice-result-text').textContent = t('diceRollError');
+        document.getElementById('dice-result').style.display = 'block';
+      }
+    }
+
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('.generate-name-btn').addEventListener('click', generateName);
+      document.querySelector('.generate-tavern-btn').addEventListener('click', generateTavern);
+      document.querySelector('.generate-plot-btn').addEventListener('click', generatePlotHook);
+      document.querySelector('.generate-treasure-btn').addEventListener('click', generateTreasure);
+      document.querySelector('.generate-encounter-btn').addEventListener('click', generateEncounter);
+      document.querySelector('.generate-rumor-btn').addEventListener('click', generateRumor);
+      document.querySelector('.generate-magic-btn').addEventListener('click', generateMagicItem);
+      document.querySelector('.generate-weather-btn').addEventListener('click', generateWeather);
+
+      // Save to Notes button listeners
+      document.querySelector('.save-name-btn').addEventListener('click', () => {
+        saveToNotes(lastGeneratedContent.name, 'NPCs Met');
+      });
+      document.querySelector('.save-tavern-btn').addEventListener('click', () => {
+        saveToNotes(lastGeneratedContent.tavern, 'Locations');
+      });
+      document.querySelector('.save-plot-btn').addEventListener('click', () => {
+        saveToNotes(lastGeneratedContent.plot, 'Quests');
+      });
+      document.querySelector('.save-encounter-btn').addEventListener('click', () => {
+        saveToNotes(lastGeneratedContent.encounter, 'Events');
+      });
+      document.querySelector('.save-rumor-btn').addEventListener('click', () => {
+        saveToNotes(lastGeneratedContent.rumor, 'Notes');
+      });
+      document.querySelector('.save-magic-btn').addEventListener('click', () => {
+        saveToNotes(lastGeneratedContent.magic, 'Loot');
+      });
+
+      // Translate button listeners
+      document.querySelector('.translate-tavern-btn').addEventListener('click', () => {
+        toggleTranslation('tavern', document.querySelector('.tavern-result'), document.querySelector('.translate-tavern-btn'));
+      });
+      document.querySelector('.translate-plot-btn').addEventListener('click', () => {
+        toggleTranslation('plot', document.querySelector('.plot-result'), document.querySelector('.translate-plot-btn'));
+      });
+      document.querySelector('.translate-encounter-btn').addEventListener('click', () => {
+        toggleTranslation('encounter', document.querySelector('.encounter-result'), document.querySelector('.translate-encounter-btn'));
+      });
+      document.querySelector('.translate-rumor-btn').addEventListener('click', () => {
+        toggleTranslation('rumor', document.querySelector('.rumor-result'), document.querySelector('.translate-rumor-btn'));
+      });
+      document.querySelector('.translate-magic-btn').addEventListener('click', () => {
+        toggleTranslation('magic', document.querySelector('.magic-result'), document.querySelector('.translate-magic-btn'));
+      });
+
+      document.querySelectorAll('.btn-dice').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const die = btn.dataset.die;
+          rollDice(die);
+        });
+      });
+
+      document.getElementById('roll-custom-dice-btn').addEventListener('click', rollCustomDice);
+      document.getElementById('custom-dice').addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') rollCustomDice();
+      });
+    });
+  </script>
+</body>
+</html>

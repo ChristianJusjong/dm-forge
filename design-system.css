@@ -1,0 +1,413 @@
+/* ==========================================
+   DESIGN SYSTEM - DM CODEX
+   Konsistent design gennem hele appen
+   ========================================== */
+
+:root {
+  /* ==========================================
+     COLOR PALETTE - Medieval Fantasy Theme
+     ========================================== */
+
+  /* Primary Colors */
+  --color-primary: #d4af37;           /* Gold */
+  --color-primary-light: #f0d06b;     /* Light Gold */
+  --color-primary-dark: #8b7355;      /* Dark Gold/Brown */
+
+  /* Background Colors */
+  --color-bg-darkest: #0a0604;        /* Darkest background */
+  --color-bg-dark: #1a0f0a;           /* Main background */
+  --color-bg-medium: #2d1f15;         /* Card backgrounds */
+  --color-bg-light: #3e2e23;          /* Lighter backgrounds */
+
+  /* Text Colors */
+  --color-text-primary: #e8d5b7;      /* Main text (high contrast) */
+  --color-text-secondary: #f4e8d0;    /* Secondary text (higher contrast) */
+  --color-text-muted: #b8956a;        /* Muted text */
+  --color-text-dark: #5c4033;         /* Dark text (for light backgrounds) */
+
+  /* Accent Colors */
+  --color-wood-brown: #7c624d;        /* Wood/border brown */
+  --color-iron: #4a4a4a;              /* Iron gray */
+  --color-blood-red: #8b0000;         /* Blood red */
+
+  /* Semantic Colors */
+  --color-success: #4caf50;           /* Success green */
+  --color-success-dark: #4a7c59;      /* Dark success */
+  --color-warning: #ff9800;           /* Warning orange */
+  --color-warning-dark: #c67b00;      /* Dark warning */
+  --color-danger: #ff6b6b;            /* Danger red */
+  --color-danger-dark: #a0292a;       /* Dark danger */
+  --color-info: #7fd77f;              /* Info blue-green */
+
+  /* ==========================================
+     TYPOGRAPHY
+     ========================================== */
+
+  /* Font Families */
+  --font-primary: 'Lato', 'Georgia', serif;
+  --font-display: 'Cinzel', serif;
+
+  /* Font Sizes - Responsive Scale */
+  --font-size-base: 16px;
+  --font-size-xs: 0.85rem;
+  --font-size-sm: 0.9rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.1rem;
+  --font-size-xl: 1.25rem;
+
+  /* Heading Sizes */
+  --font-size-h1: 2.2rem;
+  --font-size-h2: 1.8rem;
+  --font-size-h3: 1.5rem;
+  --font-size-h4: 1.25rem;
+  --font-size-h5: 1.1rem;
+  --font-size-h6: 1rem;
+
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Line Heights */
+  --line-height-tight: 1.4;
+  --line-height-normal: 1.6;
+  --line-height-relaxed: 1.7;
+  --line-height-loose: 1.8;
+
+  /* Letter Spacing */
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+
+  /* ==========================================
+     SPACING SYSTEM
+     ========================================== */
+
+  --spacing-xs: 0.25rem;    /* 4px */
+  --spacing-sm: 0.5rem;     /* 8px */
+  --spacing-md: 1rem;       /* 16px */
+  --spacing-lg: 1.5rem;     /* 24px */
+  --spacing-xl: 2rem;       /* 32px */
+  --spacing-2xl: 3rem;      /* 48px */
+  --spacing-3xl: 4rem;      /* 64px */
+
+  /* ==========================================
+     BORDERS & RADIUS
+     ========================================== */
+
+  --border-width-thin: 1px;
+  --border-width-medium: 2px;
+  --border-width-thick: 3px;
+
+  --border-radius-sm: 4px;
+  --border-radius-md: 6px;
+  --border-radius-lg: 8px;
+  --border-radius-xl: 10px;
+  --border-radius-2xl: 12px;
+  --border-radius-full: 9999px;
+
+  /* ==========================================
+     SHADOWS
+     ========================================== */
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 3px 8px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 6px 16px rgba(0, 0, 0, 0.7);
+  --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.8);
+
+  /* Text Shadows */
+  --text-shadow-sm: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  --text-shadow-md: 1px 1px 3px rgba(0, 0, 0, 0.9);
+  --text-shadow-lg: 2px 2px 4px rgba(0, 0, 0, 0.9);
+  --text-shadow-glow: 0 0 10px rgba(212, 175, 55, 0.6), 2px 2px 4px rgba(0, 0, 0, 0.9);
+
+  /* ==========================================
+     TRANSITIONS
+     ========================================== */
+
+  --transition-fast: 0.15s ease-in-out;
+  --transition-normal: 0.2s ease-in-out;
+  --transition-slow: 0.3s ease-in-out;
+
+  /* ==========================================
+     Z-INDEX SCALE
+     ========================================== */
+
+  --z-base: 1;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+}
+
+/* ==========================================
+   COMPONENT DESIGN TOKENS
+   ========================================== */
+
+:root {
+  /* Buttons */
+  --btn-padding-y: 0.65rem;
+  --btn-padding-x: 1.4rem;
+  --btn-font-size: 0.95rem;
+  --btn-border-radius: var(--border-radius-md);
+
+  /* Input Fields */
+  --input-padding-y: 0.7rem;
+  --input-padding-x: 1rem;
+  --input-font-size: 1rem;
+  --input-border-radius: var(--border-radius-md);
+  --input-border-color: var(--color-wood-brown);
+  --input-bg: rgba(255, 255, 255, 0.05);
+  --input-text-color: var(--color-text-secondary);
+
+  /* Cards */
+  --card-padding: 1.5rem;
+  --card-border-radius: var(--border-radius-lg);
+  --card-border-width: var(--border-width-thick);
+  --card-border-color: var(--color-wood-brown);
+  --card-bg: linear-gradient(135deg, rgba(26, 15, 10, 0.95) 0%, rgba(13, 8, 6, 0.95) 100%);
+
+  /* Modal */
+  --modal-padding: 2rem;
+  --modal-border-radius: var(--border-radius-xl);
+  --modal-max-width: 600px;
+  --modal-backdrop-bg: rgba(0, 0, 0, 0.85);
+}
+
+/* ==========================================
+   UTILITY CLASSES - TEXT
+   ========================================== */
+
+/* Text Colors */
+.text-primary { color: var(--color-text-primary) !important; }
+.text-secondary { color: var(--color-text-secondary) !important; }
+.text-muted { color: var(--color-text-muted) !important; }
+.text-gold { color: var(--color-primary) !important; }
+.text-gold-light { color: var(--color-primary-light) !important; }
+.text-success { color: var(--color-success) !important; }
+.text-warning { color: var(--color-warning) !important; }
+.text-danger { color: var(--color-danger) !important; }
+
+/* Text Sizes */
+.text-xs { font-size: var(--font-size-xs) !important; }
+.text-sm { font-size: var(--font-size-sm) !important; }
+.text-md { font-size: var(--font-size-md) !important; }
+.text-lg { font-size: var(--font-size-lg) !important; }
+.text-xl { font-size: var(--font-size-xl) !important; }
+
+/* Text Weights */
+.text-light { font-weight: var(--font-weight-light) !important; }
+.text-normal { font-weight: var(--font-weight-normal) !important; }
+.text-medium { font-weight: var(--font-weight-medium) !important; }
+.text-semibold { font-weight: var(--font-weight-semibold) !important; }
+.text-bold { font-weight: var(--font-weight-bold) !important; }
+
+/* Text Alignment */
+.text-left { text-align: left !important; }
+.text-center { text-align: center !important; }
+.text-right { text-align: right !important; }
+
+/* Text Transform */
+.text-uppercase { text-transform: uppercase !important; }
+.text-lowercase { text-transform: lowercase !important; }
+.text-capitalize { text-transform: capitalize !important; }
+
+/* ==========================================
+   UTILITY CLASSES - SPACING
+   ========================================== */
+
+/* Margin */
+.m-0 { margin: 0 !important; }
+.m-xs { margin: var(--spacing-xs) !important; }
+.m-sm { margin: var(--spacing-sm) !important; }
+.m-md { margin: var(--spacing-md) !important; }
+.m-lg { margin: var(--spacing-lg) !important; }
+.m-xl { margin: var(--spacing-xl) !important; }
+
+.mt-0 { margin-top: 0 !important; }
+.mt-xs { margin-top: var(--spacing-xs) !important; }
+.mt-sm { margin-top: var(--spacing-sm) !important; }
+.mt-md { margin-top: var(--spacing-md) !important; }
+.mt-lg { margin-top: var(--spacing-lg) !important; }
+.mt-xl { margin-top: var(--spacing-xl) !important; }
+
+.mb-0 { margin-bottom: 0 !important; }
+.mb-xs { margin-bottom: var(--spacing-xs) !important; }
+.mb-sm { margin-bottom: var(--spacing-sm) !important; }
+.mb-md { margin-bottom: var(--spacing-md) !important; }
+.mb-lg { margin-bottom: var(--spacing-lg) !important; }
+.mb-xl { margin-bottom: var(--spacing-xl) !important; }
+
+/* Padding */
+.p-0 { padding: 0 !important; }
+.p-xs { padding: var(--spacing-xs) !important; }
+.p-sm { padding: var(--spacing-sm) !important; }
+.p-md { padding: var(--spacing-md) !important; }
+.p-lg { padding: var(--spacing-lg) !important; }
+.p-xl { padding: var(--spacing-xl) !important; }
+
+/* Gap (for flex/grid) */
+.gap-xs { gap: var(--spacing-xs) !important; }
+.gap-sm { gap: var(--spacing-sm) !important; }
+.gap-md { gap: var(--spacing-md) !important; }
+.gap-lg { gap: var(--spacing-lg) !important; }
+.gap-xl { gap: var(--spacing-xl) !important; }
+
+/* ==========================================
+   UTILITY CLASSES - LAYOUT
+   ========================================== */
+
+/* Display */
+.d-none { display: none !important; }
+.d-block { display: block !important; }
+.d-inline { display: inline !important; }
+.d-inline-block { display: inline-block !important; }
+.d-flex { display: flex !important; }
+.d-grid { display: grid !important; }
+
+/* Flex */
+.flex-row { flex-direction: row !important; }
+.flex-column { flex-direction: column !important; }
+.flex-wrap { flex-wrap: wrap !important; }
+.flex-nowrap { flex-wrap: nowrap !important; }
+.justify-start { justify-content: flex-start !important; }
+.justify-center { justify-content: center !important; }
+.justify-end { justify-content: flex-end !important; }
+.justify-between { justify-content: space-between !important; }
+.align-start { align-items: flex-start !important; }
+.align-center { align-items: center !important; }
+.align-end { align-items: flex-end !important; }
+
+/* Width */
+.w-100 { width: 100% !important; }
+.w-auto { width: auto !important; }
+
+/* ==========================================
+   STANDARDIZED LABEL STYLES
+   ========================================== */
+
+/* All labels should use these consistent styles */
+label,
+.label,
+.input-label {
+  display: block;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary-light);
+  margin-bottom: var(--spacing-sm);
+  font-family: var(--font-display);
+  text-shadow: var(--text-shadow-md);
+  letter-spacing: var(--letter-spacing-wide);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-tight);
+}
+
+/* Small labels (for compact forms) */
+.label-sm {
+  font-size: var(--font-size-md);
+  margin-bottom: var(--spacing-xs);
+}
+
+/* Inline labels */
+.label-inline {
+  display: inline-block;
+  margin-right: var(--spacing-sm);
+  margin-bottom: 0;
+}
+
+/* Label with required indicator */
+.label-required::after {
+  content: ' *';
+  color: var(--color-danger);
+}
+
+/* ==========================================
+   STANDARDIZED INPUT STYLES
+   ========================================== */
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+textarea,
+select,
+.input,
+.textarea {
+  width: 100%;
+  padding: var(--input-padding-y) var(--input-padding-x);
+  background: var(--input-bg);
+  border: var(--border-width-medium) solid var(--input-border-color);
+  border-radius: var(--input-border-radius);
+  color: var(--input-text-color);
+  font-size: var(--input-font-size);
+  font-family: var(--font-primary);
+  line-height: var(--line-height-normal);
+  transition: border-color var(--transition-normal);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+/* ==========================================
+   SPECIALIZED LAYOUTS
+   ========================================== */
+
+/* Creature Form Grid (for encounters.html) */
+.creature-form-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
+  gap: var(--spacing-md);
+  align-items: end;
+}
+
+@media (max-width: 1024px) {
+  .creature-form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .creature-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
+
+@media (max-width: 768px) {
+  :root {
+    --font-size-base: 15px;
+    --font-size-h1: 1.8rem;
+    --font-size-h2: 1.5rem;
+    --font-size-h3: 1.3rem;
+
+    --card-padding: 1rem;
+    --modal-padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --font-size-base: 14px;
+    --font-size-h1: 1.6rem;
+    --font-size-h2: 1.3rem;
+    --font-size-h3: 1.15rem;
+
+    --btn-padding-y: 0.6rem;
+    --btn-padding-x: 1.2rem;
+    --btn-font-size: 0.9rem;
+  }
+}

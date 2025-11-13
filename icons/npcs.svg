@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="robeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#6b4d91"/>
+      <stop offset="100%" style="stop-color:#4a3366"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Wizard NPC -->
+  <!-- Body/Robe -->
+  <path d="M 32 24 L 18 35 L 18 58 Q 18 60 20 60 L 44 60 Q 46 60 46 58 L 46 35 L 32 24 Z"
+        fill="url(#robeGrad)" stroke="#d4af37" stroke-width="1.5"/>
+
+  <!-- Head -->
+  <circle cx="32" cy="18" r="9" fill="#e8d5b7" stroke="#d4af37" stroke-width="1.5"/>
+
+  <!-- Wizard hat -->
+  <path d="M 22 16 L 32 2 L 42 16 Q 42 18 40 18 L 24 18 Q 22 18 22 16 Z"
+        fill="url(#robeGrad)" stroke="#d4af37" stroke-width="1.5"/>
+  <ellipse cx="32" cy="16" rx="10" ry="3" fill="url(#robeGrad)" stroke="#d4af37" stroke-width="1.5"/>
+
+  <!-- Staff -->
+  <line x1="48" y1="28" x2="48" y2="58" stroke="#8b4513" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="48" cy="24" r="5" fill="#4169e1" stroke="#d4af37" stroke-width="1.5">
+    <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Beard -->
+  <path d="M 28 22 Q 32 26 36 22" fill="#999" stroke="#666" stroke-width="1"/>
+
+  <!-- Eyes -->
+  <circle cx="28" cy="17" r="1.5" fill="#333"/>
+  <circle cx="36" cy="17" r="1.5" fill="#333"/>
+</svg>

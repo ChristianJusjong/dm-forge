@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offline - Dungeon Master Forge</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Lato', 'Georgia', serif;
+      background: linear-gradient(180deg, #0a0604 0%, #1a0f0a 50%, #0d0806 100%);
+      color: #e8d5b7;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .offline-container {
+      text-align: center;
+      max-width: 600px;
+    }
+
+    .offline-icon {
+      font-size: 6rem;
+      margin-bottom: 2rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(0.95); }
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #d4af37;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+    }
+
+    p {
+      font-size: 1.2rem;
+      color: #b8956a;
+      margin-bottom: 2rem;
+      line-height: 1.8;
+    }
+
+    .feature-list {
+      background: linear-gradient(135deg, #2d1f15 0%, #1a1308 100%);
+      border: 2px solid #8b7355;
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 2rem 0;
+      text-align: left;
+    }
+
+    .feature-list h2 {
+      color: #d4af37;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .feature-list ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .feature-list li {
+      padding: 0.5rem 0;
+      padding-left: 2rem;
+      position: relative;
+    }
+
+    .feature-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #4caf50;
+      font-weight: bold;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+      border: 2px solid #f0d06b;
+      color: #1a1308;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+    }
+
+    .btn:hover {
+      background: linear-gradient(135deg, #f0d06b 0%, #d4af37 100%);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .status {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: rgba(255, 152, 0, 0.1);
+      border: 1px solid #ff9800;
+      border-radius: 8px;
+      color: #ff9800;
+      font-size: 0.9rem;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ff9800;
+      margin-right: 0.5rem;
+      animation: blink 1.5s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+
+      .offline-icon {
+        font-size: 4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="offline-container">
+    <div class="offline-icon">🌐</div>
+
+    <h1>You're Offline</h1>
+
+    <p>
+      No internet connection detected. But don't worry - Dungeon Master Forge works offline!
+    </p>
+
+    <div class="feature-list">
+      <h2>✨ Available Offline:</h2>
+      <ul>
+        <li>Initiative Tracker</li>
+        <li>Campaign Management</li>
+        <li>Session Notes</li>
+        <li>Encounter Builder</li>
+        <li>Saved Monsters & NPCs</li>
+        <li>Party Configuration</li>
+      </ul>
+    </div>
+
+    <p style="font-size: 1rem; color: #8b7355;">
+      <strong>Note:</strong> Monster search requires internet connection.
+      Previously viewed monsters are cached for offline use.
+    </p>
+
+    <button class="btn" onclick="tryReconnect()">
+      🔄 Try to Reconnect
+    </button>
+
+    <div class="status">
+      <span class="status-indicator"></span>
+      Waiting for connection...
+    </div>
+  </div>
+
+  <script>
+    // Auto-check connection every 5 seconds
+    setInterval(checkConnection, 5000);
+
+    function checkConnection() {
+      if (navigator.onLine) {
+        window.location.reload();
+      }
+    }
+
+    function tryReconnect() {
+      if (navigator.onLine) {
+        window.location.href = '/';
+      } else {
+        alert('Still offline. Please check your internet connection.');
+      }
+    }
+
+    // Listen for online event
+    window.addEventListener('online', () => {
+      console.log('✅ Connection restored!');
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
+    });
+
+    // Update status
+    window.addEventListener('offline', () => {
+      console.log('❌ Connection lost');
+    });
+  </script>
+</body>
+</html>

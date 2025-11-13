@@ -1,0 +1,179 @@
+{
+  "name": "Dungeon Master Forge - Complete D&D 5e Toolkit",
+  "short_name": "DM Forge",
+  "description": "Professional tools for Dungeon Masters: initiative tracking, encounter building, monster stats, NPC generation, session notes, and campaign management for D&D 5e.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
+  "background_color": "#0a0604",
+  "theme_color": "#d4af37",
+  "orientation": "any",
+  "dir": "ltr",
+  "lang": "en-US",
+  "categories": [
+    "games",
+    "entertainment",
+    "utilities",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/maskable-icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/maskable-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop-home.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Home screen with campaign management"
+    },
+    {
+      "src": "/screenshots/desktop-initiative.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Initiative tracker for combat encounters"
+    },
+    {
+      "src": "/screenshots/mobile-monsters.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Monster browser on mobile"
+    },
+    {
+      "src": "/screenshots/mobile-notes.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Session notes on mobile"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Initiative Tracker",
+      "short_name": "Initiative",
+      "description": "Start combat encounter tracking",
+      "url": "/initiative.html",
+      "icons": [
+        {
+          "src": "/icons/shortcuts/initiative-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Monster Browser",
+      "short_name": "Monsters",
+      "description": "Search D&D 5e monsters",
+      "url": "/monsters.html",
+      "icons": [
+        {
+          "src": "/icons/shortcuts/monster-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Encounter Builder",
+      "short_name": "Encounters",
+      "description": "Build balanced encounters",
+      "url": "/encounters.html",
+      "icons": [
+        {
+          "src": "/icons/shortcuts/encounter-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Session Notes",
+      "short_name": "Notes",
+      "description": "View campaign notes",
+      "url": "/notes.html",
+      "icons": [
+        {
+          "src": "/icons/shortcuts/notes-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "share_target": {
+    "action": "/share-target",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7"
+}

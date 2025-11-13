@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monster Browser - Dungeon Master Forge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="design-system.css">
+  <link rel="stylesheet" href="medieval-theme.css">
+  <link rel="stylesheet" href="responsive-design.css">
+  <link rel="stylesheet" href="global-overrides.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Navigation will be inserted here by nav.js -->
+
+    <!-- Monster Browser Content -->
+    <main class="page-content">
+      <div class="page-header">
+        <h1 class="page-title">🐉 <span data-i18n="monsterBrowser">Monster Browser</span></h1>
+        <p class="page-subtitle">Browse D&D 5e SRD monsters with D&D Beyond links</p>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div class="input-group" style="margin-bottom: 0;">
+          <label class="input-label" data-i18n="searchMonsters">Search Monsters</label>
+          <div style="display: flex; gap: var(--space-sm); align-items: center;">
+            <input id="monster-search" type="text" placeholder="e.g., goblin, dragon..." class="input" style="margin-bottom: 0;">
+            <button id="search-btn" class="btn" style="white-space: nowrap;">🔍 <span data-i18n="search">Search</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monsters Grid -->
+      <div id="monsters-grid" class="monsters-grid">
+        <!-- Monsters will be rendered here -->
+      </div>
+
+      <div id="loading" class="loading" style="display: none;">
+        ⏳ Loading monsters...
+      </div>
+
+      <div id="no-monsters" class="empty-state" style="display: none;">
+        <p data-i18n="noMonstersFound">No monsters found. Try a different search!</p>
+      </div>
+
+      <!-- Monster Details Modal -->
+      <div id="monster-modal" class="modal-overlay" style="display: none;">
+        <div class="modal large">
+          <h2 id="monster-name"></h2>
+          <p id="monster-type" style="font-style: italic; color: var(--text-secondary);"></p>
+
+          <div class="card" style="margin-top: 1.5rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1rem; text-align: center;">
+              <div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary);">AC</div>
+                <div id="monster-ac" style="font-size: 1.5rem; font-weight: 700; color: var(--gold);"></div>
+              </div>
+              <div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary);">HP</div>
+                <div id="monster-hp" style="font-size: 1.5rem; font-weight: 700; color: var(--gold);"></div>
+              </div>
+              <div>
+                <div style="font-size: 0.9rem; color: var(--text-secondary);">CR</div>
+                <div id="monster-cr" style="font-size: 1.5rem; font-weight: 700; color: var(--gold);"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="monster-stats" style="margin-top: 1.5rem;"></div>
+
+          <div class="modal-actions" style="margin-top: 2rem;">
+            <a id="dndbeyond-link" href="#" target="_blank" class="btn btn-secondary">📖 View on D&D Beyond</a>
+            <button id="close-modal-btn" class="btn" data-i18n="close">Close</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="auth.js"></script>
+  <script src="translations.js"></script>
+  <script src="campaign-manager.js"></script>
+  <script src="nav.js"></script>
+  <script src="ads.js"></script>
+  <script>
+    // Require authentication
+    if (!requireAuth()) {
+      throw new Error('Authentication required');
+    }
+
+    // ========================================
+    // MONSTER BROWSER
+    // ========================================
+
+    // No translation needed - keep all monster content in English
+    let monsters = [];
+    let currentMonster = null;
+
+    async function searchMonsters() {
+      const searchTerm = document.getElementById('monster-search').value.trim();
+      const grid = document.getElementById('monsters-grid');
+      const loading = document.getElementById('loading');
+      const noMonsters = document.getElementById('no-monsters');
+
+      grid.innerHTML = '';
+      loading.style.display = 'block';
+      noMonsters.style.display = 'none';
+
+      try {
+        const url = searchTerm
+          ? `https://api.open5e.com/v1/monsters/?search=${encodeURIComponent(searchTerm)}&limit=50`
+          : 'https://api.open5e.com/v1/monsters/?limit=50';
+
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('API Error');
+
+        const data = await response.json();
+        monsters = data.results;
+
+        loading.style.display = 'none';
+
+        if (monsters.length === 0) {
+          noMonsters.style.display = 'block';
+          return;
+        }
+
+        renderMonsters();
+
+      } catch (error) {
+        loading.style.display = 'none';
+        grid.innerHTML = `<div class="error-message">Error loading monsters: ${error.message}. Try again later.</div>`;
+      }
+    }
+
+    function renderMonsters() {
+      const grid = document.getElementById('monsters-grid');
+
+      grid.innerHTML = monsters.map(monster => {
+        const dndBeyondSlug = monster.name.toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-|-$/g, '');
+
+        return `
+          <div class="monster-card" data-slug="${monster.slug}" style="cursor: pointer;">
+            <h3>${monster.name}</h3>
+            <p style="font-style: italic; color: #5c4033; margin-bottom: 1rem;">
+              ${monster.size} ${monster.type}, ${monster.alignment}
+            </p>
+
+            <div class="monster-stats">
+              <span class="monster-stat"><strong>CR:</strong> ${monster.challenge_rating}</span>
+              <span class="monster-stat"><strong>HP:</strong> ${monster.hit_points}</span>
+              <span class="monster-stat"><strong>AC:</strong> ${monster.armor_class}</span>
+            </div>
+
+            <div class="monster-links" style="margin-top: 1rem;">
+              <a href="https://www.dndbeyond.com/monsters/${dndBeyondSlug}" target="_blank" class="monster-link" onclick="event.stopPropagation()">
+                📖 D&D Beyond
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Add click listeners
+      document.querySelectorAll('.monster-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const slug = card.dataset.slug;
+          const monster = monsters.find(m => m.slug === slug);
+          if (monster) showMonsterDetails(monster);
+        });
+      });
+    }
+
+    async function showMonsterDetails(monster) {
+      currentMonster = monster;
+
+      // Show modal immediately
+      document.getElementById('monster-modal').style.display = 'flex';
+      document.getElementById('monster-name').textContent = monster.name;
+      document.getElementById('monster-type').textContent = `${monster.size} ${monster.type}, ${monster.alignment}`;
+
+      document.getElementById('monster-ac').textContent = monster.armor_class;
+      document.getElementById('monster-hp').textContent = `${monster.hit_points} (${monster.hit_dice})`;
+      document.getElementById('monster-cr').textContent = monster.challenge_rating;
+
+      try {
+        // Keep ALL monster content in English (names AND descriptions)
+        let abilities = [];
+        if (monster.special_abilities && monster.special_abilities.length > 0) {
+          abilities = monster.special_abilities.slice(0, 5).map(ability => ({
+            name: ability.name,
+            desc: ability.desc
+          }));
+        }
+
+        let actions = [];
+        if (monster.actions && monster.actions.length > 0) {
+          actions = monster.actions.slice(0, 5).map(action => ({
+            name: action.name,
+            desc: action.desc
+          }));
+        }
+
+        // Build stats display
+        const stats = `
+          <div class="card">
+            <h4 style="color: #d4af37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.6), 2px 2px 4px rgba(0, 0, 0, 0.9); margin-bottom: 1rem;">Ability Scores</h4>
+            <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.5rem; text-align: center; color: #e8d5b7;">
+              <div><strong style="color: #f0d06b;">STR</strong><br>${monster.strength} (${Math.floor((monster.strength - 10) / 2)})</div>
+              <div><strong style="color: #f0d06b;">DEX</strong><br>${monster.dexterity} (${Math.floor((monster.dexterity - 10) / 2)})</div>
+              <div><strong style="color: #f0d06b;">CON</strong><br>${monster.constitution} (${Math.floor((monster.constitution - 10) / 2)})</div>
+              <div><strong style="color: #f0d06b;">INT</strong><br>${monster.intelligence} (${Math.floor((monster.intelligence - 10) / 2)})</div>
+              <div><strong style="color: #f0d06b;">WIS</strong><br>${monster.wisdom} (${Math.floor((monster.wisdom - 10) / 2)})</div>
+              <div><strong style="color: #f0d06b;">CHA</strong><br>${monster.charisma} (${Math.floor((monster.charisma - 10) / 2)})</div>
+            </div>
+          </div>
+
+          ${monster.speed ? `<p style="margin-top: 1rem; color: #e8d5b7; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);"><strong style="color: #f0d06b;">Speed:</strong> ${JSON.stringify(monster.speed).replace(/[{}":]/g, ' ')}</p>` : ''}
+          ${monster.senses ? `<p style="color: #e8d5b7; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);"><strong style="color: #f0d06b;">Senses:</strong> ${monster.senses}</p>` : ''}
+          ${monster.languages ? `<p style="color: #e8d5b7; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);"><strong style="color: #f0d06b;">Languages:</strong> ${monster.languages}</p>` : ''}
+
+          ${abilities.length > 0 ? `
+            <div class="card" style="margin-top: 1rem;">
+              <h4 style="color: #d4af37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.6), 2px 2px 4px rgba(0, 0, 0, 0.9); margin-bottom: 0.5rem;">Special Abilities</h4>
+              ${abilities.map(ability => `
+                <div style="margin-bottom: 0.75rem; color: #e8d5b7; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); line-height: 1.6;">
+                  <strong style="color: #f0d06b;">${ability.name}:</strong> ${ability.desc}
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+
+          ${actions.length > 0 ? `
+            <div class="card" style="margin-top: 1rem;">
+              <h4 style="color: #d4af37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.6), 2px 2px 4px rgba(0, 0, 0, 0.9); margin-bottom: 0.5rem;">Actions</h4>
+              ${actions.map(action => `
+                <div style="margin-bottom: 0.75rem; color: #e8d5b7; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); line-height: 1.6;">
+                  <strong style="color: #f0d06b;">${action.name}:</strong> ${action.desc}
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+        `;
+
+        document.getElementById('monster-stats').innerHTML = stats;
+
+      } catch (error) {
+        console.error('Error displaying monster details:', error);
+        document.getElementById('monster-stats').innerHTML = '<p style="color: #ff6b6b; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);">Error loading monster details. Please try again.</p>';
+      }
+
+      // Set D&D Beyond link
+      const dndBeyondSlug = monster.name.toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '');
+      document.getElementById('dndbeyond-link').href = `https://www.dndbeyond.com/monsters/${dndBeyondSlug}`;
+    }
+
+    function closeModal() {
+      document.getElementById('monster-modal').style.display = 'none';
+      currentMonster = null;
+    }
+
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('search-btn').addEventListener('click', searchMonsters);
+      document.getElementById('monster-search').addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') searchMonsters();
+      });
+      document.getElementById('close-modal-btn').addEventListener('click', closeModal);
+      document.getElementById('monster-modal').addEventListener('click', (e) => {
+        if (e.target.id === 'monster-modal') closeModal();
+      });
+
+      // Load initial monsters
+      searchMonsters();
+    });
+  </script>
+</body>
+</html>

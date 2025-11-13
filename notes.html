@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Session Notes - Dungeon Master Forge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="design-system.css">
+  <link rel="stylesheet" href="medieval-theme.css">
+  <link rel="stylesheet" href="responsive-design.css">
+  <link rel="stylesheet" href="global-overrides.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Navigation will be inserted here by nav.js -->
+
+    <!-- Session Notes Content -->
+    <main class="page-content">
+      <div class="note-taker">
+        <div class="notes-header">
+          <h2>📝 <span data-i18n="sessionNotes">Session Notes</span></h2>
+          <button id="new-session-btn" class="btn" data-i18n="newSession">+ New Session</button>
+        </div>
+
+        <!-- Sessions Sidebar -->
+        <div id="sessions-sidebar" class="sessions-sidebar">
+          <!-- Sessions will be rendered here -->
+        </div>
+
+        <div id="no-sessions" class="empty-state" style="display: none;">
+          <p data-i18n="noSessions">No sessions created yet</p>
+        </div>
+
+        <!-- Note Editor -->
+        <div id="note-editor" class="note-editor" style="display: none;">
+          <div class="editor-header">
+            <h3 id="current-session-title"></h3>
+            <span id="save-status" class="auto-save"></span>
+          </div>
+
+          <div class="editor-toolbar">
+            <button class="btn-small add-section-btn" data-section="events" data-i18n="events">+ Events</button>
+            <button class="btn-small add-section-btn" data-section="npcsMet" data-i18n="npcsMet">+ NPCs Met</button>
+            <button class="btn-small add-section-btn" data-section="locations" data-i18n="locations">+ Locations</button>
+            <button class="btn-small add-section-btn" data-section="quests" data-i18n="quests">+ Quests</button>
+            <button class="btn-small add-section-btn" data-section="loot" data-i18n="loot">+ Loot</button>
+            <button class="btn-small add-section-btn" data-section="notes" data-i18n="notes">+ Notes</button>
+          </div>
+
+          <div id="sections-container" class="sections">
+            <!-- Sections will be rendered here -->
+          </div>
+
+          <!-- Quick Notes -->
+          <div class="quick-notes">
+            <h4 data-i18n="quickNotes">Quick Notes</h4>
+            <div id="quick-notes-list" class="quick-notes-list">
+              <!-- Quick notes will be rendered here -->
+            </div>
+            <div class="quick-note-input">
+              <input id="quick-note-text" type="text" data-i18n-placeholder="quickNotePlaceholder" placeholder="Quick note..." class="input">
+              <button id="add-quick-note-btn" class="btn-small" data-i18n="add">Add</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="no-session-selected" class="no-session-selected">
+          <p data-i18n="selectSession">Select a session to view notes</p>
+        </div>
+      </div>
+
+      <!-- New Session Modal -->
+      <div id="new-session-modal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+          <h3 data-i18n="newSession">New Session</h3>
+          <input id="new-session-title" type="text" data-i18n-placeholder="sessionTitle" placeholder="Session Title" class="input">
+          <div class="modal-actions">
+            <button id="create-session-btn" class="btn" data-i18n="create">Create</button>
+            <button id="cancel-session-btn" class="btn btn-secondary" data-i18n="cancel">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="auth.js"></script>
+  <script src="translations.js"></script>
+  <script src="campaign-manager.js"></script>
+  <script src="nav.js"></script>
+  <script>
+    // Require authentication
+    if (!requireAuth()) {
+      throw new Error('Authentication required');
+    }
+
+    // ========================================
+    // NOTE TAKER / SESSION NOTES
+    // ========================================
+
+    let sessions = [];
+    let currentSession = null;
+    let saveTimeout = null;
+
+    function loadSessions() {
+      const saved = localStorage.getItem('session_notes');
+      if (saved) {
+        sessions = JSON.parse(saved);
+      }
+    }
+
+    function saveSessions() {
+      localStorage.setItem('session_notes', JSON.stringify(sessions));
+      document.getElementById('save-status').textContent = t('allChangesSaved');
+    }
+
+    function autoSave() {
+      document.getElementById('save-status').textContent = t('saving');
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(() => {
+        saveSessions();
+      }, 1000);
+    }
+
+    function renderSessions() {
+      const sidebar = document.getElementById('sessions-sidebar');
+      const noSessions = document.getElementById('no-sessions');
+
+      if (sessions.length === 0) {
+        sidebar.innerHTML = '';
+        noSessions.style.display = 'block';
+        return;
+      }
+
+      noSessions.style.display = 'none';
+
+      sidebar.innerHTML = sessions.map(session => {
+        const date = new Date(session.date);
+        const formattedDate = date.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        return `
+          <div class="session-item ${currentSession && currentSession.id === session.id ? 'active' : ''}" data-id="${session.id}">
+            <div class="session-info">
+              <h4>${session.title}</h4>
+              <span class="session-date">${formattedDate}</span>
+            </div>
+            <button class="btn-tiny btn-danger delete-session" data-id="${session.id}">×</button>
+          </div>
+        `;
+      }).join('');
+
+      document.querySelectorAll('.session-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+          if (!e.target.classList.contains('delete-session')) {
+            const id = parseInt(item.dataset.id);
+            const session = sessions.find(s => s.id === id);
+            if (session) {
+              selectSession(session);
+            }
+          }
+        });
+      });
+
+      document.querySelectorAll('.delete-session').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (confirm(t('deleteSessionConfirm'))) {
+            const id = parseInt(e.target.dataset.id);
+            sessions = sessions.filter(s => s.id !== id);
+            if (currentSession && currentSession.id === id) {
+              currentSession = null;
+              document.getElementById('note-editor').style.display = 'none';
+              document.getElementById('no-session-selected').style.display = 'block';
+            }
+            saveSessions();
+            renderSessions();
+          }
+        });
+      });
+    }
+
+    function selectSession(session) {
+      currentSession = session;
+      document.getElementById('note-editor').style.display = 'block';
+      document.getElementById('no-session-selected').style.display = 'none';
+      document.getElementById('current-session-title').textContent = session.title;
+      document.getElementById('save-status').textContent = t('allChangesSaved');
+      renderSections();
+      renderQuickNotes();
+      renderSessions(); // Re-render to update active state
+    }
+
+    function renderSections() {
+      if (!currentSession) return;
+
+      const container = document.getElementById('sections-container');
+      container.innerHTML = currentSession.sections.map((section, index) => `
+        <div class="section">
+          <div class="section-header">
+            <input type="text" class="section-title-input" value="${section.title}" data-index="${index}">
+            <button class="btn-tiny remove-section-btn" data-index="${index}">${t('remove')}</button>
+          </div>
+          <textarea class="section-textarea" data-index="${index}" rows="6" placeholder="Enter ${section.title.toLowerCase()} here...">${section.content}</textarea>
+        </div>
+      `).join('');
+
+      container.querySelectorAll('.section-title-input').forEach(input => {
+        input.addEventListener('input', (e) => {
+          const index = parseInt(e.target.dataset.index);
+          currentSession.sections[index].title = e.target.value;
+          autoSave();
+        });
+      });
+
+      container.querySelectorAll('.section-textarea').forEach(textarea => {
+        textarea.addEventListener('input', (e) => {
+          const index = parseInt(e.target.dataset.index);
+          currentSession.sections[index].content = e.target.value;
+          autoSave();
+        });
+      });
+
+      container.querySelectorAll('.remove-section-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const index = parseInt(e.target.dataset.index);
+          currentSession.sections.splice(index, 1);
+          autoSave();
+          renderSections();
+        });
+      });
+    }
+
+    function renderQuickNotes() {
+      if (!currentSession) return;
+
+      const list = document.getElementById('quick-notes-list');
+      list.innerHTML = currentSession.quickNotes.map((note, index) => `
+        <div class="quick-note">
+          <span>${note.timestamp} - ${note.text}</span>
+          <button class="btn-tiny remove-quick-note" data-index="${index}">×</button>
+        </div>
+      `).join('');
+
+      list.querySelectorAll('.remove-quick-note').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const index = parseInt(e.target.dataset.index);
+          currentSession.quickNotes.splice(index, 1);
+          autoSave();
+          renderQuickNotes();
+        });
+      });
+    }
+
+    function addSection(title) {
+      if (currentSession) {
+        currentSession.sections.push({
+          title,
+          content: ''
+        });
+        autoSave();
+        renderSections();
+      }
+    }
+
+    function addQuickNote() {
+      const input = document.getElementById('quick-note-text');
+      const text = input.value.trim();
+
+      if (text && currentSession) {
+        const timestamp = new Date().toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        currentSession.quickNotes.push({
+          timestamp,
+          text
+        });
+        input.value = '';
+        autoSave();
+        renderQuickNotes();
+      }
+    }
+
+    function showNewSessionModal() {
+      document.getElementById('new-session-modal').style.display = 'flex';
+    }
+
+    function hideNewSessionModal() {
+      document.getElementById('new-session-modal').style.display = 'none';
+      document.getElementById('new-session-title').value = '';
+    }
+
+    function createSession() {
+      const title = document.getElementById('new-session-title').value.trim();
+
+      if (title) {
+        const newSession = {
+          id: Date.now(),
+          title,
+          date: new Date().toISOString(),
+          sections: [
+            { title: t('sessionSummary'), content: '' },
+            { title: t('events'), content: '' },
+            { title: t('npcsMet'), content: '' },
+            { title: t('quests'), content: '' }
+          ],
+          quickNotes: []
+        };
+
+        sessions.unshift(newSession);
+        currentSession = newSession;
+        saveSessions();
+        renderSessions();
+        selectSession(newSession);
+        hideNewSessionModal();
+      }
+    }
+
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('new-session-btn').addEventListener('click', showNewSessionModal);
+      document.getElementById('cancel-session-btn').addEventListener('click', hideNewSessionModal);
+      document.getElementById('create-session-btn').addEventListener('click', createSession);
+      document.getElementById('new-session-title').addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') createSession();
+      });
+
+      document.querySelectorAll('.add-section-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const sectionName = t(btn.dataset.section);
+          addSection(sectionName);
+        });
+      });
+
+      document.getElementById('add-quick-note-btn').addEventListener('click', addQuickNote);
+      document.getElementById('quick-note-text').addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') addQuickNote();
+      });
+
+      // Close modal on overlay click
+      document.getElementById('new-session-modal').addEventListener('click', (e) => {
+        if (e.target.id === 'new-session-modal') {
+          hideNewSessionModal();
+        }
+      });
+
+      loadSessions();
+      renderSessions();
+
+      // Initial status
+      if (sessions.length === 0) {
+        document.getElementById('no-session-selected').style.display = 'block';
+      } else {
+        document.getElementById('no-session-selected').style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

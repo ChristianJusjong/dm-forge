@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Backup & Export - Dungeon Master Forge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="design-system.css">
+  <link rel="stylesheet" href="medieval-theme.css">
+  <link rel="stylesheet" href="responsive-design.css">
+  <link rel="stylesheet" href="global-overrides.css">
+  <style>
+    .backup-card {
+      background: linear-gradient(135deg, rgba(26, 15, 10, 0.95) 0%, rgba(13, 8, 6, 0.95) 100%);
+      border: 2px solid rgba(212, 175, 55, 0.4);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .warning-box {
+      background: rgba(255, 152, 0, 0.1);
+      border: 2px solid rgba(255, 152, 0, 0.6);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .info-box {
+      background: rgba(76, 175, 80, 0.1);
+      border: 2px solid rgba(76, 175, 80, 0.6);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .storage-meter {
+      width: 100%;
+      height: 24px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+
+    .storage-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4caf50, #ff9800, #f44336);
+      transition: width 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 1rem;
+      color: white;
+      font-weight: bold;
+      font-size: 0.85rem;
+    }
+
+    .file-input-label {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
+      color: #0a0604;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .file-input-label:hover {
+      background: linear-gradient(135deg, #f0d06b 0%, #d4af37 100%);
+      transform: translateY(-2px);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- Navigation will be inserted here by nav.js -->
+
+    <main class="page-content">
+      <div class="page-header">
+        <h1 class="page-title">💾 Data Backup & Export</h1>
+        <p class="page-subtitle">Protect your campaigns from data loss</p>
+      </div>
+
+      <!-- Warning Banner -->
+      <div class="warning-box">
+        <h3 style="color: #ff9800; margin-bottom: 1rem;">⚠️ Important: Your Data is Stored Locally</h3>
+        <p style="color: #e8d5b7; line-height: 1.8; margin-bottom: 1rem;">
+          All your campaign data is stored in your browser's local storage. This means:
+        </p>
+        <ul style="color: #e8d5b7; line-height: 1.8; margin-left: 1.5rem;">
+          <li>Clearing browser cache = <strong>permanent data loss</strong></li>
+          <li>Switching browsers = data doesn't transfer</li>
+          <li>No automatic backups or cloud sync</li>
+          <li>Computer crash = potential data loss</li>
+        </ul>
+        <p style="color: #ff9800; margin-top: 1rem; font-weight: 600;">
+          📌 Regular backups are <strong>essential</strong> to prevent losing months of campaign work!
+        </p>
+      </div>
+
+      <!-- Storage Usage -->
+      <div class="backup-card">
+        <h2 style="color: #d4af37; margin-bottom: 1.5rem;">📊 Storage Usage</h2>
+        <div id="storage-info">
+          <p style="color: #e8d5b7;">Calculating...</p>
+        </div>
+        <div class="storage-meter">
+          <div class="storage-fill" id="storage-meter" style="width: 0%">0%</div>
+        </div>
+        <p style="color: #b8956a; font-size: 0.9rem; margin-top: 0.5rem;">
+          Typical localStorage limit: ~5-10 MB
+        </p>
+      </div>
+
+      <!-- Export All Data -->
+      <div class="backup-card">
+        <h2 style="color: #d4af37; margin-bottom: 1rem;">📥 Export All Data</h2>
+        <p style="color: #e8d5b7; line-height: 1.8; margin-bottom: 1.5rem;">
+          Download a complete backup of <strong>all your data</strong> including campaigns, sessions, notes, NPCs, and encounters.
+        </p>
+        <button class="btn btn-primary" onclick="doExportAll()" style="font-size: 1.1rem;">
+          💾 Export Complete Backup
+        </button>
+        <p style="color: #b8956a; font-size: 0.85rem; margin-top: 1rem;">
+          Last backup: <span id="last-backup">Never</span>
+        </p>
+      </div>
+
+      <!-- Export Campaign Only -->
+      <div class="backup-card">
+        <h2 style="color: #d4af37; margin-bottom: 1rem;">📤 Export Campaign</h2>
+        <p style="color: #e8d5b7; line-height: 1.8; margin-bottom: 1.5rem;">
+          Export a specific campaign or all campaigns separately.
+        </p>
+
+        <div id="campaign-list" style="margin-bottom: 1.5rem;">
+          <p style="color: #e8d5b7;">Loading campaigns...</p>
+        </div>
+
+        <button class="btn btn-secondary" onclick="exportAllCampaigns()">
+          📦 Export All Campaigns
+        </button>
+      </div>
+
+      <!-- Import Data -->
+      <div class="backup-card">
+        <h2 style="color: #d4af37; margin-bottom: 1rem;">📤 Import / Restore Data</h2>
+        <p style="color: #e8d5b7; line-height: 1.8; margin-bottom: 1.5rem;">
+          Restore data from a previously exported backup file.
+        </p>
+
+        <div class="warning-box" style="background: rgba(244, 67, 54, 0.1); border-color: rgba(244, 67, 54, 0.6);">
+          <p style="color: #f44336; font-weight: 600; margin-bottom: 0.5rem;">⚠️ Warning: This will overwrite your current data!</p>
+          <p style="color: #e8d5b7; font-size: 0.9rem;">
+            Make sure to export your current data first before importing.
+          </p>
+        </div>
+
+        <label for="import-file" class="file-input-label">
+          📂 Choose Backup File
+        </label>
+        <input type="file" id="import-file" accept=".json" onchange="handleFileImport(this)">
+      </div>
+
+      <!-- Best Practices -->
+      <div class="info-box">
+        <h3 style="color: #4caf50; margin-bottom: 1rem;">✅ Backup Best Practices</h3>
+        <ul style="color: #e8d5b7; line-height: 1.8; margin-left: 1.5rem;">
+          <li><strong>Weekly backups:</strong> Export your data at least once a week</li>
+          <li><strong>Before updates:</strong> Always backup before browser/OS updates</li>
+          <li><strong>Multiple locations:</strong> Store backups in cloud storage (Google Drive, Dropbox, etc.)</li>
+          <li><strong>Version backups:</strong> Keep multiple backup versions (don't overwrite)</li>
+          <li><strong>Test restores:</strong> Periodically test that your backups work</li>
+        </ul>
+      </div>
+    </main>
+  </div>
+
+  <script src="auth.js"></script>
+  <script src="translations.js"></script>
+  <script src="campaign-manager.js"></script>
+  <script src="data-manager.js"></script>
+  <script src="nav.js"></script>
+  <script src="ads.js"></script>
+  <script>
+    // Require authentication
+    if (!requireAuth()) {
+      throw new Error('Authentication required');
+    }
+
+    // Update storage usage display
+    function updateStorageDisplay() {
+      const usage = checkStorageUsage();
+      if (!usage) return;
+
+      const infoDiv = document.getElementById('storage-info');
+      infoDiv.innerHTML = `
+        <p style="color: #e8d5b7; font-size: 1.1rem; margin-bottom: 0.5rem;">
+          <strong>${usage.sizeKB} KB</strong> used (${usage.sizeMB} MB)
+        </p>
+        <p style="color: ${usage.usagePercent > 80 ? '#ff9800' : '#4caf50'}; font-weight: 600;">
+          ${usage.usagePercent}% of estimated 5 MB quota
+        </p>
+      `;
+
+      const meter = document.getElementById('storage-meter');
+      meter.style.width = `${Math.min(usage.usagePercent, 100)}%`;
+      meter.textContent = `${usage.usagePercent}%`;
+    }
+
+    // Export all data wrapper
+    function doExportAll() {
+      if (exportAllData()) {
+        recordBackup();
+        updateLastBackupDisplay();
+      }
+    }
+
+    // Update last backup date display
+    function updateLastBackupDisplay() {
+      const lastBackup = localStorage.getItem('last_backup_date');
+      const span = document.getElementById('last-backup');
+
+      if (lastBackup) {
+        const date = new Date(parseInt(lastBackup));
+        span.textContent = date.toLocaleString();
+        span.style.color = '#4caf50';
+      } else {
+        span.textContent = 'Never';
+        span.style.color = '#ff9800';
+      }
+    }
+
+    // Load campaigns list
+    function loadCampaignsList() {
+      const listDiv = document.getElementById('campaign-list');
+      const campaigns = [];
+
+      // Find all campaign keys
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith('campaign_')) {
+          try {
+            const code = key.replace('campaign_', '');
+            const data = JSON.parse(localStorage.getItem(key));
+            campaigns.push({ code, name: data.name || 'Unnamed Campaign' });
+          } catch (error) {
+            console.error('Failed to parse campaign:', key, error);
+          }
+        }
+      }
+
+      if (campaigns.length === 0) {
+        listDiv.innerHTML = '<p style="color: #b8956a;">No campaigns found</p>';
+        return;
+      }
+
+      listDiv.innerHTML = campaigns.map(campaign => `
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 8px; margin-bottom: 0.75rem;">
+          <div>
+            <strong style="color: #d4af37;">${campaign.name}</strong>
+            <br>
+            <small style="color: #8b7355;">Code: ${campaign.code}</small>
+          </div>
+          <button class="btn" onclick="exportSingleCampaign('${campaign.code}')">
+            📥 Export
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // Export single campaign
+    function exportSingleCampaign(code) {
+      exportCampaignData(code);
+    }
+
+    // Export all campaigns
+    function exportAllCampaigns() {
+      exportCampaignData();
+    }
+
+    // Handle file import
+    function handleFileImport(input) {
+      if (input.files && input.files[0]) {
+        importData(input.files[0]);
+      }
+    }
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', () => {
+      updateStorageDisplay();
+      updateLastBackupDisplay();
+      loadCampaignsList();
+    });
+  </script>
+</body>
+</html>

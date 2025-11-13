@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="scrollGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f5deb3"/>
+      <stop offset="100%" style="stop-color:#d2b48c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Scroll/parchment -->
+  <!-- Top roll -->
+  <ellipse cx="32" cy="12" rx="18" ry="5" fill="#8b7355" stroke="#5d4a37" stroke-width="1.5"/>
+  <rect x="14" y="12" width="36" height="3" fill="#8b7355"/>
+
+  <!-- Main parchment -->
+  <rect x="16" y="15" width="32" height="36" fill="url(#scrollGrad)" stroke="#a0826d" stroke-width="1.5"/>
+
+  <!-- Bottom roll -->
+  <rect x="14" y="51" width="36" height="3" fill="#8b7355"/>
+  <ellipse cx="32" cy="54" rx="18" ry="5" fill="#8b7355" stroke="#5d4a37" stroke-width="1.5"/>
+
+  <!-- Writing on parchment -->
+  <line x1="20" y1="22" x2="44" y2="22" stroke="#5d4a37" stroke-width="1.5" opacity="0.7"/>
+  <line x1="20" y1="28" x2="44" y2="28" stroke="#5d4a37" stroke-width="1.5" opacity="0.7"/>
+  <line x1="20" y1="34" x2="40" y2="34" stroke="#5d4a37" stroke-width="1.5" opacity="0.7"/>
+  <line x1="20" y1="40" x2="42" y2="40" stroke="#5d4a37" stroke-width="1.5" opacity="0.7"/>
+  <line x1="20" y1="46" x2="38" y2="46" stroke="#5d4a37" stroke-width="1.5" opacity="0.7"/>
+
+  <!-- Quill pen -->
+  <path d="M 48 8 Q 52 16 50 28" stroke="#8b4513" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M 48 8 Q 46 12 48 16" fill="#daa520" stroke="#8b4513" stroke-width="1"/>
+</svg>

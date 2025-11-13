@@ -1,0 +1,335 @@
+/* Medieval Theme Enhancements */
+
+/* Stone texture background pattern using CSS */
+.stone-texture {
+  background-color: #2a2420;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(60, 50, 40, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(50, 40, 30, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(70, 60, 50, 0.25) 0%, transparent 50%),
+    linear-gradient(135deg, #2a2420 0%, #1a1410 50%, #2a2420 100%);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+}
+
+/* Parchment texture */
+.parchment-texture {
+  background-color: #f4e8d0;
+  background-image:
+    linear-gradient(0deg, transparent 24%, rgba(139, 115, 85, .05) 25%, rgba(139, 115, 85, .05) 26%, transparent 27%, transparent 74%, rgba(139, 115, 85, .05) 75%, rgba(139, 115, 85, .05) 76%, transparent 77%, transparent),
+    linear-gradient(90deg, transparent 24%, rgba(139, 115, 85, .05) 25%, rgba(139, 115, 85, .05) 26%, transparent 27%, transparent 74%, rgba(139, 115, 85, .05) 75%, rgba(139, 115, 85, .05) 76%, transparent 77%, transparent);
+  background-size: 50px 50px;
+  box-shadow: inset 0 0 50px rgba(139, 115, 85, 0.2);
+}
+
+/* Leather texture */
+.leather-texture {
+  background-color: #5d4a37;
+  background-image:
+    radial-gradient(ellipse at 30% 40%, rgba(80, 60, 45, 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(90, 70, 55, 0.3) 0%, transparent 50%),
+    repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0, 0, 0, 0.1) 2px, rgba(0, 0, 0, 0.1) 4px);
+}
+
+/* Enhanced hero section */
+.hero-section-enhanced {
+  position: relative;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  background:
+    linear-gradient(rgba(10, 6, 4, 0.85), rgba(10, 6, 4, 0.85)),
+    url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iYSIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIj48cGF0aCBkPSJNMCAyMGgyME0yMCAwdjIwIiBzdHJva2U9IiMzMzMiIHN0cm9rZS13aWR0aD0iMC41IiBmaWxsPSJub25lIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2EpIi8+PC9zdmc+');
+  background-size: cover, 40px 40px;
+  overflow: hidden;
+}
+
+.hero-section-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+  pointer-events: none;
+}
+
+/* Large logo container */
+.hero-logo-container {
+  position: relative;
+  text-align: center;
+  z-index: 1;
+}
+
+.hero-logo-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 2rem;
+  filter: drop-shadow(0 10px 40px rgba(212, 175, 55, 0.5));
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.hero-logo-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%);
+  animation: pulse-glow 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+/* Medieval title styling */
+.medieval-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #d4af37;
+  text-transform: uppercase;
+  letter-spacing: 0.15rem;
+  text-shadow:
+    0 0 30px rgba(212, 175, 55, 1),
+    0 0 60px rgba(212, 175, 55, 0.6),
+    5px 5px 10px rgba(0, 0, 0, 0.9),
+    -2px -2px 5px rgba(255, 255, 255, 0.1);
+  margin: 1rem 0;
+  position: relative;
+  display: inline-block;
+  padding: 0 2rem;
+}
+
+.medieval-title::before,
+.medieval-title::after {
+  content: '⚔';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.25rem;
+  color: #d4af37;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+}
+
+.medieval-title::before {
+  left: 0;
+}
+
+.medieval-title::after {
+  right: 0;
+  transform: translateY(-50%) scaleX(-1);
+}
+
+/* Hide decorative swords on very small screens */
+@media (max-width: 480px) {
+  .medieval-title {
+    padding: 0;
+  }
+
+  .medieval-title::before,
+  .medieval-title::after {
+    display: none;
+  }
+}
+
+/* Decorative border */
+.medieval-border {
+  position: relative;
+  padding: 2rem;
+  border: 3px solid #d4af37;
+  border-image: linear-gradient(135deg, #d4af37 0%, #f0d06b 50%, #d4af37 100%) 1;
+  box-shadow:
+    0 0 30px rgba(212, 175, 55, 0.3),
+    inset 0 0 30px rgba(212, 175, 55, 0.1);
+}
+
+.medieval-border::before,
+.medieval-border::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #d4af37;
+  background: radial-gradient(circle, #d4af37 0%, transparent 70%);
+}
+
+.medieval-border::before {
+  top: -3px;
+  left: -3px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.medieval-border::after {
+  bottom: -3px;
+  right: -3px;
+  border-left: none;
+  border-top: none;
+}
+
+/* Enhanced feature cards */
+.feature-card-enhanced {
+  position: relative;
+  background:
+    linear-gradient(135deg, rgba(26, 15, 10, 0.95) 0%, rgba(13, 8, 6, 0.95) 100%);
+  border: 3px solid rgba(212, 175, 55, 0.6);
+  border-radius: 8px;
+  padding: 2rem;
+  transition: all 0.4s ease;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.feature-card-enhanced::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(212, 175, 55, 0.02) 10px,
+    rgba(212, 175, 55, 0.02) 20px
+  );
+  pointer-events: none;
+}
+
+.feature-card-enhanced:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: #d4af37;
+  box-shadow:
+    0 20px 50px rgba(212, 175, 55, 0.4),
+    0 0 50px rgba(212, 175, 55, 0.3),
+    inset 0 0 30px rgba(212, 175, 55, 0.1);
+}
+
+.feature-card-enhanced:hover .card-icon {
+  transform: scale(1.2) rotate(5deg);
+  filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.8));
+}
+
+/* Ornamental dividers */
+.medieval-divider {
+  height: 4px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    #d4af37 20%,
+    #f0d06b 50%,
+    #d4af37 80%,
+    transparent 100%);
+  margin: 3rem auto;
+  max-width: 600px;
+  position: relative;
+}
+
+.medieval-divider::before {
+  content: '◆';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #d4af37;
+  font-size: 1.5rem;
+  background: #0d0806;
+  padding: 0 1rem;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+}
+
+/* Torch effect for accents */
+.torch-glow {
+  position: relative;
+  display: inline-block;
+}
+
+.torch-glow::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(ellipse at center, rgba(255, 140, 0, 0.4) 0%, transparent 70%);
+  animation: flicker 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Aged paper effect for cards */
+.aged-paper {
+  background:
+    linear-gradient(135deg, #f4e8d0 0%, #e8dcc4 100%);
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.aged-paper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(139, 115, 85, 0.03) 1px, rgba(139, 115, 85, 0.03) 2px),
+    repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(139, 115, 85, 0.03) 1px, rgba(139, 115, 85, 0.03) 2px);
+  pointer-events: none;
+}
+
+/* Metallic button effect */
+.btn-medieval {
+  background: linear-gradient(135deg, #8b7355 0%, #5d4a37 100%);
+  border: 2px solid #d4af37;
+  color: #f0d06b;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-medieval::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  transform: rotate(45deg);
+  transition: all 0.5s ease;
+}
+
+.btn-medieval:hover::before {
+  left: 100%;
+}
+
+.btn-medieval:hover {
+  border-color: #f0d06b;
+  box-shadow:
+    0 6px 16px rgba(212, 175, 55, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}

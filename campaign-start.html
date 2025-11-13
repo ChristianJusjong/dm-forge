@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Start Campaign - Dungeon Master Forge</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="design-system.css">
+  <link rel="stylesheet" href="medieval-theme.css">
+  <link rel="stylesheet" href="responsive-design.css">
+  <style>
+    .campaign-hero {
+      text-align: center;
+      padding: 3rem 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .campaign-hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #d4af37;
+      text-shadow: 0 0 20px rgba(212, 175, 55, 0.8), 3px 3px 6px rgba(0, 0, 0, 0.9);
+    }
+
+    .campaign-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .campaign-option-card {
+      background: linear-gradient(135deg, rgba(26, 15, 10, 0.95) 0%, rgba(13, 8, 6, 0.95) 100%);
+      border: 3px solid rgba(212, 175, 55, 0.6);
+      border-radius: 12px;
+      padding: 2.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .campaign-option-card:hover {
+      transform: translateY(-5px);
+      border-color: #d4af37;
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+    }
+
+    .campaign-option-icon {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+      filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6));
+    }
+
+    .campaign-option-card h2 {
+      color: #d4af37;
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+
+    .campaign-option-card p {
+      color: #e8d5b7;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+
+    .modal-content-campaign {
+      max-width: 500px;
+    }
+
+    .code-input {
+      font-family: 'Courier New', monospace;
+      font-size: 1.5rem;
+      text-align: center;
+      letter-spacing: 0.3rem;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- Navigation will be inserted here by nav.js -->
+
+    <main class="page-content">
+      <div class="campaign-hero">
+        <img src="logo-icon.svg" alt="DM Codex" style="width: 100px; height: 100px; margin: 0 auto 1.5rem auto; display: block;">
+        <h1>Welcome, Dungeon Master</h1>
+        <p style="font-size: 1.2rem; color: #e8d5b7; max-width: 700px; margin: 0 auto; line-height: 1.8;">
+          Begin your adventure by creating a new campaign or continue an existing one.
+        </p>
+      </div>
+
+      <div class="campaign-options">
+        <!-- New Campaign -->
+        <div class="campaign-option-card" onclick="showNewCampaignModal()">
+          <div class="campaign-option-icon">🎲</div>
+          <h2 data-i18n="newCampaign">New Campaign</h2>
+          <p data-i18n="newCampaignDesc">Start a fresh adventure. Create your party, manage encounters, and forge your legend.</p>
+          <button class="btn btn-primary" data-i18n="startNew">Start New Campaign</button>
+        </div>
+
+        <!-- Load Campaign -->
+        <div class="campaign-option-card" onclick="showLoadCampaignModal()">
+          <div class="campaign-option-icon">📜</div>
+          <h2 data-i18n="loadCampaign">Load Campaign</h2>
+          <p data-i18n="loadCampaignDesc">Continue your existing adventure using your campaign code.</p>
+          <button class="btn btn-secondary" data-i18n="loadExisting">Load Existing Campaign</button>
+        </div>
+      </div>
+
+      <!-- Recent Campaigns -->
+      <div id="recent-campaigns" class="card" style="max-width: 900px; margin: 3rem auto; display: none;">
+        <h2 style="color: #d4af37; margin-bottom: 1.5rem;">📚 Recent Campaigns</h2>
+        <div id="recent-campaigns-list"></div>
+      </div>
+    </main>
+
+    <!-- New Campaign Modal -->
+    <div id="new-campaign-modal" class="modal-overlay" style="display: none;">
+      <div class="modal modal-content-campaign" style="max-width: 600px;">
+        <h2 style="color: #d4af37; margin-bottom: 1.5rem;">🎲 Create New Campaign</h2>
+
+        <div class="input-group">
+          <label class="input-label" data-i18n="campaignName">Campaign Name</label>
+          <input id="campaign-name-input" type="text" placeholder="e.g., The Lost Mines of Phandelver" class="input">
+        </div>
+
+        <div class="input-group" style="margin-top: 1.5rem;">
+          <label class="input-label">D&D Edition</label>
+          <select id="campaign-edition" class="input">
+            <optgroup label="5th Edition">
+              <option value="5e-2024" selected>5th Edition (2024)</option>
+              <option value="5e-2014">5th Edition (2014)</option>
+            </optgroup>
+            <optgroup label="Earlier Editions">
+              <option value="4e-2008">4th Edition (2008)</option>
+              <option value="3.5e-2003">3.5 Edition (2003)</option>
+              <option value="3e-2000">3rd Edition (2000)</option>
+              <option value="2e-1989">2nd Edition (1989)</option>
+              <option value="1e-1977">1st Edition (1977)</option>
+              <option value="oe-1974">Original D&D (1974)</option>
+            </optgroup>
+            <optgroup label="Pathfinder">
+              <option value="pf2-2019">Pathfinder 2e (2019)</option>
+              <option value="pf1-2009">Pathfinder 1e (2009)</option>
+            </optgroup>
+            <optgroup label="Other">
+              <option value="other">Other/Homebrew</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="input-group" style="margin-top: 1.5rem;">
+          <label class="input-label">Campaign Setting / World</label>
+          <select id="campaign-world" class="input">
+            <optgroup label="Official D&D Settings">
+              <option value="forgotten-realms" selected>Forgotten Realms</option>
+              <option value="eberron">Eberron</option>
+              <option value="greyhawk">Greyhawk</option>
+              <option value="dragonlance">Dragonlance</option>
+              <option value="ravenloft">Ravenloft</option>
+              <option value="spelljammer">Spelljammer</option>
+              <option value="planescape">Planescape</option>
+              <option value="dark-sun">Dark Sun</option>
+              <option value="mystara">Mystara</option>
+              <option value="birthright">Birthright</option>
+            </optgroup>
+            <optgroup label="Other Settings">
+              <option value="critical-role">Critical Role (Exandria)</option>
+              <option value="homebrew">Homebrew / Custom World</option>
+              <option value="other">Other Setting</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="modal-actions" style="margin-top: 2rem;">
+          <button class="btn btn-primary" onclick="createNewCampaign()">
+            ⚔️ <span data-i18n="create">Create</span>
+          </button>
+          <button class="btn" onclick="closeModal('new-campaign-modal')" data-i18n="cancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load Campaign Modal -->
+    <div id="load-campaign-modal" class="modal-overlay" style="display: none;">
+      <div class="modal modal-content-campaign">
+        <h2 style="color: #d4af37; margin-bottom: 1.5rem;">📜 Load Campaign</h2>
+
+        <div class="input-group">
+          <label class="input-label" data-i18n="enterCode">Enter Campaign Code</label>
+          <input id="campaign-code-input" type="text" placeholder="XXXX-XXXX" class="input code-input" maxlength="9">
+          <p style="font-size: 0.9rem; color: #8b7355; margin-top: 0.5rem;">
+            Enter the 8-character code you received when closing your last session.
+          </p>
+        </div>
+
+        <div id="load-error" class="error-message" style="display: none; margin-top: 1rem;"></div>
+
+        <div class="modal-actions" style="margin-top: 2rem;">
+          <button class="btn btn-primary" onclick="loadExistingCampaign()">
+            📖 <span data-i18n="load">Load</span>
+          </button>
+          <button class="btn" onclick="closeModal('load-campaign-modal')" data-i18n="cancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+  <script src="translations.js"></script>
+  <script src="campaign-manager.js"></script>
+  <script src="nav.js"></script>
+  <script src="ads.js"></script>
+  <script>
+    // Require authentication
+    if (!requireAuth()) {
+      // User will be redirected to login
+      throw new Error('Authentication required');
+    }
+
+    // Show new campaign modal
+    function showNewCampaignModal() {
+      document.getElementById('new-campaign-modal').style.display = 'flex';
+      document.getElementById('campaign-name-input').focus();
+    }
+
+    // Show load campaign modal
+    function showLoadCampaignModal() {
+      document.getElementById('load-campaign-modal').style.display = 'flex';
+      document.getElementById('campaign-code-input').focus();
+    }
+
+    // Close modal
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
+
+    // Create new campaign
+    function createNewCampaign() {
+      const nameInput = document.getElementById('campaign-name-input');
+      const editionSelect = document.getElementById('campaign-edition');
+      const worldSelect = document.getElementById('campaign-world');
+
+      const name = nameInput.value.trim();
+      const edition = editionSelect.value;
+      const world = worldSelect.value;
+
+      if (!name) {
+        alert('Please enter a campaign name.');
+        nameInput.focus();
+        return;
+      }
+
+      const settings = {
+        edition: edition,
+        world: world
+      };
+
+      const campaign = createCampaign(name, settings);
+
+      // Get world name for display
+      const worldName = worldSelect.options[worldSelect.selectedIndex].text;
+      const editionName = editionSelect.options[editionSelect.selectedIndex].text;
+
+      // Show success and redirect to party setup
+      alert(`Campaign created!\n\nName: ${name}\nSetting: ${worldName}\nEdition: ${editionName}\n\nYour campaign code: ${campaign.code}\n\nKeep this code safe - you'll need it to continue your campaign later!`);
+
+      window.location.href = 'configuration.html';
+    }
+
+    // Load existing campaign
+    function loadExistingCampaign() {
+      const codeInput = document.getElementById('campaign-code-input');
+      const code = codeInput.value.trim();
+
+      if (!code) {
+        showLoadError('Please enter a campaign code.');
+        codeInput.focus();
+        return;
+      }
+
+      const campaign = loadCampaign(code);
+
+      if (!campaign) {
+        showLoadError('Campaign not found. Please check your code and try again.');
+        codeInput.focus();
+        return;
+      }
+
+      // Redirect to party setup or directly to campaign dashboard
+      if (!campaign.party || campaign.party.length === 0) {
+        window.location.href = 'configuration.html';
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+
+    // Show load error
+    function showLoadError(message) {
+      const errorDiv = document.getElementById('load-error');
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+
+      setTimeout(() => {
+        errorDiv.style.display = 'none';
+      }, 5000);
+    }
+
+    // Auto-format code input
+    document.addEventListener('DOMContentLoaded', () => {
+      const codeInput = document.getElementById('campaign-code-input');
+
+      codeInput.addEventListener('input', (e) => {
+        let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+
+        if (value.length > 4) {
+          value = value.slice(0, 4) + '-' + value.slice(4, 8);
+        }
+
+        e.target.value = value;
+      });
+
+      // Enter key support
+      document.getElementById('campaign-name-input').addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') createNewCampaign();
+      });
+
+      document.getElementById('campaign-code-input').addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') loadExistingCampaign();
+      });
+
+      // Check if there's already an active campaign
+      const activeCampaign = getActiveCampaign();
+      if (activeCampaign) {
+        // Show option to continue
+        const hero = document.querySelector('.campaign-hero');
+        hero.innerHTML = `
+          <h1>⚔️ Welcome Back, Dungeon Master</h1>
+          <p style="font-size: 1.2rem; color: #e8d5b7; max-width: 700px; margin: 0 auto 2rem auto; line-height: 1.8;">
+            You have an active campaign: <strong style="color: #d4af37;">${activeCampaign.name}</strong>
+          </p>
+          <button class="btn btn-primary" onclick="window.location.href='index.html'" style="font-size: 1.1rem; padding: 0.75rem 2rem;">
+            ⚔️ Continue Campaign
+          </button>
+          <button class="btn" onclick="clearActiveCampaign(); location.reload();" style="font-size: 1rem; padding: 0.75rem 2rem; margin-left: 1rem;">
+            🚪 Switch Campaign
+          </button>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>
