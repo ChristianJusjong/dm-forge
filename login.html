@@ -137,10 +137,24 @@
 
   <script type="module" src="auth.js"></script>
   <script>
+    // Wait for auth module to be fully loaded
+    function waitForAuth() {
+      return new Promise((resolve) => {
+        if (typeof login === 'function' && typeof isLoggedIn === 'function') {
+          resolve();
+        } else {
+          setTimeout(() => waitForAuth().then(resolve), 50);
+        }
+      });
+    }
+
     // Wait for modules to load
-    window.addEventListener('load', () => {
+    window.addEventListener('load', async () => {
+      // Wait for auth functions to be available
+      await waitForAuth();
+
       // Check if already logged in
-      if (typeof isLoggedIn === 'function' && isLoggedIn()) {
+      if (isLoggedIn()) {
         window.location.href = 'campaign-start.html';
       }
 
