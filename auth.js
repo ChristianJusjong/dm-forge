@@ -187,6 +187,42 @@ async function changePassword(oldPassword, newPassword) {
   return { success: true, message: 'Password changed successfully' };
 }
 
+// Save API key to user profile
+function saveUserApiKey(username, apiKey) {
+  const users = getUsers();
+  const userIndex = users.findIndex(u => u.username.toLowerCase() === username.toLowerCase());
+
+  if (userIndex === -1) {
+    console.error('User not found:', username);
+    return { success: false, message: 'User not found' };
+  }
+
+  // Save API key to user profile
+  users[userIndex].apiKey = apiKey;
+  saveUsers(users);
+
+  // Also update current user session
+  const currentUser = getCurrentUser();
+  if (currentUser && currentUser.username.toLowerCase() === username.toLowerCase()) {
+    currentUser.apiKey = apiKey;
+    localStorage.setItem('dm_codex_current_user', JSON.stringify(currentUser));
+  }
+
+  return { success: true, message: 'API key saved to profile' };
+}
+
+// Get API key from user profile
+function getUserApiKey(username) {
+  const users = getUsers();
+  const user = users.find(u => u.username.toLowerCase() === username.toLowerCase());
+
+  if (!user) {
+    return null;
+  }
+
+  return user.apiKey || null;
+}
+
 // Get user's campaigns
 function getUserCampaigns(username) {
   const users = getUsers();
@@ -252,3 +288,5 @@ window.updateUserProfile = updateUserProfile;
 window.changePassword = changePassword;
 window.getUserCampaigns = getUserCampaigns;
 window.addUserCampaign = addUserCampaign;
+window.saveUserApiKey = saveUserApiKey;
+window.getUserApiKey = getUserApiKey;

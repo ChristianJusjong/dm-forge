@@ -321,7 +321,7 @@
     // API KEY MANAGEMENT
     // ========================================
 
-    // Save API key to campaign settings
+    // Save API key to user profile
     function saveApiKey() {
       const apiKeyInput = document.getElementById('groq-api-key');
       const statusDiv = document.getElementById('api-key-status');
@@ -338,26 +338,21 @@
         // Don't return - let them save anyway in case format changed
       }
 
-      // Get active campaign
-      const campaign = getActiveCampaign();
-      if (!campaign) {
-        statusDiv.innerHTML = '<span style="color: #ff6b6b;">⚠️ No active campaign found</span>';
+      // Get current user
+      const currentUser = getCurrentUser();
+      if (!currentUser) {
+        statusDiv.innerHTML = '<span style="color: #ff6b6b;">⚠️ User not logged in</span>';
         return;
       }
 
-      // Initialize apiKeys object if it doesn't exist
-      if (!campaign.settings) {
-        campaign.settings = {};
-      }
-      if (!campaign.settings.apiKeys) {
-        campaign.settings.apiKeys = {};
-      }
+      // Save API key to user profile
+      const result = saveUserApiKey(currentUser.username, apiKey);
 
-      // Save API key
-      campaign.settings.apiKeys.groq = apiKey;
-      saveCampaign();
-
-      statusDiv.innerHTML = '<span style="color: #4caf50;">✓ API key saved successfully!</span>';
+      if (result.success) {
+        statusDiv.innerHTML = '<span style="color: #4caf50;">✓ API key saved to your profile!</span>';
+      } else {
+        statusDiv.innerHTML = '<span style="color: #ff6b6b;">⚠️ Failed to save API key</span>';
+      }
 
       // Clear status after 3 seconds
       setTimeout(() => {
@@ -365,16 +360,17 @@
       }, 3000);
     }
 
-    // Load API key from campaign settings
+    // Load API key from user profile
     function loadApiKey() {
-      const campaign = getActiveCampaign();
-      if (!campaign || !campaign.settings || !campaign.settings.apiKeys) {
+      const currentUser = getCurrentUser();
+      if (!currentUser) {
         return;
       }
 
-      const apiKeyInput = document.getElementById('groq-api-key');
-      if (campaign.settings.apiKeys.groq) {
-        apiKeyInput.value = campaign.settings.apiKeys.groq;
+      const apiKey = getUserApiKey(currentUser.username);
+      if (apiKey) {
+        const apiKeyInput = document.getElementById('groq-api-key');
+        apiKeyInput.value = apiKey;
       }
     }
 
@@ -392,13 +388,20 @@
       }
     }
 
-    // Get Groq API key from campaign settings
+    // Get Groq API key from user profile
     function getGroqApiKey() {
-      const campaign = getActiveCampaign();
-      if (campaign && campaign.settings && campaign.settings.apiKeys && campaign.settings.apiKeys.groq) {
-        return campaign.settings.apiKeys.groq;
+      const currentUser = getCurrentUser();
+      if (!currentUser) {
+        return null;
       }
-      return null;
+
+      // Try to get from current user session first (faster)
+      if (currentUser.apiKey) {
+        return currentUser.apiKey;
+      }
+
+      // Fallback to reading from localStorage
+      return getUserApiKey(currentUser.username);
     }
 
     // Export to window for use in other files

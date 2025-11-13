@@ -3,7 +3,7 @@
 // Provides offline support and faster repeat visits
 // ==========================================
 
-const CACHE_VERSION = 'v1.3.0';
+const CACHE_VERSION = 'v1.4.0';
 const CACHE_NAME = `dm-forge-${CACHE_VERSION}`;
 const API_CACHE = `dm-forge-api-${CACHE_VERSION}`;
 const IMAGE_CACHE = `dm-forge-images-${CACHE_VERSION}`;
