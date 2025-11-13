@@ -454,8 +454,10 @@ Be specific and creative. Answer in English.`;
       try {
         let content;
 
-        // Try Groq first if enabled (faster, much higher rate limits)
-        if (USE_GROQ && GROQ_API_KEY !== 'gsk_your_key_here') {
+        // Try Groq first if enabled and API key is available
+        const apiKey = typeof window.getGroqApiKey === 'function' ? window.getGroqApiKey() : null;
+
+        if (USE_GROQ && apiKey) {
           try {
             content = await generateWithGroq(prompt);
             console.log('✅ Generated with Groq (fast & unlimited)');

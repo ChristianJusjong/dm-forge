@@ -440,8 +440,14 @@ ${text}`;
       // Check for API key
       const apiKey = typeof window.getGroqApiKey === 'function' ? window.getGroqApiKey() : null;
 
-      if (!USE_AI || !apiKey) {
+      if (!USE_AI) {
         return null;
+      }
+
+      if (!apiKey) {
+        alert('⚠️ Groq API Key Required\n\nTo use AI features, please add your free Groq API key in:\nConfiguration > AI Settings\n\nClick OK to go to Configuration now.');
+        window.location.href = 'configuration.html';
+        throw new Error('API key required');
       }
 
       try {
