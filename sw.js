@@ -3,7 +3,7 @@
 // Provides offline support and faster repeat visits
 // ==========================================
 
-const CACHE_VERSION = 'v1.2.0';
+const CACHE_VERSION = 'v1.3.0';
 const CACHE_NAME = `dm-forge-${CACHE_VERSION}`;
 const API_CACHE = `dm-forge-api-${CACHE_VERSION}`;
 const IMAGE_CACHE = `dm-forge-images-${CACHE_VERSION}`;
@@ -12,6 +12,10 @@ const IMAGE_CACHE = `dm-forge-images-${CACHE_VERSION}`;
 const STATIC_ASSETS = [
   '/',
   '/index.html',
+  '/welcome.html',
+  '/login.html',
+  '/signup.html',
+  '/dashboard.html',
   '/campaign-start.html',
   '/configuration.html',
   '/initiative.html',
@@ -34,7 +38,8 @@ const STATIC_ASSETS = [
   '/sync-utils.js',
   '/performance-loader.js',
   '/campaign-manager.js',
-  '/auth.js'
+  '/auth.js',
+  '/translations.js'
 ];
 
 // API endpoints to cache
