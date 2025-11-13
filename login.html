@@ -174,16 +174,20 @@
           return;
         }
 
+        console.log('Attempting login with:', emailOrUsername);
         const result = await login(emailOrUsername, password);
+        console.log('Login result:', result);
 
         if (result.success) {
           successDiv.textContent = 'Login successful! Redirecting...';
           successDiv.style.display = 'block';
 
           setTimeout(() => {
+            console.log('Redirecting to campaign-start.html');
             window.location.href = 'campaign-start.html';
           }, 1000);
         } else {
+          console.error('Login failed:', result.message);
           errorDiv.textContent = result.message;
           errorDiv.style.display = 'block';
         }
