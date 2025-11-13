@@ -266,7 +266,7 @@
     // RANDOM TABLES GENERATORS WITH AI
     // ========================================
 
-    // GROQ_API_KEY is already declared in nav.js
+    // Groq API key is retrieved from campaign settings via window.getGroqApiKey()
     const USE_AI = true; // Set to true for AI-enhanced generation
 
     // ========================================
@@ -283,7 +283,10 @@
     };
 
     async function translateWithGroq(text, targetLang) {
-      if (!GROQ_API_KEY) return text;
+      // Check for API key
+      const apiKey = typeof window.getGroqApiKey === 'function' ? window.getGroqApiKey() : null;
+
+      if (!apiKey) return text;
 
       const translatePrompt = `Translate this D&D content from English to ${targetLang === 'da' ? 'Danish' : targetLang}.
 
@@ -301,7 +304,7 @@ ${text}`;
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${GROQ_API_KEY}`
+            'Authorization': `Bearer ${apiKey}`
           },
           body: JSON.stringify({
             model: 'llama-3.1-8b-instant',
@@ -434,7 +437,10 @@ ${text}`;
     }
 
     async function generateWithAI(prompt) {
-      if (!USE_AI || !GROQ_API_KEY) {
+      // Check for API key
+      const apiKey = typeof window.getGroqApiKey === 'function' ? window.getGroqApiKey() : null;
+
+      if (!USE_AI || !apiKey) {
         return null;
       }
 
@@ -443,7 +449,7 @@ ${text}`;
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${GROQ_API_KEY}`
+            'Authorization': `Bearer ${apiKey}`
           },
           body: JSON.stringify({
             model: 'llama-3.1-8b-instant',
