@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome - Dungeon Master Forge</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="design-system.css">
+  <link rel="stylesheet" href="medieval-theme.css">
+  <link rel="stylesheet" href="responsive-design.css">
+  <style>
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: linear-gradient(135deg, rgba(13, 8, 6, 0.98) 0%, rgba(26, 15, 10, 0.98) 100%);
+    }
+
+    .auth-card {
+      background: linear-gradient(135deg, rgba(26, 15, 10, 0.95) 0%, rgba(13, 8, 6, 0.95) 100%);
+      border: 3px solid rgba(212, 175, 55, 0.6);
+      border-radius: 16px;
+      padding: 3rem;
+      max-width: 450px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .auth-title {
+      font-family: 'Cinzel', serif;
+      font-size: 2.5rem;
+      color: #d4af37;
+      text-shadow: 0 0 20px rgba(212, 175, 55, 0.8), 3px 3px 6px rgba(0, 0, 0, 0.9);
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-subtitle {
+      color: #e8d5b7;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .btn-large {
+      width: 100%;
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .auth-link {
+      text-align: center;
+      margin-top: 2rem;
+      color: #b8956a;
+    }
+
+    .auth-link a {
+      color: #d4af37;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    .auth-link a:hover {
+      color: #f0d06b;
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-container stone-texture">
+    <div class="auth-card">
+      <div class="auth-header">
+        <img src="logo-icon.svg" alt="Dungeon Master Forge" style="width: 80px; height: 80px; margin: 0 auto 1rem auto; display: block;">
+        <div class="auth-title">Dungeon Master Forge</div>
+        <p class="auth-subtitle">Your Ultimate D&D 5e Campaign Companion</p>
+      </div>
+
+      <a href="login.html" class="btn btn-primary btn-large">
+        🎲 Login
+      </a>
+
+      <a href="signup.html" class="btn btn-secondary btn-large">
+        ⚔️ Create Account
+      </a>
+
+      <div class="auth-link">
+        <a href="privacy-policy.html">Privacy Policy</a> •
+        <a href="terms-of-service.html">Terms</a> •
+        <a href="support.html">Support</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="auth.js"></script>
+  <script>
+    // If already logged in, redirect to dashboard
+    if (typeof isLoggedIn === 'function' && isLoggedIn()) {
+      window.location.href = 'dashboard.html';
+    }
+  </script>
+</body>
+</html>

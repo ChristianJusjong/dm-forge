@@ -217,11 +217,14 @@
   <script type="module" src="nav.js"></script>
   <script type="module" src="ads.js"></script>
   <script>
-    // Require authentication
-    if (!requireAuth()) {
-      // User will be redirected to login
-      throw new Error('Authentication required');
-    }
+    // Wait for modules to load before checking auth
+    window.addEventListener('load', () => {
+      // Require authentication
+      if (typeof requireAuth === 'function' && !requireAuth()) {
+        // User will be redirected to login
+        throw new Error('Authentication required');
+      }
+    });
 
     // Show new campaign modal
     function showNewCampaignModal() {

@@ -197,7 +197,7 @@ function requireCampaign() {
   const campaign = getActiveCampaign();
 
   // Allow access to these pages without campaign
-  const allowedPages = ['campaign-start.html', 'index.html', 'privacy-policy.html', 'terms-of-service.html', 'support.html'];
+  const allowedPages = ['campaign-start.html', 'index.html', 'welcome.html', 'dashboard.html', 'privacy-policy.html', 'terms-of-service.html', 'support.html'];
   const currentPage = window.location.pathname.split('/').pop() || 'index.html';
 
   if (allowedPages.includes(currentPage)) {
@@ -214,3 +214,21 @@ function requireCampaign() {
 document.addEventListener('DOMContentLoaded', () => {
   requireCampaign();
 });
+
+// Export functions to window for use in inline scripts
+window.getActiveCampaign = getActiveCampaign;
+window.createCampaign = createCampaign;
+window.loadCampaign = loadCampaign;
+window.saveCampaign = saveCampaign;
+window.updateParty = updateParty;
+window.startSession = startSession;
+window.endSession = endSession;
+window.getActiveSession = getActiveSession;
+window.getCampaignSettings = getCampaignSettings;
+window.getCampaignEdition = getCampaignEdition;
+window.getCampaignWorld = getCampaignWorld;
+window.clearActiveCampaign = clearActiveCampaign;
+window.requireCampaign = requireCampaign;
+window.isCampaignActive = isCampaignActive;
+window.isSessionActive = isSessionActive;
+window.getParty = getParty;

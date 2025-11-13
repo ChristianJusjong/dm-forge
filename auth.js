@@ -186,3 +186,13 @@ async function changePassword(oldPassword, newPassword) {
 
   return { success: true, message: 'Password changed successfully' };
 }
+
+// Export functions to window for use in inline scripts
+window.signup = signup;
+window.login = login;
+window.logout = logout;
+window.isLoggedIn = isLoggedIn;
+window.getCurrentUser = getCurrentUser;
+window.requireAuth = requireAuth;
+window.updateUserProfile = updateUserProfile;
+window.changePassword = changePassword;

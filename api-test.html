@@ -170,10 +170,13 @@
   <script type="module" src="campaign-manager.js"></script>
   <script type="module" src="nav.js"></script>
   <script>
-    // Require authentication
-    if (!requireAuth()) {
-      throw new Error('Authentication required');
-    }
+    // Wait for modules to load
+    window.addEventListener('load', () => {
+      // Require authentication
+      if (typeof requireAuth === 'function' && !requireAuth()) {
+        throw new Error('Authentication required');
+      }
+    });
 
     // GROQ_API_KEY is already declared in nav.js
     const GEMINI_API_KEY = 'AIzaSyC_FPJb1pVXl4x8_cWd8xX9T-c1z238wiI';

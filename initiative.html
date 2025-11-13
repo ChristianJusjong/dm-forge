@@ -87,10 +87,13 @@
   <script type="module" src="campaign-manager.js"></script>
   <script type="module" src="nav.js"></script>
   <script>
-    // Require authentication
-    if (!requireAuth()) {
-      throw new Error('Authentication required');
-    }
+    // Wait for modules to load
+    window.addEventListener('load', () => {
+      // Require authentication
+      if (typeof requireAuth === 'function' && !requireAuth()) {
+        throw new Error('Authentication required');
+      }
+    });
 
     // ========================================
     // INITIATIVE TRACKER

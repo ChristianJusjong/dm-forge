@@ -254,10 +254,13 @@
   <script type="module" src="ads.js"></script>
   <script src="random-data.js"></script>
   <script>
-    // Require authentication
-    if (!requireAuth()) {
-      throw new Error('Authentication required');
-    }
+    // Wait for modules to load
+    window.addEventListener('load', () => {
+      // Require authentication
+      if (typeof requireAuth === 'function' && !requireAuth()) {
+        throw new Error('Authentication required');
+      }
+    });
 
     // ========================================
     // RANDOM TABLES GENERATORS WITH AI

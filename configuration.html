@@ -60,6 +60,19 @@
             </p>
           </div>
         </div>
+
+        <!-- Backup & Export -->
+        <div class="card" style="margin-bottom: 2rem;">
+          <h3 style="color: #d4af37; margin-bottom: 1.5rem;">💾 Backup & Export</h3>
+          <p style="color: #e8d5b7; line-height: 1.8; margin-bottom: 1.5rem;">
+            Export your campaign data, party, and session notes. Import backups to restore your data.
+          </p>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="backup.html" class="btn btn-primary" style="text-decoration: none;">
+              💾 Open Backup Manager
+            </a>
+          </div>
+        </div>
       </div>
 
       <!-- Party Tab -->
@@ -216,11 +229,14 @@
   <script type="module" src="campaign-manager.js"></script>
   <script type="module" src="nav.js"></script>
   <script>
-    // Require authentication
-    if (!requireAuth()) {
-      // User will be redirected to login
-      throw new Error('Authentication required');
-    }
+    // Wait for modules to load
+    window.addEventListener('load', () => {
+      // Require authentication
+      if (typeof requireAuth === 'function' && !requireAuth()) {
+        // User will be redirected to login
+        throw new Error('Authentication required');
+      }
+    });
 
     // ========================================
     // PARTY SETUP

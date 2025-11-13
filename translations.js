@@ -358,3 +358,6 @@ const translations = {
     configuration: 'Konfiguration'
   }
 };
+
+// Export translations to window for use in other modules
+window.translations = translations;

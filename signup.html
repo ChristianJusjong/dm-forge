@@ -236,11 +236,11 @@
       const result = await signup(username, email, password);
 
       if (result.success) {
-        successDiv.textContent = 'Account created successfully! Redirecting to login...';
+        successDiv.textContent = 'Account created successfully! Redirecting...';
         successDiv.style.display = 'block';
 
         setTimeout(() => {
-          window.location.href = 'login.html';
+          window.location.href = 'campaign-start.html';
         }, 2000);
       } else {
         errorDiv.textContent = result.message;

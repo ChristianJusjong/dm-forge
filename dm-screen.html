@@ -630,10 +630,13 @@
   <script type="module" src="campaign-manager.js"></script>
   <script src="random-data.js"></script>
   <script>
-    // Require authentication
-    if (!requireAuth()) {
-      throw new Error('Authentication required');
-    }
+    // Wait for modules to load
+    window.addEventListener('load', () => {
+      // Require authentication
+      if (typeof requireAuth === 'function' && !requireAuth()) {
+        throw new Error('Authentication required');
+      }
+    });
 
     // ========================================
     // EMBEDDED API KEY
@@ -664,7 +667,6 @@
         const key = el.getAttribute('data-i18n');
         el.textContent = t(key);
       });
-    }
 
     // ========================================
     // TAB NAVIGATION
@@ -853,6 +855,8 @@
   </script>
 
   <script>
+    // Wait for modules to load
+    window.addEventListener('load', () => {
     // ========================================
     // ENCOUNTER BUILDER
     // ========================================
@@ -1050,6 +1054,8 @@
   </script>
 
   <script>
+    // Wait for modules to load
+    window.addEventListener('load', () => {
     // ========================================
     // MONSTER BROWSER (Open5e API + D&D Beyond Links)
     // ========================================
@@ -1231,6 +1237,8 @@
   </script>
 
   <script>
+    // Wait for modules to load
+    window.addEventListener('load', () => {
     // ========================================
     // NPC GENERATOR
     // ========================================
@@ -1384,6 +1392,8 @@ Format as clear sections. Be creative and specific!`;
   </script>
 
   <script>
+    // Wait for modules to load
+    window.addEventListener('load', () => {
     // ========================================
     // RANDOM TABLES
     // ========================================
@@ -1497,6 +1507,8 @@ Format as clear sections. Be creative and specific!`;
   </script>
 
   <script>
+    // Wait for modules to load
+    window.addEventListener('load', () => {
     // ========================================
     // NOTE TAKER
     // ========================================

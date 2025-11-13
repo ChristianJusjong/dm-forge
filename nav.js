@@ -58,7 +58,7 @@ function initializeNav() {
     <nav class="main-nav">
       <div class="nav-container">
         <!-- Brand/Logo -->
-        <a href="index.html" class="nav-brand">
+        <a href="dashboard.html" class="nav-brand">
           <img src="logo-icon.svg" alt="Dungeon Master Forge" style="width: 32px; height: 32px; margin-right: 0.5rem;">
           <span>Dungeon Master Forge</span>
         </a>
@@ -77,7 +77,6 @@ function initializeNav() {
           <li><a href="npcs.html" class="nav-link ${currentPage === 'npcs.html' ? 'active' : ''}" data-i18n="npcs">NPCs</a></li>
           <li><a href="inspiration.html" class="nav-link ${currentPage === 'inspiration.html' ? 'active' : ''}" data-i18n="inspiration">Inspiration</a></li>
           <li><a href="notes.html" class="nav-link ${currentPage === 'notes.html' ? 'active' : ''}" data-i18n="notes">Notes</a></li>
-          <li><a href="backup.html" class="nav-link ${currentPage === 'backup.html' ? 'active' : ''}" style="color: #ff9800;">💾 Backup</a></li>
         </ul>
 
         <!-- Controls -->
@@ -257,6 +256,11 @@ function updateNavCampaignInfo() {
     `;
   }
 }
+
+// Export translation function to window for use in inline scripts
+window.t = t;
+window.getCurrentLanguage = getCurrentLanguage;
+window.updateTranslations = updateTranslations;
 
 // Call this after DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeNav);
