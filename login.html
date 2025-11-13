@@ -101,7 +101,7 @@
       <div id="error-message" class="error-message"></div>
       <div id="success-message" class="success-message"></div>
 
-      <form id="login-form">
+      <form id="login-form" onsubmit="return handleLogin(event)">
         <div class="input-group">
           <label class="input-label">Email or Username</label>
           <input
@@ -137,6 +137,8 @@
 
   <script type="module" src="auth.js"></script>
   <script>
+    console.log('Login script loaded');
+
     // Wait for auth module to be fully loaded
     function waitForAuth() {
       return new Promise((resolve) => {
@@ -148,19 +150,14 @@
       });
     }
 
-    // Wait for modules to load
-    window.addEventListener('load', async () => {
-      // Wait for auth functions to be available
+    // Global form submit handler
+    window.handleLogin = async function(e) {
+      e.preventDefault();
+      console.log('handleLogin called');
+
+      // Wait for auth to be available
       await waitForAuth();
-
-      // Check if already logged in
-      if (isLoggedIn()) {
-        window.location.href = 'campaign-start.html';
-      }
-
-      // Setup form submit handler
-      document.getElementById('login-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
+      console.log('Auth functions available');
 
         const emailOrUsername = document.getElementById('email-username').value.trim();
         const password = document.getElementById('password').value;
@@ -190,7 +187,19 @@
           errorDiv.textContent = result.message;
           errorDiv.style.display = 'block';
         }
-      });
+
+      return false; // Prevent default form submission
+    };
+
+    // Check if already logged in on page load
+    window.addEventListener('load', async () => {
+      console.log('Page loaded, checking auth status');
+      await waitForAuth();
+
+      if (isLoggedIn()) {
+        console.log('Already logged in, redirecting...');
+        window.location.href = 'campaign-start.html';
+      }
     });
   </script>
 </body>
