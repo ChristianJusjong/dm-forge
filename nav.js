@@ -27,33 +27,40 @@ async function translateWithGroq(text, targetLang = null) {
   try {
     const lang = targetLang || currentLanguage;
 
+    const requestBody = {
+      model: 'llama-3.1-8b-instant',  // Changed to match other pages
+      messages: [
+        {
+          role: 'system',
+          content: `You are a translator. Translate the following text to ${lang}. Only return the translated text, nothing else.`
+        },
+        {
+          role: 'user',
+          content: text
+        }
+      ],
+      temperature: 0.3,
+      max_tokens: 500
+    };
+
+    console.log('🌐 Translation request:', { lang, textLength: text.length });
+
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`
       },
-      body: JSON.stringify({
-        model: 'llama-3.1-70b-versatile',
-        messages: [
-          {
-            role: 'system',
-            content: `You are a translator. Translate the following text to ${lang}. Only return the translated text, nothing else.`
-          },
-          {
-            role: 'user',
-            content: text
-          }
-        ],
-        temperature: 0.3,
-        max_tokens: 500
-      })
+      body: JSON.stringify(requestBody)
     });
 
     if (!response.ok) {
-      console.error('Translation API error:', response.status);
+      const errorData = await response.json().catch(() => ({}));
+      console.error('❌ Translation API error:', response.status, errorData);
       return text;
     }
+
+    console.log('✅ Translation successful');
 
     const data = await response.json();
     return data.choices[0].message.content.trim();
