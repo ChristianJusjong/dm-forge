@@ -293,6 +293,49 @@ function addUserCampaign(username, campaignCode, campaignName) {
   return { success: true, message: 'Campaign added to user list' };
 }
 
+// Get Groq API key from user profile (used by all pages)
+function getGroqApiKey() {
+  console.log('🔑 getGroqApiKey called');
+
+  // Always get fresh user data from localStorage
+  const currentUser = getCurrentUser();
+  console.log('👤 Current user:', currentUser ? currentUser.username : 'NOT LOGGED IN');
+
+  if (!currentUser) {
+    console.error('❌ No current user, cannot get API key');
+    return null;
+  }
+
+  // First, try to get directly from users array in localStorage (most reliable)
+  const users = getUsers();
+  const fullUser = users.find(u => u.username.toLowerCase() === currentUser.username.toLowerCase());
+
+  if (fullUser && fullUser.apiKey) {
+    console.log('✅ API key found in users array:', fullUser.apiKey.substring(0, 10) + '...');
+
+    // Also update current user session to keep it in sync
+    if (!currentUser.apiKey || currentUser.apiKey !== fullUser.apiKey) {
+      currentUser.apiKey = fullUser.apiKey;
+      localStorage.setItem('dm_codex_current_user', JSON.stringify(currentUser));
+      console.log('🔄 Synced API key to current user session');
+    }
+
+    return fullUser.apiKey;
+  }
+
+  // Fallback: Check current user session (in case it's there but not in users array)
+  if (currentUser.apiKey) {
+    console.log('✅ API key found in current user session:', currentUser.apiKey.substring(0, 10) + '...');
+    return currentUser.apiKey;
+  }
+
+  console.error('❌ API key not found anywhere');
+  console.log('📋 Debug - Current user object:', { ...currentUser, password: '[REDACTED]' });
+  console.log('📋 Debug - Full user from array:', fullUser ? { ...fullUser, password: '[REDACTED]' } : 'NOT FOUND');
+
+  return null;
+}
+
 // Export functions to window for use in inline scripts
 window.signup = signup;
 window.login = login;
@@ -306,3 +349,4 @@ window.getUserCampaigns = getUserCampaigns;
 window.addUserCampaign = addUserCampaign;
 window.saveUserApiKey = saveUserApiKey;
 window.getUserApiKey = getUserApiKey;
+window.getGroqApiKey = getGroqApiKey;

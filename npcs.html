@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NPC Generator - Dungeon Master Forge</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -321,14 +322,22 @@
     async function translateNamesOnly(content, targetLang) {
       if (targetLang !== 'da') return content;
 
+      console.log('🌐 translateNamesOnly called');
+      console.log('🔍 getGroqApiKey function exists?', typeof window.getGroqApiKey);
+
       // Check for API key
       const apiKey = typeof window.getGroqApiKey === 'function' ? window.getGroqApiKey() : null;
 
+      console.log('🔑 API key for translation:', apiKey ? 'FOUND' : 'NOT FOUND');
+
       if (!apiKey) {
-        alert('⚠️ Groq API Key Required\n\nTo use AI features, please add your free Groq API key in:\nConfiguration > AI Settings\n\nClick OK to go to Configuration now.');
-        window.location.href = 'configuration.html';
-        return;
+        console.error('❌ No API key for translation!');
+        console.error('⚠️ Groq API Key Required - Please check Configuration > AI Settings');
+        // Removed auto-redirect to allow debugging
+        return content; // Return original content untranslated
       }
+
+      console.log('✅ Translating with Groq...');
 
       const translatePrompt = `You are translating D&D content from English to Danish.
 
@@ -374,14 +383,21 @@ Return the content with ONLY proper names translated to Danish:`;
     async function translateDescriptions(content, targetLang) {
       if (targetLang !== 'da') return content;
 
+      console.log('🌐 translateDescriptions called');
+
       // Check for API key
       const apiKey = typeof window.getGroqApiKey === 'function' ? window.getGroqApiKey() : null;
 
+      console.log('🔑 API key for descriptions:', apiKey ? 'FOUND' : 'NOT FOUND');
+
       if (!apiKey) {
-        alert('⚠️ Groq API Key Required\n\nTo use AI features, please add your free Groq API key in:\nConfiguration > AI Settings\n\nClick OK to go to Configuration now.');
-        window.location.href = 'configuration.html';
-        return;
+        console.error('❌ No API key for description translation!');
+        console.error('⚠️ Groq API Key Required - Please check Configuration > AI Settings');
+        // Removed auto-redirect to allow debugging
+        return content; // Return original content untranslated
       }
+
+      console.log('✅ Translating descriptions with Groq...');
 
       const translatePrompt = `Translate this D&D NPC description from English to Danish.
 

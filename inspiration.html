@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inspiration & Random Tables - Dungeon Master Forge</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -437,18 +438,29 @@ ${text}`;
     }
 
     async function generateWithAI(prompt) {
+      console.log('🎲 generateWithAI called');
+      console.log('🔍 Checking if getGroqApiKey exists:', typeof window.getGroqApiKey);
+
       // Check for API key
       const apiKey = typeof window.getGroqApiKey === 'function' ? window.getGroqApiKey() : null;
 
+      console.log('🔑 API key result:', apiKey ? 'FOUND' : 'NOT FOUND');
+
       if (!USE_AI) {
+        console.log('⚠️ USE_AI is false');
         return null;
       }
 
       if (!apiKey) {
-        alert('⚠️ Groq API Key Required\n\nTo use AI features, please add your free Groq API key in:\nConfiguration > AI Settings\n\nClick OK to go to Configuration now.');
-        window.location.href = 'configuration.html';
-        throw new Error('API key required');
+        console.error('❌ No API key found!');
+        console.log('Debug: Current user:', getCurrentUser());
+        console.log('Debug: Users array:', JSON.parse(localStorage.getItem('dm_codex_users') || '[]'));
+        console.error('⚠️ Groq API Key Required - Please check Configuration > AI Settings');
+        // Removed auto-redirect to allow debugging
+        return null;
       }
+
+      console.log('✅ API key found, making Groq API request...');
 
       try {
         const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {

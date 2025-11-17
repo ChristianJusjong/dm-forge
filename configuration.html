@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Campaign Configuration - Dungeon Master Forge</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -405,44 +406,7 @@
       }
     }
 
-    // Get Groq API key from user profile
-    function getGroqApiKey() {
-      console.log('getGroqApiKey called');
-
-      if (typeof getCurrentUser !== 'function') {
-        console.error('getCurrentUser not available');
-        return null;
-      }
-
-      const currentUser = getCurrentUser();
-      console.log('Current user in getGroqApiKey:', currentUser ? currentUser.username : 'not logged in');
-
-      if (!currentUser) {
-        console.warn('No current user, cannot get API key');
-        return null;
-      }
-
-      // Try to get from current user session first (faster)
-      if (currentUser.apiKey) {
-        console.log('✅ API key found in current user session');
-        return currentUser.apiKey;
-      }
-
-      console.log('API key not in session, checking localStorage...');
-
-      // Fallback to reading from localStorage
-      if (typeof getUserApiKey !== 'function') {
-        console.error('getUserApiKey not available');
-        return null;
-      }
-
-      const apiKey = getUserApiKey(currentUser.username);
-      console.log('API key from localStorage:', apiKey ? 'found' : 'not found');
-      return apiKey;
-    }
-
-    // Export to window for use in other files
-    window.getGroqApiKey = getGroqApiKey;
+    // Note: getGroqApiKey is now defined in auth.js and available globally
 
     // ========================================
     // PARTY SETUP
