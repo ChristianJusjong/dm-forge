@@ -74,6 +74,9 @@
             <div style="display: flex; gap: 0.5rem;">
               <button class="btn generate-name-btn" data-i18n="generate" style="flex: 1;">Generate</button>
               <button class="btn btn-secondary save-name-btn" style="display: none;">📝 Save</button>
+              <button class="btn btn-secondary translate-name-btn" style="display: none;" title="Translate description">
+                <span>🌐</span> <span data-i18n="translate">Translate</span>
+              </button>
             </div>
             <div class="result name-result"></div>
           </div>
@@ -276,6 +279,7 @@
 
     // Translation tracking
     const translationStates = {
+      name: { isTranslated: false, original: '' },
       tavern: { isTranslated: false, original: '' },
       plot: { isTranslated: false, original: '' },
       encounter: { isTranslated: false, original: '' },
@@ -638,6 +642,10 @@ Reward: A magical +1 shield with dwarven runes of protection`;
           // Store for saving and show save button
           lastGeneratedContent.name = `NPC: ${name}\n${desc}\n\n${translatedQuests.filter(q => q !== null).map((q, i) => `Quest ${i+1}:\n${q.dialog}\n${q.mission}\n${q.reward}`).join('\n\n')}`;
           document.querySelector('.save-name-btn').style.display = 'block';
+          if (desc || questsHTML) {
+            document.querySelector('.translate-name-btn').style.display = 'block';
+            translationStates.name.isTranslated = false;
+          }
         } else {
           fallbackRandomName(nameType, resultEl);
         }
@@ -1056,6 +1064,9 @@ Description: A silver ring with a dark amethyst. The wearer can teleport 30 feet
       });
 
       // Translate button listeners
+      document.querySelector('.translate-name-btn').addEventListener('click', () => {
+        toggleTranslation('name', document.querySelector('.name-result'), document.querySelector('.translate-name-btn'));
+      });
       document.querySelector('.translate-tavern-btn').addEventListener('click', () => {
         toggleTranslation('tavern', document.querySelector('.tavern-result'), document.querySelector('.translate-tavern-btn'));
       });

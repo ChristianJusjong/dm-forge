@@ -330,8 +330,11 @@ IMPORTANT:
 
         let text;
 
+        // Get API key
+        const apiKey = typeof window.getGroqApiKey === 'function' ? window.getGroqApiKey() : null;
+
         // Try Groq first if enabled (faster, much higher rate limits)
-        if (USE_GROQ && GROQ_API_KEY) {
+        if (USE_GROQ && apiKey) {
           try {
             text = await generateWithGroq(prompt);
             console.log('✅ Generated with Groq (fast & unlimited)');
@@ -342,6 +345,7 @@ IMPORTANT:
           }
         } else {
           // Use Gemini by default
+          console.log('ℹ️ Using Gemini (no Groq API key)');
           text = await generateWithGemini(prompt);
           console.log('✅ Generated with Gemini');
         }
