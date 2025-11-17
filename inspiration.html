@@ -635,8 +635,10 @@ Reward: A magical +1 shield with dwarven runes of protection`;
 
           resultEl.innerHTML = `
             <div style="font-size: 1.3rem; font-weight: 700; color: var(--gold); margin-bottom: 0.5rem;">${name}</div>
-            ${desc ? `<div style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 0.5rem;">${desc}</div>` : ''}
-            ${questsHTML}
+            <div data-translatable>
+              ${desc ? `<div style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 0.5rem;">${desc}</div>` : ''}
+              ${questsHTML}
+            </div>
           `;
 
           // Store for saving and show save button
