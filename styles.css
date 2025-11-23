@@ -2197,7 +2197,7 @@ small,
 }
 
 /* Hide ads on smaller screens */
-@media (max-width: 1280px) {
+@media (max-width: 1200px) {
   .ad-container {
     display: none !important;
   }
