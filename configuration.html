@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +8,16 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="design-system.css">
   <link rel="stylesheet" href="medieval-theme.css">
   <link rel="stylesheet" href="responsive-design.css">
   <link rel="stylesheet" href="global-overrides.css">
 </head>
+
 <body>
   <div id="app">
     <!-- Navigation will be inserted here by nav.js -->
@@ -28,13 +32,16 @@
       <!-- Tab Navigation -->
       <div class="card" style="margin-bottom: 2rem; padding: 0; overflow: hidden;">
         <div class="config-tabs" style="display: flex; border-bottom: 2px solid rgba(124, 98, 77, 0.3);">
-          <button class="config-tab active" data-tab="campaign" style="flex: 1; padding: 1rem; background: none; border: none; color: #e8d5b7; font-weight: 600; cursor: pointer; transition: all 0.3s; border-bottom: 3px solid #d4af37;">
+          <button class="config-tab active" data-tab="campaign"
+            style="flex: 1; padding: 1rem; background: none; border: none; color: #e8d5b7; font-weight: 600; cursor: pointer; transition: all 0.3s; border-bottom: 3px solid #d4af37;">
             📖 Campaign
           </button>
-          <button class="config-tab" data-tab="party" style="flex: 1; padding: 1rem; background: none; border: none; color: #b8956a; font-weight: 600; cursor: pointer; transition: all 0.3s; border-bottom: 3px solid transparent;">
+          <button class="config-tab" data-tab="party"
+            style="flex: 1; padding: 1rem; background: none; border: none; color: #b8956a; font-weight: 600; cursor: pointer; transition: all 0.3s; border-bottom: 3px solid transparent;">
             🛡️ Party
           </button>
-          <button class="config-tab" data-tab="session" style="flex: 1; padding: 1rem; background: none; border: none; color: #b8956a; font-weight: 600; cursor: pointer; transition: all 0.3s; border-bottom: 3px solid transparent;">
+          <button class="config-tab" data-tab="session"
+            style="flex: 1; padding: 1rem; background: none; border: none; color: #b8956a; font-weight: 600; cursor: pointer; transition: all 0.3s; border-bottom: 3px solid transparent;">
             ⚔️ Session
           </button>
         </div>
@@ -73,13 +80,8 @@
           <div class="input-group" style="margin-bottom: 1.5rem;">
             <label class="input-label">Groq API Key</label>
             <div style="display: flex; gap: 0.5rem; align-items: flex-start; flex-wrap: wrap;">
-              <input
-                id="groq-api-key"
-                type="password"
-                placeholder="Enter your Groq API key"
-                class="input"
-                style="flex: 1; min-width: 250px;"
-              >
+              <input id="groq-api-key" type="password" placeholder="Enter your Groq API key" class="input"
+                style="flex: 1; min-width: 250px;">
               <button onclick="toggleApiKeyVisibility()" class="btn" style="padding: 0.75rem 1rem;">
                 👁️ Show
               </button>
@@ -91,7 +93,8 @@
           </div>
 
           <!-- Setup Guide -->
-          <details style="background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+          <details
+            style="background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
             <summary style="color: #d4af37; cursor: pointer; font-weight: 600; margin-bottom: 0.5rem;">
               📖 How to get a Groq API Key (Free)
             </summary>
@@ -99,7 +102,8 @@
               <ol style="margin-left: 1.5rem;">
                 <li style="margin-bottom: 1rem;">
                   <strong>Visit Groq Console:</strong> Go to
-                  <a href="https://console.groq.com" target="_blank" rel="noopener" style="color: #f0d06b; text-decoration: underline;">
+                  <a href="https://console.groq.com" target="_blank" rel="noopener"
+                    style="color: #f0d06b; text-decoration: underline;">
                     console.groq.com
                   </a>
                 </li>
@@ -116,7 +120,8 @@
                   <strong>Save:</strong> Click the "Save" button to store your key securely in your campaign
                 </li>
               </ol>
-              <div style="background: rgba(139, 0, 0, 0.2); border: 1px solid rgba(139, 0, 0, 0.5); border-radius: 6px; padding: 1rem; margin-top: 1rem;">
+              <div
+                style="background: rgba(139, 0, 0, 0.2); border: 1px solid rgba(139, 0, 0, 0.5); border-radius: 6px; padding: 1rem; margin-top: 1rem;">
                 <strong style="color: #ff6b6b;">🔒 Security Note:</strong>
                 <p style="color: #e8d5b7; margin-top: 0.5rem; font-size: 0.9rem;">
                   Your API key is stored locally in your browser only. Never share your API key with anyone.
@@ -155,113 +160,126 @@
       <!-- Party Tab -->
       <div id="tab-party" class="config-tab-content" style="display: none;">
 
-      <!-- Party Summary Card -->
-      <div class="card" style="margin-bottom: 2rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-          <div>
-            <h3 style="color: #d4af37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.6), 2px 2px 4px rgba(0, 0, 0, 0.9); margin-bottom: 0.5rem;">Party Overview</h3>
-            <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
-              <div>
-                <span style="color: #e8d5b7; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);">Members:</span>
-                <strong id="party-count" style="color: #f0d06b; font-size: 1.3rem; margin-left: 0.5rem; text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);">0</strong>
-              </div>
-              <div>
-                <span style="color: #e8d5b7; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);">Average Level:</span>
-                <strong id="party-avg-level" style="color: #f0d06b; font-size: 1.3rem; margin-left: 0.5rem; text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);">-</strong>
+        <!-- Party Summary Card -->
+        <div class="card" style="margin-bottom: 2rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <h3
+                style="color: #d4af37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.6), 2px 2px 4px rgba(0, 0, 0, 0.9); margin-bottom: 0.5rem;">
+                Party Overview</h3>
+              <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                <div>
+                  <span style="color: #e8d5b7; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);">Members:</span>
+                  <strong id="party-count"
+                    style="color: #f0d06b; font-size: 1.3rem; margin-left: 0.5rem; text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);">0</strong>
+                </div>
+                <div>
+                  <span style="color: #e8d5b7; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);">Average Level:</span>
+                  <strong id="party-avg-level"
+                    style="color: #f0d06b; font-size: 1.3rem; margin-left: 0.5rem; text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);">-</strong>
+                </div>
               </div>
             </div>
-          </div>
-          <button id="clear-party-btn" class="btn btn-danger">Clear All</button>
-        </div>
-      </div>
-
-      <!-- Add Character Form -->
-      <div class="card" style="margin-bottom: 2rem;">
-        <h3 style="color: #d4af37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.6), 2px 2px 4px rgba(0, 0, 0, 0.9); margin-bottom: 1.5rem;">Add Party Member</h3>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
-          <div class="input-group">
-            <label class="input-label">Character Name</label>
-            <input id="char-name" type="text" placeholder="e.g., Thorin" class="input">
-          </div>
-
-          <div class="input-group">
-            <label class="input-label">Class</label>
-            <select id="char-class" class="input">
-              <option value="">Select Class</option>
-              <option value="Barbarian">Barbarian</option>
-              <option value="Bard">Bard</option>
-              <option value="Cleric">Cleric</option>
-              <option value="Druid">Druid</option>
-              <option value="Fighter">Fighter</option>
-              <option value="Monk">Monk</option>
-              <option value="Paladin">Paladin</option>
-              <option value="Ranger">Ranger</option>
-              <option value="Rogue">Rogue</option>
-              <option value="Sorcerer">Sorcerer</option>
-              <option value="Warlock">Warlock</option>
-              <option value="Wizard">Wizard</option>
-            </select>
-          </div>
-
-          <div class="input-group">
-            <label class="input-label">Race</label>
-            <select id="char-race" class="input">
-              <option value="">Select Race</option>
-              <option value="Human">Human</option>
-              <option value="Elf">Elf</option>
-              <option value="Dwarf">Dwarf</option>
-              <option value="Halfling">Halfling</option>
-              <option value="Dragonborn">Dragonborn</option>
-              <option value="Gnome">Gnome</option>
-              <option value="Half-Elf">Half-Elf</option>
-              <option value="Half-Orc">Half-Orc</option>
-              <option value="Tiefling">Tiefling</option>
-            </select>
-          </div>
-
-          <div class="input-group">
-            <label class="input-label">Level</label>
-            <input id="char-level" type="number" min="1" max="20" value="1" class="input">
+            <button id="clear-party-btn" class="btn btn-danger">Clear All</button>
           </div>
         </div>
 
-        <button id="add-character-btn" class="btn btn-large" style="width: 100%;">+ Add Character</button>
-      </div>
+        <!-- Add Character Form -->
+        <div class="card" style="margin-bottom: 2rem;">
+          <h3
+            style="color: #d4af37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.6), 2px 2px 4px rgba(0, 0, 0, 0.9); margin-bottom: 1.5rem;">
+            Add Party Member</h3>
 
-      <!-- Party Members List -->
-      <div id="party-list" class="cards-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
-        <!-- Party members will be rendered here -->
-      </div>
+          <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+            <div class="input-group">
+              <label class="input-label">Character Name</label>
+              <input id="char-name" type="text" placeholder="e.g., Thorin" class="input">
+            </div>
 
-      <div id="no-party" class="empty-state" style="display: none;">
-        <p>No party members yet. Add your first character above!</p>
-      </div>
+            <div class="input-group">
+              <label class="input-label">Class</label>
+              <select id="char-class" class="input">
+                <option value="">Select Class</option>
+                <option value="Barbarian">Barbarian</option>
+                <option value="Bard">Bard</option>
+                <option value="Cleric">Cleric</option>
+                <option value="Druid">Druid</option>
+                <option value="Fighter">Fighter</option>
+                <option value="Monk">Monk</option>
+                <option value="Paladin">Paladin</option>
+                <option value="Ranger">Ranger</option>
+                <option value="Rogue">Rogue</option>
+                <option value="Sorcerer">Sorcerer</option>
+                <option value="Warlock">Warlock</option>
+                <option value="Wizard">Wizard</option>
+              </select>
+            </div>
 
-      <!-- Confirm Party Button -->
-      <div id="confirm-party-section" style="display: none; text-align: center; margin: 2rem auto; max-width: 600px;">
-        <div class="card" style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(139, 0, 0, 0.15) 100%); border: 2px solid rgba(212, 175, 55, 0.6);">
-          <h3 style="color: #d4af37; margin-bottom: 1rem;">✅ Ready to Begin?</h3>
-          <p style="color: #e8d5b7; line-height: 1.8; margin-bottom: 1.5rem;">
-            Once you confirm your party, you can start your first session. You can always come back to adjust levels later.
-          </p>
-          <button id="confirm-party-btn" class="btn btn-primary" style="font-size: 1.1rem; padding: 0.75rem 2rem;">
-            ⚔️ Confirm Party & Continue
-          </button>
+            <div class="input-group">
+              <label class="input-label">Race</label>
+              <select id="char-race" class="input">
+                <option value="">Select Race</option>
+                <option value="Human">Human</option>
+                <option value="Elf">Elf</option>
+                <option value="Dwarf">Dwarf</option>
+                <option value="Halfling">Halfling</option>
+                <option value="Dragonborn">Dragonborn</option>
+                <option value="Gnome">Gnome</option>
+                <option value="Half-Elf">Half-Elf</option>
+                <option value="Half-Orc">Half-Orc</option>
+                <option value="Tiefling">Tiefling</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label">Level</label>
+              <input id="char-level" type="number" min="1" max="20" value="1" class="input">
+            </div>
+          </div>
+
+          <button id="add-character-btn" class="btn btn-large" style="width: 100%;">+ Add Character</button>
         </div>
-      </div>
 
-      <!-- Quick Start Templates -->
-      <div class="card" style="margin-top: 3rem;">
-        <h3 style="color: #d4af37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.6), 2px 2px 4px rgba(0, 0, 0, 0.9); margin-bottom: 1rem;">Quick Start Templates</h3>
-        <p style="color: #e8d5b7; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); line-height: 1.7; margin-bottom: 1.5rem;">Pre-made party compositions to get started quickly</p>
-
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-          <button class="btn btn-secondary template-btn" data-template="classic">Classic Party (4)</button>
-          <button class="btn btn-secondary template-btn" data-template="small">Small Party (3)</button>
-          <button class="btn btn-secondary template-btn" data-template="large">Large Party (6)</button>
+        <!-- Party Members List -->
+        <div id="party-list" class="cards-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
+          <!-- Party members will be rendered here -->
         </div>
-      </div>
+
+        <div id="no-party" class="empty-state" style="display: none;">
+          <p>No party members yet. Add your first character above!</p>
+        </div>
+
+        <!-- Confirm Party Button -->
+        <div id="confirm-party-section" style="display: none; text-align: center; margin: 2rem auto; max-width: 600px;">
+          <div class="card"
+            style="background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(139, 0, 0, 0.15) 100%); border: 2px solid rgba(212, 175, 55, 0.6);">
+            <h3 style="color: #d4af37; margin-bottom: 1rem;">✅ Ready to Begin?</h3>
+            <p style="color: #e8d5b7; line-height: 1.8; margin-bottom: 1.5rem;">
+              Once you confirm your party, you can start your first session. You can always come back to adjust levels
+              later.
+            </p>
+            <button id="confirm-party-btn" class="btn btn-primary" style="font-size: 1.1rem; padding: 0.75rem 2rem;">
+              ⚔️ Confirm Party & Continue
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Start Templates -->
+        <div class="card" style="margin-top: 3rem;">
+          <h3
+            style="color: #d4af37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.6), 2px 2px 4px rgba(0, 0, 0, 0.9); margin-bottom: 1rem;">
+            Quick Start Templates</h3>
+          <p
+            style="color: #e8d5b7; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); line-height: 1.7; margin-bottom: 1.5rem;">
+            Pre-made party compositions to get started quickly</p>
+
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <button class="btn btn-secondary template-btn" data-template="classic">Classic Party (4)</button>
+            <button class="btn btn-secondary template-btn" data-template="small">Small Party (3)</button>
+            <button class="btn btn-secondary template-btn" data-template="large">Large Party (6)</button>
+          </div>
+        </div>
       </div>
 
       <!-- Session Tab -->
@@ -288,7 +306,8 @@
       </p>
       <div class="input-group">
         <label class="input-label">Session Notes (Optional)</label>
-        <textarea id="session-notes-textarea-config" class="textarea" rows="5" placeholder="What happened in this session?"></textarea>
+        <textarea id="session-notes-textarea-config" class="textarea" rows="5"
+          placeholder="What happened in this session?"></textarea>
       </div>
       <div class="modal-actions" style="margin-top: 2rem;">
         <button class="btn btn-primary" onclick="endSessionFromConfig()">
@@ -301,6 +320,7 @@
     </div>
   </div>
 
+  <script src="storage-utils.js"></script>
   <script type="module" src="auth.js"></script>
   <script type="module" src="translations.js"></script>
   <script type="module" src="campaign-manager.js"></script>
@@ -490,7 +510,7 @@
           <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
             <div>
               <div style="font-size: 2.5rem; margin-bottom: 0.5rem; filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.3));">${classIcons[char.class] || '⚔️'}</div>
-              <h3 style="color: #d4af37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.6), 2px 2px 4px rgba(0, 0, 0, 0.9); margin-bottom: 0.25rem;">${char.name}</h3>
+              <h3 style="color: #d4af37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.6), 2px 2px 4px rgba(0, 0, 0, 0.9); margin-bottom: 0.25rem;">${escapeHTML(char.name)}</h3>
               <p style="color: #e8d5b7; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); font-size: 0.95rem; line-height: 1.5;">${char.race} ${char.class}</p>
             </div>
             <button class="btn-small btn-danger remove-character" data-index="${index}">×</button>
@@ -583,7 +603,7 @@
 
       party = [];
 
-      switch(template) {
+      switch (template) {
         case 'classic':
           party = [
             { id: Date.now(), name: 'Ragnar', class: 'Fighter', race: 'Human', level: 3 },
@@ -664,7 +684,7 @@
         <div style="display: grid; gap: 1rem;">
           <div style="padding: 1rem; background: rgba(212, 175, 55, 0.1); border-radius: 6px;">
             <strong style="color: #d4af37;">Campaign Name:</strong>
-            <span style="color: #e8d5b7; margin-left: 1rem;">${campaign.name}</span>
+            <span style="color: #e8d5b7; margin-left: 1rem;">${escapeHTML(campaign.name)}</span>
           </div>
           <div style="padding: 1rem; background: rgba(212, 175, 55, 0.1); border-radius: 6px;">
             <strong style="color: #d4af37;">Edition:</strong>
@@ -724,7 +744,7 @@
               <strong style="color: #d4af37;">Session ${campaign.sessions.length - index}</strong>
               <span style="color: #b8956a; font-size: 0.9rem;">${new Date(s.startedAt).toLocaleDateString()}</span>
             </div>
-            <p style="color: #e8d5b7; font-size: 0.9rem; line-height: 1.6;">${s.notes || 'No notes'}</p>
+            <p style="color: #e8d5b7; font-size: 0.9rem; line-height: 1.6;">${escapeHTML(s.notes || 'No notes')}</p>
           </div>
         `).join('');
       } else {
@@ -815,4 +835,5 @@
     });
   </script>
 </body>
+
 </html>

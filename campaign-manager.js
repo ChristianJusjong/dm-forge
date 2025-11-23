@@ -60,7 +60,8 @@ function loadCampaign(code) {
     return null;
   }
 
-  const campaign = JSON.parse(campaignData);
+  const campaign = safeJSONParse(campaignData, null);
+  if (!campaign) return null;
   campaign.lastPlayed = Date.now();
 
   // Save updated last played
@@ -92,7 +93,7 @@ function getActiveCampaign() {
     return null;
   }
 
-  activeCampaign = JSON.parse(campaignData);
+  activeCampaign = safeJSONParse(campaignData, null);
   return activeCampaign;
 }
 

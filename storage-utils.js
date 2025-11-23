@@ -193,6 +193,72 @@ function clearLocalStorageByPrefix(prefix) {
   }
 }
 
+/**
+ * Escape HTML special characters to prevent XSS
+ * @param {string} str - String to escape
+ * @returns {string} Escaped string
+ */
+function escapeHTML(str) {
+  if (typeof str !== 'string') return str;
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+/**
+ * Create a full backup of all application data
+ * @returns {string} JSON string of all data
+ */
+function createBackup() {
+  const backup = {
+    version: 1,
+    timestamp: Date.now(),
+    data: {}
+  };
+
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      backup.data[key] = localStorage.getItem(key);
+    }
+    return JSON.stringify(backup, null, 2);
+  } catch (error) {
+    console.error('Backup creation failed:', error);
+    return null;
+  }
+}
+
+/**
+ * Restore data from backup
+ * @param {string} jsonString - Backup JSON string
+ * @returns {object} Result { success: boolean, message: string }
+ */
+function restoreBackup(jsonString) {
+  try {
+    const backup = JSON.parse(jsonString);
+    
+    if (!backup.data) {
+      return { success: false, message: 'Invalid backup format: missing data object' };
+    }
+
+    // Clear current storage
+    localStorage.clear();
+
+    // Restore keys
+    Object.keys(backup.data).forEach(key => {
+      localStorage.setItem(key, backup.data[key]);
+    });
+
+    return { success: true, message: 'Backup restored successfully' };
+  } catch (error) {
+    console.error('Restore error:', error);
+    return { success: false, message: 'Failed to parse backup file: ' + error.message };
+  }
+}
+
 // Make functions globally available
 if (typeof window !== 'undefined') {
   window.safeJSONParse = safeJSONParse;
@@ -205,6 +271,9 @@ if (typeof window !== 'undefined') {
   window.isLocalStorageAvailable = isLocalStorageAvailable;
   window.getAllLocalStorageKeys = getAllLocalStorageKeys;
   window.clearLocalStorageByPrefix = clearLocalStorageByPrefix;
+  window.escapeHTML = escapeHTML;
+  window.createBackup = createBackup;
+  window.restoreBackup = restoreBackup;
 }
 
 // Warn if localStorage is not available

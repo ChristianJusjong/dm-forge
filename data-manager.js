@@ -8,22 +8,14 @@
  */
 function exportAllData() {
   try {
-    const backup = {
-      version: 1,
-      timestamp: Date.now(),
-      date: new Date().toISOString(),
-      data: {}
-    };
+    // Use storage-utils to create backup string
+    const jsonString = createBackup();
 
-    // Collect all localStorage data
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      const value = localStorage.getItem(key);
-      backup.data[key] = value;
+    if (!jsonString) {
+      throw new Error('Backup creation failed');
     }
 
     // Create downloadable JSON file
-    const jsonString = JSON.stringify(backup, null, 2);
     const blob = new Blob([jsonString], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
 
@@ -53,41 +45,18 @@ function importData(file) {
 
   reader.onload = (e) => {
     try {
-      const backup = JSON.parse(e.target.result);
+      // Use storage-utils to restore
+      const result = restoreBackup(e.target.result);
 
-      // Validate backup structure
-      if (!backup.version || !backup.data) {
-        throw new Error('Invalid backup file format');
+      if (result.success) {
+        alert(result.message + '\n\nReloading page...');
+        location.reload();
+      } else {
+        throw new Error(result.message);
       }
-
-      // Confirm before overwriting
-      const message = `This will restore data from ${new Date(backup.timestamp).toLocaleString()}.\n\n` +
-                     `⚠️ WARNING: This will OVERWRITE your current data!\n\n` +
-                     `Do you want to continue?`;
-
-      if (!confirm(message)) {
-        return;
-      }
-
-      // Clear existing data (optional - comment out to merge instead)
-      // localStorage.clear();
-
-      // Restore data
-      let restoredCount = 0;
-      Object.keys(backup.data).forEach(key => {
-        try {
-          localStorage.setItem(key, backup.data[key]);
-          restoredCount++;
-        } catch (error) {
-          console.error(`Failed to restore key: ${key}`, error);
-        }
-      });
-
-      alert(`✅ Successfully restored ${restoredCount} items!\n\nReloading page...`);
-      location.reload();
     } catch (error) {
       console.error('❌ Import failed:', error);
-      alert('Failed to import backup file. The file may be corrupted or in the wrong format.');
+      alert('Failed to import backup file: ' + error.message);
     }
   };
 
@@ -188,8 +157,8 @@ function checkStorageUsage() {
     // Warn if over 80% capacity
     if (usagePercent > 80) {
       const message = `⚠️ Storage Warning\n\n` +
-                     `You're using ${usagePercent}% of available storage (${sizeMB} MB / ${quotaMB} MB).\n\n` +
-                     `Consider exporting and archiving old campaigns to free up space.`;
+        `You're using ${usagePercent}% of available storage (${sizeMB} MB / ${quotaMB} MB).\n\n` +
+        `Consider exporting and archiving old campaigns to free up space.`;
       console.warn(message);
 
       if (usagePercent > 90) {

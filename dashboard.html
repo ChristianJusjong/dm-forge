@@ -145,7 +145,7 @@
     </div>
   </div>
 
-  <script type="module" src="auth.js"></script>
+  <script src="storage-utils.js"></script><script type="module" src="auth.js"></script>
   <script type="module" src="translations.js"></script>
   <script type="module" src="campaign-manager.js"></script>
   <script type="module" src="nav.js"></script>
@@ -208,7 +208,7 @@
           : '<span style="color: #ff9800;">⚠ Not Confirmed</span>';
 
         infoDiv.innerHTML = `
-          <h2 style="color: #d4af37; margin-bottom: 0.5rem;">📖 ${campaign.name}</h2>
+          <h2 style="color: #d4af37; margin-bottom: 0.5rem;">📖 ${escapeHTML(campaign.name)}</h2>
           <p style="color: #b8956a; font-size: 0.9rem; margin-bottom: 1rem;">
             ${worldName} • ${edition.toUpperCase()}
           </p>
@@ -233,7 +233,7 @@
         // Active session - show session info and end button
         const duration = Math.floor((Date.now() - session.startedAt) / 60000);
         infoDiv.innerHTML = `
-          <h2 style="color: #d4af37; margin-bottom: 0.5rem;">📖 ${campaign.name}</h2>
+          <h2 style="color: #d4af37; margin-bottom: 0.5rem;">📖 ${escapeHTML(campaign.name)}</h2>
           <p style="color: #4caf50; font-weight: 700; margin-bottom: 1rem;">
             ✅ Session Active (${duration} min)
           </p>
@@ -311,3 +311,4 @@
   </script>
 </body>
 </html>
+

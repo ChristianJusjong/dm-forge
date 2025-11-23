@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Data Backup & Export - Dungeon Master Forge</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="design-system.css">
   <link rel="stylesheet" href="medieval-theme.css">
@@ -80,6 +83,7 @@
     }
   </style>
 </head>
+
 <body>
   <div id="app">
     <!-- Navigation will be inserted here by nav.js -->
@@ -125,7 +129,8 @@
       <div class="backup-card">
         <h2 style="color: #d4af37; margin-bottom: 1rem;">📥 Export All Data</h2>
         <p style="color: #e8d5b7; line-height: 1.8; margin-bottom: 1.5rem;">
-          Download a complete backup of <strong>all your data</strong> including campaigns, sessions, notes, NPCs, and encounters.
+          Download a complete backup of <strong>all your data</strong> including campaigns, sessions, notes, NPCs, and
+          encounters.
         </p>
         <button class="btn btn-primary" onclick="doExportAll()" style="font-size: 1.1rem;">
           💾 Export Complete Backup
@@ -159,7 +164,8 @@
         </p>
 
         <div class="warning-box" style="background: rgba(244, 67, 54, 0.1); border-color: rgba(244, 67, 54, 0.6);">
-          <p style="color: #f44336; font-weight: 600; margin-bottom: 0.5rem;">⚠️ Warning: This will overwrite your current data!</p>
+          <p style="color: #f44336; font-weight: 600; margin-bottom: 0.5rem;">⚠️ Warning: This will overwrite your
+            current data!</p>
           <p style="color: #e8d5b7; font-size: 0.9rem;">
             Make sure to export your current data first before importing.
           </p>
@@ -185,6 +191,7 @@
     </main>
   </div>
 
+  <script src="storage-utils.js"></script>
   <script type="module" src="auth.js"></script>
   <script type="module" src="translations.js"></script>
   <script type="module" src="campaign-manager.js"></script>
@@ -270,7 +277,7 @@
       listDiv.innerHTML = campaigns.map(campaign => `
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 8px; margin-bottom: 0.75rem;">
           <div>
-            <strong style="color: #d4af37;">${campaign.name}</strong>
+            <strong style="color: #d4af37;">${escapeHTML(campaign.name)}</strong>
             <br>
             <small style="color: #8b7355;">Code: ${campaign.code}</small>
           </div>
@@ -306,4 +313,5 @@
     });
   </script>
 </body>
+
 </html>

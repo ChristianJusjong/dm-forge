@@ -48,7 +48,7 @@ const initiativeState = {
 function loadInitiativeData() {
   const saved = localStorage.getItem('initiative_tracker');
   if (saved) {
-    const data = JSON.parse(saved);
+    const data = safeJSONParse(saved, {});
     initiativeState.combatants = data.combatants || [];
     initiativeState.round = data.round || 1;
     initiativeState.currentTurn = data.currentTurn || 0;
@@ -80,7 +80,7 @@ function renderCombatants() {
       <div class="combatant ${isActive ? 'active' : ''}" data-id="${combatant.id}">
         <div class="combatant-main">
           <div class="combatant-info">
-            <h4>${combatant.name}</h4>
+            <h4>${escapeHTML(combatant.name)}</h4>
             <div class="combatant-stats">
               <span>${t('initiative')}: ${combatant.initiative}</span>
               <span>${t('hp')}:
@@ -90,10 +90,10 @@ function renderCombatants() {
               <span>${t('ac')}: ${combatant.ac}</span>
             </div>
             ${combatant.conditions && combatant.conditions.length > 0 ?
-              `<div class="conditions">
+        `<div class="conditions">
                 ${combatant.conditions.map((cond, i) =>
-                  `<span class="condition-tag">${cond} <button class="remove-condition" data-id="${combatant.id}" data-index="${i}">×</button></span>`
-                ).join('')}
+          `<span class="condition-tag">${escapeHTML(cond)} <button class="remove-condition" data-id="${combatant.id}" data-index="${i}">×</button></span>`
+        ).join('')}
               </div>` : ''}
           </div>
           <div class="combatant-actions">
@@ -221,7 +221,7 @@ let editingEncounterId = null;
 function loadEncounters() {
   const saved = localStorage.getItem('encounters');
   if (saved) {
-    encounters = JSON.parse(saved);
+    encounters = safeJSONParse(saved, []);
   }
 }
 
@@ -248,8 +248,8 @@ function renderEncounters() {
     return `
       <div class="encounter-card">
         <div class="encounter-info">
-          <h3>${encounter.name}</h3>
-          ${encounter.description ? `<p class="description">${encounter.description}</p>` : ''}
+          <h3>${escapeHTML(encounter.name)}</h3>
+          ${encounter.description ? `<p class="description">${escapeHTML(encounter.description)}</p>` : ''}
           <div class="encounter-stats">
             <span>${t('creatures')}: ${encounter.creatures.length}</span>
             ${encounter.creatures.length > 0 ? `<span>${t('totalCR')}: ${totalCR}</span>` : ''}
@@ -267,7 +267,7 @@ function renderEncounters() {
             ${encounter.creatures.map((creature, index) => `
               <div class="creature-item">
                 <div class="creature-info">
-                  <span class="creature-name">${creature.name}</span>
+                  <span class="creature-name">${escapeHTML(creature.name)}</span>
                   <span class="creature-stat">${t('hp')}: ${creature.hp}</span>
                   <span class="creature-stat">${t('ac')}: ${creature.ac}</span>
                   <span class="creature-stat">${t('cr')}: ${creature.cr || 0}</span>
@@ -425,7 +425,7 @@ let viewingNPC = null;
 function loadSavedNPCs() {
   const saved = localStorage.getItem('saved_npcs');
   if (saved) {
-    savedNPCs = JSON.parse(saved);
+    savedNPCs = safeJSONParse(saved, []);
   }
 }
 
@@ -447,10 +447,10 @@ function renderSavedNPCs() {
   grid.innerHTML = savedNPCs.map(npc => `
     <div class="npc-card" data-id="${npc.id}">
       <div class="npc-card-header">
-        <h4>${npc.name}</h4>
+        <h4>${escapeHTML(npc.name)}</h4>
         <button class="btn-tiny btn-danger delete-npc" data-id="${npc.id}">${t('delete')}</button>
       </div>
-      <p class="npc-preview">${npc.preview}</p>
+      <p class="npc-preview">${escapeHTML(npc.preview)}</p>
     </div>
   `).join('');
 
@@ -492,7 +492,7 @@ function closeNPCModal() {
 }
 
 function formatNPC(content) {
-  return content
+  return escapeHTML(content)
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
     .replace(/\*([^*]+)\*/g, '<em>$1</em>')
     .replace(/\n/g, '<br>');

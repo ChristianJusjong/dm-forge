@@ -2,10 +2,17 @@
 // AUTHENTICATION SYSTEM
 // ==========================================
 
-// Hash password using simple SHA-256 (browser-based)
-async function hashPassword(password) {
+// Generate a random salt
+function generateSalt() {
+  const array = new Uint8Array(16);
+  crypto.getRandomValues(array);
+  return Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Hash password using SHA-256 with optional salt
+async function hashPassword(password, salt = '') {
   const encoder = new TextEncoder();
-  const data = encoder.encode(password);
+  const data = encoder.encode(password + salt);
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
@@ -13,13 +20,12 @@ async function hashPassword(password) {
 
 // Get all users from localStorage
 function getUsers() {
-  const users = localStorage.getItem('dm_codex_users');
-  return users ? JSON.parse(users) : [];
+  return safeLocalStorageGet('dm_codex_users', []);
 }
 
 // Save users to localStorage
 function saveUsers(users) {
-  localStorage.setItem('dm_codex_users', JSON.stringify(users));
+  safeLocalStorageSet('dm_codex_users', users);
 }
 
 // Sign up new user
@@ -37,8 +43,9 @@ async function signup(username, email, password) {
       return { success: false, message: 'Email already registered' };
     }
 
-    // Hash password
-    const hashedPassword = await hashPassword(password);
+    // Generate salt and hash password
+    const salt = generateSalt();
+    const hashedPassword = await hashPassword(password, salt);
 
     // Create new user
     const newUser = {
@@ -46,6 +53,7 @@ async function signup(username, email, password) {
       username,
       email,
       password: hashedPassword,
+      salt: salt,
       createdAt: new Date().toISOString()
     };
 
@@ -74,13 +82,44 @@ async function login(emailOrUsername, password) {
       return { success: false, message: 'Invalid email/username or password' };
     }
 
-    // Verify password
-    const hashedPassword = await hashPassword(password);
-    if (hashedPassword !== user.password) {
+    // Verify password (handle both legacy and salted)
+    let isValid = false;
+    let migrated = false;
+
+    if (user.salt) {
+      // Modern salted hash
+      const hashedPassword = await hashPassword(password, user.salt);
+      isValid = (hashedPassword === user.password);
+    } else {
+      // Legacy unsalted hash
+      const legacyHash = await hashPassword(password, '');
+      if (legacyHash === user.password) {
+        isValid = true;
+        // MIGRATION: Upgrade to salted hash
+        const newSalt = generateSalt();
+        const newHash = await hashPassword(password, newSalt);
+
+        user.salt = newSalt;
+        user.password = newHash;
+        migrated = true;
+      }
+    }
+
+    if (!isValid) {
       return { success: false, message: 'Invalid email/username or password' };
     }
 
-    // Store logged in user (without password)
+    // Save migration if needed
+    if (migrated) {
+      const userIndex = users.findIndex(u => u.id === user.id);
+      if (userIndex !== -1) {
+        users[userIndex] = user;
+        saveUsers(users);
+        console.log('🔒 Security Upgrade: User account migrated to salted hash.');
+      }
+    }
+
+    // Store logged in user (without password/salt)
     const sessionUser = {
       id: user.id,
       username: user.username,
@@ -88,7 +127,7 @@ async function login(emailOrUsername, password) {
       loginAt: new Date().toISOString()
     };
 
-    localStorage.setItem('dm_codex_current_user', JSON.stringify(sessionUser));
+    safeLocalStorageSet('dm_codex_current_user', sessionUser);
 
     return { success: true, message: 'Login successful!', user: sessionUser };
   } catch (error) {
@@ -99,7 +138,7 @@ async function login(emailOrUsername, password) {
 
 // Logout user
 function logout() {
-  localStorage.removeItem('dm_codex_current_user');
+  safeLocalStorageRemove('dm_codex_current_user');
   window.location.href = 'login.html';
 }
 
@@ -110,8 +149,7 @@ function isLoggedIn() {
 
 // Get current logged in user
 function getCurrentUser() {
-  const user = localStorage.getItem('dm_codex_current_user');
-  return user ? JSON.parse(user) : null;
+  return safeLocalStorageGet('dm_codex_current_user');
 }
 
 // Require authentication (call this on protected pages)
@@ -155,7 +193,7 @@ function updateUserProfile(updates) {
   }
 
   saveUsers(users);
-  localStorage.setItem('dm_codex_current_user', JSON.stringify(currentUser));
+  safeLocalStorageSet('dm_codex_current_user', currentUser);
 
   return { success: true, message: 'Profile updated successfully' };
 }
@@ -173,14 +211,24 @@ async function changePassword(oldPassword, newPassword) {
   }
 
   // Verify old password
-  const hashedOldPassword = await hashPassword(oldPassword);
-  if (hashedOldPassword !== user.password) {
+  let isValidOld = false;
+  if (user.salt) {
+    const hashedOld = await hashPassword(oldPassword, user.salt);
+    isValidOld = (hashedOld === user.password);
+  } else {
+    const hashedOldLegacy = await hashPassword(oldPassword, '');
+    isValidOld = (hashedOldLegacy === user.password);
+  }
+
+  if (!isValidOld) {
     return { success: false, message: 'Current password is incorrect' };
   }
 
-  // Update to new password
-  const hashedNewPassword = await hashPassword(newPassword);
+  // Update to new password (always salted)
+  const newSalt = generateSalt();
+  const hashedNewPassword = await hashPassword(newPassword, newSalt);
   user.password = hashedNewPassword;
+  user.salt = newSalt;
 
   saveUsers(users);
 
