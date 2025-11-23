@@ -629,9 +629,12 @@ th {
 
   /* Reserve 160px on each side for ad banners */
   .hero-content,
-  .page-content {
+  .page-content,
+  footer,
+  .footer {
     max-width: calc(100% - 320px);
     padding: var(--space-2xl) var(--space-lg);
+    margin: 0 auto;
   }
 }
 
@@ -658,12 +661,6 @@ th {
 
   .ad-banner-right {
     right: 0;
-  }
-
-  /* Ensure no content overlaps with ads at the bottom */
-  body {
-    padding-left: 160px;
-    padding-right: 160px;
   }
 }
 
