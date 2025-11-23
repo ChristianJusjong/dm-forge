@@ -30,18 +30,15 @@
       </div>
 
       <!-- Tab Navigation -->
-      <div class="card" style="margin-bottom: 2rem; padding: 0; overflow: hidden;">
-        <div class="config-tabs" style="display: flex; border-bottom: 2px solid rgba(124, 98, 77, 0.3);">
-          <button class="config-tab active" data-tab="campaign"
-            style="flex: 1; padding: 1rem; background: none; border: none; color: #e8d5b7; font-weight: 600; cursor: pointer; transition: all 0.3s; border-bottom: 3px solid #d4af37;">
+      <div class="card mb-xl p-0 overflow-hidden">
+        <div class="config-tabs">
+          <button class="config-tab active" data-tab="campaign">
             📖 Campaign
           </button>
-          <button class="config-tab" data-tab="party"
-            style="flex: 1; padding: 1rem; background: none; border: none; color: #b8956a; font-weight: 600; cursor: pointer; transition: all 0.3s; border-bottom: 3px solid transparent;">
+          <button class="config-tab" data-tab="party">
             🛡️ Party
           </button>
-          <button class="config-tab" data-tab="session"
-            style="flex: 1; padding: 1rem; background: none; border: none; color: #b8956a; font-weight: 600; cursor: pointer; transition: all 0.3s; border-bottom: 3px solid transparent;">
+          <button class="config-tab" data-tab="session">
             ⚔️ Session
           </button>
         </div>
@@ -49,30 +46,30 @@
 
       <!-- Campaign Tab -->
       <div id="tab-campaign" class="config-tab-content">
-        <div class="card" style="margin-bottom: 2rem;">
-          <h3 style="color: #d4af37; margin-bottom: 1.5rem;">Campaign Information</h3>
+        <div class="card mb-xl">
+          <h3 class="text-gold mb-lg">Campaign Information</h3>
           <div id="campaign-details"></div>
         </div>
 
         <!-- Language Settings -->
-        <div class="card" style="margin-bottom: 2rem;">
-          <h3 style="color: #d4af37; margin-bottom: 1.5rem;">🌐 Language Settings</h3>
+        <div class="card mb-xl">
+          <h3 class="text-gold mb-lg">🌐 Language Settings</h3>
           <div class="input-group">
             <label class="input-label">Interface Language</label>
             <select id="language-selector" class="input" style="max-width: 300px;">
               <option value="en">English</option>
               <option value="da">Danish (Dansk)</option>
             </select>
-            <p style="color: #8b7355; font-size: 0.9rem; margin-top: 0.5rem;">
+            <p class="text-muted text-sm mt-sm">
               This changes the language of buttons, menus, and labels throughout the app.
             </p>
           </div>
         </div>
 
         <!-- AI Settings -->
-        <div class="card" style="margin-bottom: 2rem;">
-          <h3 style="color: #d4af37; margin-bottom: 1.5rem;">🤖 AI Settings</h3>
-          <p style="color: #e8d5b7; line-height: 1.8; margin-bottom: 1.5rem;">
+        <div class="card mb-xl">
+          <h3 class="text-gold mb-lg">🤖 AI Settings</h3>
+          <p class="text-primary mb-lg" style="line-height: 1.8;">
             Configure AI features like NPC generation, content creation, and translation.
           </p>
 
@@ -132,9 +129,9 @@
           </details>
 
           <!-- Features List -->
-          <div style="background: rgba(212, 175, 55, 0.05); border-radius: 8px; padding: 1rem;">
-            <p style="color: #b8956a; font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>AI Features:</strong></p>
-            <ul style="color: #e8d5b7; font-size: 0.9rem; line-height: 1.8; margin-left: 1.5rem;">
+          <div class="p-md" style="background: rgba(212, 175, 55, 0.05); border-radius: 8px;">
+            <p class="text-muted text-sm mb-sm"><strong>AI Features:</strong></p>
+            <ul class="text-primary text-sm" style="line-height: 1.8; margin-left: 1.5rem;">
               <li>Generate detailed NPCs with personalities and backstories</li>
               <li>Create encounter descriptions and scenarios</li>
               <li>Translate content to multiple languages</li>
@@ -144,9 +141,9 @@
         </div>
 
         <!-- Backup & Export -->
-        <div class="card" style="margin-bottom: 2rem;">
-          <h3 style="color: #d4af37; margin-bottom: 1.5rem;">💾 Backup & Export</h3>
-          <p style="color: #e8d5b7; line-height: 1.8; margin-bottom: 1.5rem;">
+        <div class="card mb-xl">
+          <h3 class="text-gold mb-lg">💾 Backup & Export</h3>
+          <p class="text-primary mb-lg" style="line-height: 1.8;">
             Export your campaign data, party, and session notes. Import backups to restore your data.
           </p>
           <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
@@ -681,26 +678,26 @@
       };
 
       document.getElementById('campaign-details').innerHTML = `
-        <div style="display: grid; gap: 1rem;">
-          <div style="padding: 1rem; background: rgba(212, 175, 55, 0.1); border-radius: 6px;">
-            <strong style="color: #d4af37;">Campaign Name:</strong>
-            <span style="color: #e8d5b7; margin-left: 1rem;">${escapeHTML(campaign.name)}</span>
+        <div class="d-grid gap-md">
+          <div class="p-md" style="background: rgba(212, 175, 55, 0.1); border-radius: 6px;">
+            <strong class="text-gold">Campaign Name:</strong>
+            <span class="text-primary ml-md">${escapeHTML(campaign.name)}</span>
           </div>
-          <div style="padding: 1rem; background: rgba(212, 175, 55, 0.1); border-radius: 6px;">
-            <strong style="color: #d4af37;">Edition:</strong>
-            <span style="color: #e8d5b7; margin-left: 1rem;">${settings.edition || '5e'}</span>
+          <div class="p-md" style="background: rgba(212, 175, 55, 0.1); border-radius: 6px;">
+            <strong class="text-gold">Edition:</strong>
+            <span class="text-primary ml-md">${settings.edition || '5e'}</span>
           </div>
-          <div style="padding: 1rem; background: rgba(212, 175, 55, 0.1); border-radius: 6px;">
-            <strong style="color: #d4af37;">World/Setting:</strong>
-            <span style="color: #e8d5b7; margin-left: 1rem;">${worldNames[settings.world] || 'Forgotten Realms'}</span>
+          <div class="p-md" style="background: rgba(212, 175, 55, 0.1); border-radius: 6px;">
+            <strong class="text-gold">World/Setting:</strong>
+            <span class="text-primary ml-md">${worldNames[settings.world] || 'Forgotten Realms'}</span>
           </div>
-          <div style="padding: 1rem; background: rgba(212, 175, 55, 0.1); border-radius: 6px;">
-            <strong style="color: #d4af37;">Campaign Code:</strong>
-            <code style="color: #f0d06b; margin-left: 1rem; background: rgba(0,0,0,0.3); padding: 0.25rem 0.75rem; border-radius: 4px;">${campaign.code}</code>
+          <div class="p-md" style="background: rgba(212, 175, 55, 0.1); border-radius: 6px;">
+            <strong class="text-gold">Campaign Code:</strong>
+            <code class="text-gold-light ml-md" style="background: rgba(0,0,0,0.3); padding: 0.25rem 0.75rem; border-radius: 4px;">${campaign.code}</code>
           </div>
-          <div style="padding: 1rem; background: rgba(212, 175, 55, 0.1); border-radius: 6px;">
-            <strong style="color: #d4af37;">Created:</strong>
-            <span style="color: #e8d5b7; margin-left: 1rem;">${new Date(campaign.createdAt).toLocaleDateString()}</span>
+          <div class="p-md" style="background: rgba(212, 175, 55, 0.1); border-radius: 6px;">
+            <strong class="text-gold">Created:</strong>
+            <span class="text-primary ml-md">${new Date(campaign.createdAt).toLocaleDateString()}</span>
           </div>
         </div>
       `;
@@ -727,8 +724,8 @@
         `;
       } else {
         controlsDiv.innerHTML = `
-          <div style="text-align: center; padding: 2rem; background: rgba(212, 175, 55, 0.1); border-radius: 8px;">
-            <p style="color: #b8956a; margin-bottom: 1.5rem;">No active session</p>
+          <div class="text-center p-xl" style="background: rgba(212, 175, 55, 0.1); border-radius: 8px;">
+            <p class="text-muted mb-lg">No active session</p>
             <button class="btn btn-primary" onclick="window.location.href='index.html'">
               ⚔️ Start New Session
             </button>

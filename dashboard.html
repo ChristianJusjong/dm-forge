@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +8,16 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="design-system.css">
   <link rel="stylesheet" href="medieval-theme.css">
   <link rel="stylesheet" href="responsive-design.css">
   <link rel="stylesheet" href="global-overrides.css">
 </head>
+
 <body>
   <div id="app">
     <!-- Navigation will be inserted here by nav.js -->
@@ -24,7 +28,8 @@
         <div class="hero-logo-container">
           <div class="hero-logo-glow" aria-hidden="true"></div>
           <div class="hero-logo-wrapper">
-            <img src="logo.svg" alt="Dungeon Master Forge - A glowing golden dragon emblem surrounded by mystical runes">
+            <img src="logo.svg"
+              alt="Dungeon Master Forge - A glowing golden dragon emblem surrounded by mystical runes">
           </div>
           <h1 class="medieval-title">Dungeon Master Forge</h1>
           <div class="medieval-divider" aria-hidden="true"></div>
@@ -32,7 +37,7 @@
         </div>
 
         <!-- Campaign Info & Session Management -->
-        <div id="campaign-info" class="card" style="max-width: 800px; margin: 2rem auto; text-align: center;"></div>
+        <div id="campaign-info" class="card mx-auto text-center mb-xl" style="max-width: 800px;"></div>
 
         <!-- Feature Cards Grid -->
         <div class="cards-grid">
@@ -107,7 +112,8 @@
           </a>
 
           <!-- API Test Card -->
-          <a href="api-test.html" class="feature-card feature-card-enhanced" data-category="reference" style="opacity: 0.8; border: 2px dashed var(--wood-brown);">
+          <a href="api-test.html" class="feature-card feature-card-enhanced" data-category="reference"
+            style="opacity: 0.8; border: 2px dashed var(--wood-brown);">
             <div class="card-icon">🔧</div>
             <h3>API Test</h3>
             <p>Test connection to all external APIs (Groq, Gemini, Open5e)</p>
@@ -123,18 +129,19 @@
   <!-- End Session Modal -->
   <div id="end-session-modal" class="modal-overlay" style="display: none;">
     <div class="modal">
-      <h2 style="color: #d4af37; margin-bottom: 1.5rem;">📜 End Session</h2>
+      <h2 class="text-gold mb-lg">📜 End Session</h2>
 
-      <p style="margin-bottom: 1.5rem; line-height: 1.8;">
+      <p class="mb-lg" style="line-height: 1.8;">
         Save your session and get your campaign code to continue later.
       </p>
 
       <div class="input-group">
         <label class="input-label">Session Notes (Optional)</label>
-        <textarea id="session-notes-textarea" class="textarea" rows="5" placeholder="What happened in this session?"></textarea>
+        <textarea id="session-notes-textarea" class="textarea" rows="5"
+          placeholder="What happened in this session?"></textarea>
       </div>
 
-      <div class="modal-actions" style="margin-top: 2rem;">
+      <div class="modal-actions mt-xl">
         <button class="btn btn-primary" onclick="endSessionNow()">
           💾 End Session
         </button>
@@ -145,7 +152,8 @@
     </div>
   </div>
 
-  <script src="storage-utils.js"></script><script type="module" src="auth.js"></script>
+  <script src="storage-utils.js"></script>
+  <script type="module" src="auth.js"></script>
   <script type="module" src="translations.js"></script>
   <script type="module" src="campaign-manager.js"></script>
   <script type="module" src="nav.js"></script>
@@ -170,8 +178,8 @@
         // No campaign - show new campaign button
         infoDiv.style.display = 'block';
         infoDiv.innerHTML = `
-          <h2 style="color: #d4af37; margin-bottom: 1rem;">⚔️ No Active Campaign</h2>
-          <p style="color: #e8d5b7; margin-bottom: 1.5rem; line-height: 1.8;">
+          <h2 class="text-gold mb-md">⚔️ No Active Campaign</h2>
+          <p class="text-primary mb-lg" style="line-height: 1.8;">
             Start a new campaign or load an existing one to begin your adventure.
           </p>
           <button class="btn btn-primary" onclick="window.location.href='campaign-start.html'">
@@ -208,37 +216,39 @@
           : '<span style="color: #ff9800;">⚠ Not Confirmed</span>';
 
         infoDiv.innerHTML = `
-          <h2 style="color: #d4af37; margin-bottom: 0.5rem;">📖 ${escapeHTML(campaign.name)}</h2>
-          <p style="color: #b8956a; font-size: 0.9rem; margin-bottom: 1rem;">
+          <h2 class="text-gold mb-sm">📖 ${escapeHTML(campaign.name)}</h2>
+          <p class="text-muted text-sm mb-md">
             ${worldName} • ${edition.toUpperCase()}
           </p>
-          <p style="color: #e8d5b7; margin-bottom: 1rem;">
-            Party: <strong style="color: #f0d06b;">${campaign.party.length} members</strong> ${partyStatus} |
-            Sessions Completed: <strong style="color: #f0d06b;">${campaign.sessions.length}</strong>
+          <p class="text-primary mb-md">
+            Party: <strong class="text-gold-light">${campaign.party.length} members</strong> ${partyStatus} |
+            Sessions Completed: <strong class="text-gold-light">${campaign.sessions.length}</strong>
           </p>
-          <p style="color: #b8956a; font-size: 0.9rem; margin-bottom: 1.5rem;">
+          <p class="text-muted text-sm mb-lg">
             Campaign Code: <code style="background: rgba(0,0,0,0.3); padding: 0.25rem 0.75rem; border-radius: 4px; letter-spacing: 0.1rem;">${campaign.code}</code>
           </p>
-          <button class="btn btn-primary" onclick="startNewSession()">
-            ⚔️ Start New Session
-          </button>
-          <button class="btn" onclick="window.location.href='configuration.html'">
-            ⚙️ Configure Campaign
-          </button>
-          <button class="btn" onclick="window.location.href='campaign-start.html'">
-            🔄 Switch Campaign
-          </button>
+          <div class="d-flex flex-wrap justify-center gap-md">
+            <button class="btn btn-primary" onclick="startNewSession()">
+              ⚔️ Start New Session
+            </button>
+            <button class="btn btn-secondary" onclick="window.location.href='configuration.html'">
+              ⚙️ Configure Campaign
+            </button>
+            <button class="btn btn-secondary" onclick="window.location.href='campaign-start.html'">
+              🔄 Switch Campaign
+            </button>
+          </div>
         `;
       } else {
         // Active session - show session info and end button
         const duration = Math.floor((Date.now() - session.startedAt) / 60000);
         infoDiv.innerHTML = `
-          <h2 style="color: #d4af37; margin-bottom: 0.5rem;">📖 ${escapeHTML(campaign.name)}</h2>
-          <p style="color: #4caf50; font-weight: 700; margin-bottom: 1rem;">
+          <h2 class="text-gold mb-sm">📖 ${escapeHTML(campaign.name)}</h2>
+          <p class="text-success text-bold mb-md">
             ✅ Session Active (${duration} min)
           </p>
-          <p style="color: #e8d5b7; margin-bottom: 1.5rem;">
-            Party Members: <strong style="color: #f0d06b;">${campaign.party.length}</strong>
+          <p class="text-primary mb-lg">
+            Party Members: <strong class="text-gold-light">${campaign.party.length}</strong>
           </p>
           <button class="btn btn-secondary" onclick="showEndSessionModal()">
             🚪 End Session
@@ -310,5 +320,5 @@
     });
   </script>
 </body>
-</html>
 
+</html>

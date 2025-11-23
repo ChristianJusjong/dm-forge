@@ -121,14 +121,17 @@ function createPlaceholderContainer(position) {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(212, 175, 55, 0.4);
-    font-size: 12px;
+    color: rgba(212, 175, 55, 0.6);
+    font-size: 14px;
     text-align: center;
     border-radius: 4px;
     font-family: 'Cinzel', serif;
     padding: 1rem;
+    border: 1px dashed rgba(212, 175, 55, 0.3);
+    font-weight: 600;
+    line-height: 1.6;
   `;
-  placeholder.textContent = '160x600 Ad Space';
+  placeholder.innerHTML = '⚔️<br><br>Support<br>Dungeon Master<br>Forge<br><br>🛡️';
 
   wrapper.appendChild(label);
   wrapper.appendChild(placeholder);
@@ -153,7 +156,8 @@ window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
     const ads = document.querySelectorAll('.ad-container');
-    if (window.innerWidth < 1400) {
+    // Lower threshold to 1200px to show on more screens, but ensure no overlap via CSS
+    if (window.innerWidth < 1200) {
       ads.forEach(ad => ad.style.display = 'none');
     } else {
       ads.forEach(ad => ad.style.display = 'block');

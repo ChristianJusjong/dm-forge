@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,175 +8,55 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="design-system.css">
   <link rel="stylesheet" href="medieval-theme.css">
   <link rel="stylesheet" href="responsive-design.css">
-  <style>
-    .campaign-hero {
-      text-align: center;
-      padding: 3rem 2rem;
-      margin-bottom: 3rem;
-    }
-
-    .campaign-hero h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      color: #d4af37;
-      text-shadow: 0 0 20px rgba(212, 175, 55, 0.8), 3px 3px 6px rgba(0, 0, 0, 0.9);
-    }
-
-    .campaign-option-card {
-      background: linear-gradient(135deg, rgba(26, 15, 10, 0.95) 0%, rgba(13, 8, 6, 0.95) 100%);
-      border: 3px solid rgba(212, 175, 55, 0.6);
-      border-radius: 12px;
-      padding: 2.5rem;
-      text-align: center;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-
-    .campaign-option-card:hover {
-      transform: translateY(-5px);
-      border-color: #d4af37;
-      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
-    }
-
-    .campaign-option-icon {
-      font-size: 4rem;
-      margin-bottom: 1.5rem;
-      filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6));
-    }
-
-    .campaign-option-card h2 {
-      color: #d4af37;
-      margin-bottom: 1rem;
-      font-size: 1.8rem;
-    }
-
-    .campaign-option-card p {
-      color: #e8d5b7;
-      line-height: 1.8;
-      margin-bottom: 2rem;
-    }
-
-    .modal-content-campaign {
-      max-width: 500px;
-    }
-
-    .code-input {
-      font-family: 'Courier New', monospace;
-      font-size: 1.5rem;
-      text-align: center;
-      letter-spacing: 0.3rem;
-      text-transform: uppercase;
-    }
-
-    .recent-campaign-card {
-      background: linear-gradient(135deg, rgba(26, 15, 10, 0.95) 0%, rgba(13, 8, 6, 0.95) 100%);
-      border: 2px solid rgba(212, 175, 55, 0.4);
-      border-radius: 10px;
-      padding: 1.5rem;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .recent-campaign-card:hover {
-      transform: translateY(-3px);
-      border-color: #d4af37;
-      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
-    }
-
-    .recent-campaign-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-    }
-
-    .recent-campaign-name {
-      color: #d4af37;
-      font-size: 1.3rem;
-      font-weight: 600;
-      margin: 0 0 0.5rem 0;
-      font-family: 'Cinzel', serif;
-    }
-
-    .recent-campaign-code {
-      font-family: 'Courier New', monospace;
-      color: #8b7355;
-      font-size: 0.9rem;
-      letter-spacing: 0.1rem;
-    }
-
-    .recent-campaign-date {
-      color: #8b7355;
-      font-size: 0.85rem;
-      margin-bottom: 1rem;
-    }
-
-    .recent-campaign-footer {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: auto;
-    }
-
-    .btn-small {
-      padding: 0.5rem 1rem;
-      font-size: 0.9rem;
-      flex: 1;
-    }
-
-    @media (max-width: 768px) {
-      #recent-campaigns-list {
-        grid-template-columns: 1fr !important;
-      }
-    }
-  </style>
 </head>
+
 <body>
   <div id="app">
     <!-- Navigation will be inserted here by nav.js -->
 
     <main class="page-content">
       <div class="campaign-hero">
-        <img src="logo-icon.svg" alt="DM Codex" style="width: 100px; height: 100px; margin: 0 auto 1.5rem auto; display: block;">
+        <img src="logo-icon.svg" alt="DM Codex" class="d-block mx-auto mb-lg" style="width: 100px; height: 100px;">
         <h1>Welcome, Dungeon Master</h1>
-        <p style="font-size: 1.2rem; color: #e8d5b7; max-width: 700px; margin: 0 auto; line-height: 1.8;">
+        <p class="text-xl text-primary mx-auto mb-2xl" style="max-width: 700px; line-height: 1.8;">
           Begin your adventure by creating a new campaign or continue an existing one.
         </p>
       </div>
 
       <!-- New Campaign Card -->
-      <div style="max-width: 600px; margin: 0 auto 3rem auto;">
+      <div class="mx-auto mb-2xl" style="max-width: 600px;">
         <div class="campaign-option-card" onclick="showNewCampaignModal()">
           <div class="campaign-option-icon">🎲</div>
           <h2 data-i18n="newCampaign">New Campaign</h2>
-          <p data-i18n="newCampaignDesc">Start a fresh adventure. Create your party, manage encounters, and forge your legend.</p>
+          <p data-i18n="newCampaignDesc">Start a fresh adventure. Create your party, manage encounters, and forge your
+            legend.</p>
           <button class="btn btn-primary" data-i18n="startNew">Start New Campaign</button>
         </div>
       </div>
 
       <!-- Recent Campaigns -->
-      <div id="recent-campaigns" class="card" style="max-width: 1200px; margin: 0 auto 3rem auto; display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-          <h2 style="color: #d4af37; margin: 0;">📚 Your Campaigns</h2>
-          <button onclick="showLoadCampaignModal()" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+      <div id="recent-campaigns" class="card mx-auto mb-2xl d-none" style="max-width: 1200px;">
+        <div class="d-flex justify-between align-center mb-lg">
+          <h2 class="text-gold m-0">📚 Your Campaigns</h2>
+          <button onclick="showLoadCampaignModal()" class="btn btn-secondary text-sm p-sm">
             🔑 Enter Code
           </button>
         </div>
-        <div id="recent-campaigns-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem;"></div>
+        <div id="recent-campaigns-list" class="cards-grid"></div>
       </div>
     </main>
 
     <!-- New Campaign Modal -->
     <div id="new-campaign-modal" class="modal-overlay" style="display: none;">
       <div class="modal modal-content-campaign" style="max-width: 600px;">
-        <h2 style="color: #d4af37; margin-bottom: 1.5rem;">🎲 Create New Campaign</h2>
+        <h2 class="text-gold mb-lg">🎲 Create New Campaign</h2>
 
         <div class="input-group">
           <label class="input-label" data-i18n="campaignName">Campaign Name</label>
@@ -230,7 +111,7 @@
           </select>
         </div>
 
-        <div class="modal-actions" style="margin-top: 2rem;">
+        <div class="modal-actions mt-xl">
           <button class="btn btn-primary" onclick="createNewCampaign()">
             ⚔️ <span data-i18n="create">Create</span>
           </button>
@@ -242,7 +123,7 @@
     <!-- Load Campaign Modal -->
     <div id="load-campaign-modal" class="modal-overlay" style="display: none;">
       <div class="modal modal-content-campaign">
-        <h2 style="color: #d4af37; margin-bottom: 1.5rem;">📜 Load Campaign</h2>
+        <h2 class="text-gold mb-lg">📜 Load Campaign</h2>
 
         <div class="input-group">
           <label class="input-label" data-i18n="enterCode">Enter Campaign Code</label>
@@ -254,7 +135,7 @@
 
         <div id="load-error" class="error-message" style="display: none; margin-top: 1rem;"></div>
 
-        <div class="modal-actions" style="margin-top: 2rem;">
+        <div class="modal-actions mt-xl">
           <button class="btn btn-primary" onclick="loadExistingCampaign()">
             📖 <span data-i18n="load">Load</span>
           </button>
@@ -264,7 +145,8 @@
     </div>
   </div>
 
-  <script src="storage-utils.js"></script><script type="module" src="auth.js"></script>
+  <script src="storage-utils.js"></script>
+  <script type="module" src="auth.js"></script>
   <script type="module" src="translations.js"></script>
   <script type="module" src="campaign-manager.js"></script>
   <script type="module" src="nav.js"></script>
@@ -505,13 +387,13 @@
         const hero = document.querySelector('.campaign-hero');
         hero.innerHTML = `
           <h1>⚔️ Welcome Back, Dungeon Master</h1>
-          <p style="font-size: 1.2rem; color: #e8d5b7; max-width: 700px; margin: 0 auto 2rem auto; line-height: 1.8;">
-            You have an active campaign: <strong style="color: #d4af37;">${activeCampaign.name}</strong>
+          <p class="text-xl text-primary mx-auto mb-xl" style="max-width: 700px; line-height: 1.8;">
+            You have an active campaign: <strong class="text-gold">${activeCampaign.name}</strong>
           </p>
-          <button class="btn btn-primary" onclick="window.location.href='index.html'" style="font-size: 1.1rem; padding: 0.75rem 2rem;">
+          <button class="btn btn-primary text-lg px-xl py-md" onclick="window.location.href='index.html'">
             ⚔️ Continue Campaign
           </button>
-          <button class="btn" onclick="clearActiveCampaign(); location.reload();" style="font-size: 1rem; padding: 0.75rem 2rem; margin-left: 1rem;">
+          <button class="btn text-md px-xl py-md ml-md" onclick="clearActiveCampaign(); location.reload();">
             🚪 Switch Campaign
           </button>
         `;
@@ -519,5 +401,5 @@
     });
   </script>
 </body>
-</html>
 
+</html>

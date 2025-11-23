@@ -15,73 +15,7 @@
   <link rel="stylesheet" href="medieval-theme.css">
   <link rel="stylesheet" href="responsive-design.css">
   <link rel="stylesheet" href="global-overrides.css">
-  <style>
-    .backup-card {
-      background: linear-gradient(135deg, rgba(26, 15, 10, 0.95) 0%, rgba(13, 8, 6, 0.95) 100%);
-      border: 2px solid rgba(212, 175, 55, 0.4);
-      border-radius: 12px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .warning-box {
-      background: rgba(255, 152, 0, 0.1);
-      border: 2px solid rgba(255, 152, 0, 0.6);
-      border-radius: 8px;
-      padding: 1.5rem;
-      margin: 1.5rem 0;
-    }
-
-    .info-box {
-      background: rgba(76, 175, 80, 0.1);
-      border: 2px solid rgba(76, 175, 80, 0.6);
-      border-radius: 8px;
-      padding: 1.5rem;
-      margin: 1.5rem 0;
-    }
-
-    .storage-meter {
-      width: 100%;
-      height: 24px;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 12px;
-      overflow: hidden;
-      margin: 1rem 0;
-    }
-
-    .storage-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #4caf50, #ff9800, #f44336);
-      transition: width 0.5s ease;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding-right: 1rem;
-      color: white;
-      font-weight: bold;
-      font-size: 0.85rem;
-    }
-
-    .file-input-label {
-      display: inline-block;
-      padding: 0.75rem 1.5rem;
-      background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%);
-      color: #0a0604;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    .file-input-label:hover {
-      background: linear-gradient(135deg, #f0d06b 0%, #d4af37 100%);
-      transform: translateY(-2px);
-    }
-
-    input[type="file"] {
-      display: none;
-    }
-  </style>
+</head>
 </head>
 
 <body>
@@ -96,59 +30,59 @@
 
       <!-- Warning Banner -->
       <div class="warning-box">
-        <h3 style="color: #ff9800; margin-bottom: 1rem;">⚠️ Important: Your Data is Stored Locally</h3>
-        <p style="color: #e8d5b7; line-height: 1.8; margin-bottom: 1rem;">
+        <h3 class="text-warning mb-md">⚠️ Important: Your Data is Stored Locally</h3>
+        <p class="text-primary mb-md">
           All your campaign data is stored in your browser's local storage. This means:
         </p>
-        <ul style="color: #e8d5b7; line-height: 1.8; margin-left: 1.5rem;">
+        <ul class="text-primary ml-lg">
           <li>Clearing browser cache = <strong>permanent data loss</strong></li>
           <li>Switching browsers = data doesn't transfer</li>
           <li>No automatic backups or cloud sync</li>
           <li>Computer crash = potential data loss</li>
         </ul>
-        <p style="color: #ff9800; margin-top: 1rem; font-weight: 600;">
+        <p class="text-warning mt-md text-semibold">
           📌 Regular backups are <strong>essential</strong> to prevent losing months of campaign work!
         </p>
       </div>
 
       <!-- Storage Usage -->
       <div class="backup-card">
-        <h2 style="color: #d4af37; margin-bottom: 1.5rem;">📊 Storage Usage</h2>
+        <h2 class="text-gold mb-lg">📊 Storage Usage</h2>
         <div id="storage-info">
-          <p style="color: #e8d5b7;">Calculating...</p>
+          <p class="text-primary">Calculating...</p>
         </div>
         <div class="storage-meter">
           <div class="storage-fill" id="storage-meter" style="width: 0%">0%</div>
         </div>
-        <p style="color: #b8956a; font-size: 0.9rem; margin-top: 0.5rem;">
+        <p class="text-muted text-sm mt-sm">
           Typical localStorage limit: ~5-10 MB
         </p>
       </div>
 
       <!-- Export All Data -->
       <div class="backup-card">
-        <h2 style="color: #d4af37; margin-bottom: 1rem;">📥 Export All Data</h2>
-        <p style="color: #e8d5b7; line-height: 1.8; margin-bottom: 1.5rem;">
+        <h2 class="text-gold mb-md">📥 Export All Data</h2>
+        <p class="text-primary mb-lg">
           Download a complete backup of <strong>all your data</strong> including campaigns, sessions, notes, NPCs, and
           encounters.
         </p>
-        <button class="btn btn-primary" onclick="doExportAll()" style="font-size: 1.1rem;">
+        <button class="btn btn-primary text-lg" onclick="doExportAll()">
           💾 Export Complete Backup
         </button>
-        <p style="color: #b8956a; font-size: 0.85rem; margin-top: 1rem;">
+        <p class="text-muted text-xs mt-md">
           Last backup: <span id="last-backup">Never</span>
         </p>
       </div>
 
       <!-- Export Campaign Only -->
       <div class="backup-card">
-        <h2 style="color: #d4af37; margin-bottom: 1rem;">📤 Export Campaign</h2>
-        <p style="color: #e8d5b7; line-height: 1.8; margin-bottom: 1.5rem;">
+        <h2 class="text-gold mb-md">📤 Export Campaign</h2>
+        <p class="text-primary mb-lg">
           Export a specific campaign or all campaigns separately.
         </p>
 
-        <div id="campaign-list" style="margin-bottom: 1.5rem;">
-          <p style="color: #e8d5b7;">Loading campaigns...</p>
+        <div id="campaign-list" class="mb-lg">
+          <p class="text-primary">Loading campaigns...</p>
         </div>
 
         <button class="btn btn-secondary" onclick="exportAllCampaigns()">
@@ -158,15 +92,15 @@
 
       <!-- Import Data -->
       <div class="backup-card">
-        <h2 style="color: #d4af37; margin-bottom: 1rem;">📤 Import / Restore Data</h2>
-        <p style="color: #e8d5b7; line-height: 1.8; margin-bottom: 1.5rem;">
+        <h2 class="text-gold mb-md">📤 Import / Restore Data</h2>
+        <p class="text-primary mb-lg">
           Restore data from a previously exported backup file.
         </p>
 
-        <div class="warning-box" style="background: rgba(244, 67, 54, 0.1); border-color: rgba(244, 67, 54, 0.6);">
-          <p style="color: #f44336; font-weight: 600; margin-bottom: 0.5rem;">⚠️ Warning: This will overwrite your
+        <div class="warning-box danger">
+          <p class="text-bold mb-sm">⚠️ Warning: This will overwrite your
             current data!</p>
-          <p style="color: #e8d5b7; font-size: 0.9rem;">
+          <p class="text-primary text-sm">
             Make sure to export your current data first before importing.
           </p>
         </div>
@@ -179,8 +113,8 @@
 
       <!-- Best Practices -->
       <div class="info-box">
-        <h3 style="color: #4caf50; margin-bottom: 1rem;">✅ Backup Best Practices</h3>
-        <ul style="color: #e8d5b7; line-height: 1.8; margin-left: 1.5rem;">
+        <h3 class="text-success mb-md">✅ Backup Best Practices</h3>
+        <ul class="text-primary ml-lg">
           <li><strong>Weekly backups:</strong> Export your data at least once a week</li>
           <li><strong>Before updates:</strong> Always backup before browser/OS updates</li>
           <li><strong>Multiple locations:</strong> Store backups in cloud storage (Google Drive, Dropbox, etc.)</li>
@@ -214,10 +148,10 @@
 
       const infoDiv = document.getElementById('storage-info');
       infoDiv.innerHTML = `
-        <p style="color: #e8d5b7; font-size: 1.1rem; margin-bottom: 0.5rem;">
+        <p class="text-lg text-primary mb-sm">
           <strong>${usage.sizeKB} KB</strong> used (${usage.sizeMB} MB)
         </p>
-        <p style="color: ${usage.usagePercent > 80 ? '#ff9800' : '#4caf50'}; font-weight: 600;">
+        <p class="text-semibold" style="color: ${usage.usagePercent > 80 ? '#ff9800' : '#4caf50'};">
           ${usage.usagePercent}% of estimated 5 MB quota
         </p>
       `;
@@ -270,16 +204,16 @@
       }
 
       if (campaigns.length === 0) {
-        listDiv.innerHTML = '<p style="color: #b8956a;">No campaigns found</p>';
+        listDiv.innerHTML = '<p class="text-muted">No campaigns found</p>';
         return;
       }
 
       listDiv.innerHTML = campaigns.map(campaign => `
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: rgba(0, 0, 0, 0.2); border-radius: 8px; margin-bottom: 0.75rem;">
+        <div class="d-flex justify-between align-center p-md mb-sm" style="background: rgba(0, 0, 0, 0.2); border-radius: 8px;">
           <div>
-            <strong style="color: #d4af37;">${escapeHTML(campaign.name)}</strong>
+            <strong class="text-gold">${escapeHTML(campaign.name)}</strong>
             <br>
-            <small style="color: #8b7355;">Code: ${campaign.code}</small>
+            <small class="text-muted">Code: ${campaign.code}</small>
           </div>
           <button class="btn" onclick="exportSingleCampaign('${campaign.code}')">
             📥 Export
