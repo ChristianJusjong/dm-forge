@@ -627,7 +627,7 @@ th {
 
 @media (min-width: 1200px) {
 
-  /* Reserve 160px on each side for ad banners */
+  /* Reserve 180px on each side for ad banners */
   .hero-content,
   .page-content,
   footer,
@@ -635,7 +635,7 @@ th {
   .tab-content,
   .app-header,
   .tab-nav {
-    max-width: calc(100% - 320px);
+    max-width: calc(100% - 360px);
     padding: var(--space-2xl) var(--space-lg);
     margin: 0 auto;
   }

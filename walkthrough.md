@@ -132,6 +132,7 @@ Refactored the following pages to remove inline styles and use design system cla
 - **Positioning**: Fixed sidebar positioning to `left: 0` and `right: 0` to prevent overlap with main content.
 - **Layout Safety**: Applied `max-width` constraints to `.hero-content`, `.page-content`, `footer`, `.tab-content`, `.app-header`, and `.tab-nav` to ensure they center perfectly between the ad banners without squeezing the entire page layout.
 - **Global Integration**: Injected `ads.js` into all HTML pages (Login, Signup, DM Screen, etc.) to ensure consistent ad visibility across the entire application.
+- **Sizing**: Increased ad container width to 180px to perfectly fit the 160px ad unit (accounting for padding/borders). Updated content `max-width` to `calc(100% - 360px)` to maintain safe spacing.
 - **Content**: Updated placeholder text to "Support Dungeon Master Forge".
 
 ### Verification
