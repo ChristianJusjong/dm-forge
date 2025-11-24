@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,9 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="design-system.css">
   <link rel="stylesheet" href="medieval-theme.css">
@@ -108,11 +111,13 @@
     }
   </style>
 </head>
+
 <body>
   <div class="auth-container stone-texture">
     <div class="auth-card">
       <div class="auth-header">
-        <img src="logo-icon.svg" alt="Dungeon Master Forge" style="width: 80px; height: 80px; margin: 0 auto 1rem auto; display: block;">
+        <img src="logo-icon.svg" alt="Dungeon Master Forge"
+          style="width: 80px; height: 80px; margin: 0 auto 1rem auto; display: block;">
         <div class="auth-title">Dungeon Master Forge</div>
         <p class="auth-subtitle">Join the guild of Dungeon Masters</p>
       </div>
@@ -123,38 +128,19 @@
       <form id="signup-form" onsubmit="return handleSignup(event)">
         <div class="input-group">
           <label class="input-label">Username</label>
-          <input
-            id="username"
-            type="text"
-            placeholder="Choose a unique username"
-            class="input"
-            required
-            minlength="3"
-            maxlength="20"
-          >
+          <input id="username" type="text" placeholder="Choose a unique username" class="input" required minlength="3"
+            maxlength="20">
         </div>
 
         <div class="input-group">
           <label class="input-label">Email</label>
-          <input
-            id="email"
-            type="email"
-            placeholder="your.email@example.com"
-            class="input"
-            required
-          >
+          <input id="email" type="email" placeholder="your.email@example.com" class="input" required>
         </div>
 
         <div class="input-group">
           <label class="input-label">Password</label>
-          <input
-            id="password"
-            type="password"
-            placeholder="Create a strong password"
-            class="input"
-            required
-            minlength="8"
-          >
+          <input id="password" type="password" placeholder="Create a strong password" class="input" required
+            minlength="8">
           <div class="password-requirements">
             <strong>Password requirements:</strong>
             <ul>
@@ -166,13 +152,7 @@
 
         <div class="input-group">
           <label class="input-label">Confirm Password</label>
-          <input
-            id="confirm-password"
-            type="password"
-            placeholder="Re-enter your password"
-            class="input"
-            required
-          >
+          <input id="confirm-password" type="password" placeholder="Re-enter your password" class="input" required>
         </div>
 
         <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">
@@ -186,7 +166,9 @@
     </div>
   </div>
 
-  <script src="storage-utils.js"></script><script type="module" src="auth.js"></script>
+  <script src="ads.js"></script>
+  <script src="storage-utils.js"></script>
+  <script type="module" src="auth.js"></script>
   <script>
     console.log('Signup script loaded');
 
@@ -202,7 +184,7 @@
     }
 
     // Global form submit handler
-    window.handleSignup = async function(e) {
+    window.handleSignup = async function (e) {
       e.preventDefault();
       console.log('handleSignup called');
 
@@ -210,75 +192,75 @@
       await waitForAuth();
       console.log('Auth functions available');
 
-        const username = document.getElementById('username').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirm-password').value;
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
 
-        const errorDiv = document.getElementById('error-message');
-        const successDiv = document.getElementById('success-message');
+      const errorDiv = document.getElementById('error-message');
+      const successDiv = document.getElementById('success-message');
 
-        errorDiv.style.display = 'none';
-        successDiv.style.display = 'none';
+      errorDiv.style.display = 'none';
+      successDiv.style.display = 'none';
 
-        // Validation
-        if (!username || !email || !password || !confirmPassword) {
-          errorDiv.textContent = 'Please fill out all fields';
-          errorDiv.style.display = 'block';
-          return;
-        }
+      // Validation
+      if (!username || !email || !password || !confirmPassword) {
+        errorDiv.textContent = 'Please fill out all fields';
+        errorDiv.style.display = 'block';
+        return;
+      }
 
-        if (username.length < 3 || username.length > 20) {
-          errorDiv.textContent = 'Username must be between 3 and 20 characters';
-          errorDiv.style.display = 'block';
-          return;
-        }
+      if (username.length < 3 || username.length > 20) {
+        errorDiv.textContent = 'Username must be between 3 and 20 characters';
+        errorDiv.style.display = 'block';
+        return;
+      }
 
-        if (!email.includes('@') || !email.includes('.')) {
-          errorDiv.textContent = 'Please enter a valid email address';
-          errorDiv.style.display = 'block';
-          return;
-        }
+      if (!email.includes('@') || !email.includes('.')) {
+        errorDiv.textContent = 'Please enter a valid email address';
+        errorDiv.style.display = 'block';
+        return;
+      }
 
-        if (password.length < 8) {
-          errorDiv.textContent = 'Password must be at least 8 characters long';
-          errorDiv.style.display = 'block';
-          return;
-        }
+      if (password.length < 8) {
+        errorDiv.textContent = 'Password must be at least 8 characters long';
+        errorDiv.style.display = 'block';
+        return;
+      }
 
-        if (password !== confirmPassword) {
-          errorDiv.textContent = 'Passwords do not match';
-          errorDiv.style.display = 'block';
-          return;
-        }
+      if (password !== confirmPassword) {
+        errorDiv.textContent = 'Passwords do not match';
+        errorDiv.style.display = 'block';
+        return;
+      }
 
-        const result = await signup(username, email, password);
-        console.log('Signup result:', result);
+      const result = await signup(username, email, password);
+      console.log('Signup result:', result);
 
-        if (result.success) {
-          successDiv.textContent = 'Account created successfully! Redirecting...';
-          successDiv.style.display = 'block';
+      if (result.success) {
+        successDiv.textContent = 'Account created successfully! Redirecting...';
+        successDiv.style.display = 'block';
 
-          // Auto-login after successful signup
-          console.log('Attempting auto-login...');
-          const loginResult = await login(email, password);
-          console.log('Login result:', loginResult);
+        // Auto-login after successful signup
+        console.log('Attempting auto-login...');
+        const loginResult = await login(email, password);
+        console.log('Login result:', loginResult);
 
-          if (loginResult.success) {
-            setTimeout(() => {
-              console.log('Redirecting to campaign-start.html');
-              window.location.href = 'campaign-start.html';
-            }, 1500);
-          } else {
-            // Signup succeeded but login failed - redirect to login page
-            setTimeout(() => {
-              window.location.href = 'login.html';
-            }, 2000);
-          }
+        if (loginResult.success) {
+          setTimeout(() => {
+            console.log('Redirecting to campaign-start.html');
+            window.location.href = 'campaign-start.html';
+          }, 1500);
         } else {
-          errorDiv.textContent = result.message;
-          errorDiv.style.display = 'block';
+          // Signup succeeded but login failed - redirect to login page
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 2000);
         }
+      } else {
+        errorDiv.textContent = result.message;
+        errorDiv.style.display = 'block';
+      }
 
       return false; // Prevent default form submission
     };
@@ -295,5 +277,5 @@
     });
   </script>
 </body>
-</html>
 
+</html>

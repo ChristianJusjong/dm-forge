@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,9 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="design-system.css">
   <link rel="stylesheet" href="medieval-theme.css">
@@ -83,11 +86,13 @@
     }
   </style>
 </head>
+
 <body>
   <div class="auth-container stone-texture">
     <div class="auth-card">
       <div class="auth-header">
-        <img src="logo-icon.svg" alt="Dungeon Master Forge" style="width: 80px; height: 80px; margin: 0 auto 1rem auto; display: block;">
+        <img src="logo-icon.svg" alt="Dungeon Master Forge"
+          style="width: 80px; height: 80px; margin: 0 auto 1rem auto; display: block;">
         <div class="auth-title">Dungeon Master Forge</div>
         <p class="auth-subtitle">Your Ultimate D&D 5e Campaign Companion</p>
       </div>
@@ -110,7 +115,9 @@
     </div>
   </div>
 
-  <script src="storage-utils.js"></script><script type="module" src="auth.js"></script>
+  <script src="ads.js"></script>
+  <script src="storage-utils.js"></script>
+  <script type="module" src="auth.js"></script>
   <script>
     // If already logged in, redirect to dashboard
     if (typeof isLoggedIn === 'function' && isLoggedIn()) {
@@ -118,5 +125,5 @@
     }
   </script>
 </body>
-</html>
 
+</html>

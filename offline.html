@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,8 +35,17 @@
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.7; transform: scale(0.95); }
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.7;
+        transform: scale(0.95);
+      }
     }
 
     h1 {
@@ -128,8 +138,15 @@
     }
 
     @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
     }
 
     @media (max-width: 768px) {
@@ -147,6 +164,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="offline-container">
     <div class="offline-icon">🌐</div>
@@ -184,6 +202,7 @@
     </div>
   </div>
 
+  <script src="ads.js"></script>
   <script>
     // Auto-check connection every 5 seconds
     setInterval(checkConnection, 5000);
@@ -216,5 +235,5 @@
     });
   </script>
 </body>
-</html>
 
+</html>

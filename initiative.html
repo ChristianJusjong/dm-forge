@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Initiative Tracker - Dungeon Master Forge</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="design-system.css">
   <link rel="stylesheet" href="medieval-theme.css">
   <link rel="stylesheet" href="responsive-design.css">
   <link rel="stylesheet" href="global-overrides.css">
 </head>
+
 <body>
   <div id="app">
     <!-- Navigation will be inserted here by nav.js -->
@@ -30,7 +34,8 @@
           <div style="display: flex; align-items: center; gap: 2rem;">
             <div>
               <span style="font-size: var(--text-sm); color: #e8d5b7;">Runde:</span>
-              <span id="round-number" style="font-size: var(--text-2xl); font-weight: 700; color: #d4af37; font-family: 'Cinzel', serif; margin-left: 0.5rem;">1</span>
+              <span id="round-number"
+                style="font-size: var(--text-2xl); font-weight: 700; color: #d4af37; font-family: 'Cinzel', serif; margin-left: 0.5rem;">1</span>
             </div>
           </div>
           <div style="display: flex; gap: var(--space-sm); flex-wrap: wrap;">
@@ -82,7 +87,9 @@
     </main>
   </div>
 
-  <script src="storage-utils.js"></script><script type="module" src="auth.js"></script>
+  <script src="ads.js"></script>
+  <script src="storage-utils.js"></script>
+  <script type="module" src="auth.js"></script>
   <script type="module" src="translations.js"></script>
   <script type="module" src="campaign-manager.js"></script>
   <script type="module" src="nav.js"></script>
@@ -257,13 +264,13 @@
               ${combatant.monsterInfoVisible && combatant.monsterInfo ? combatant.monsterInfo : ''}
 
               ${combatant.conditions && combatant.conditions.length > 0 ?
-                `<div style="margin-top: 0.5rem;">
+            `<div style="margin-top: 0.5rem;">
                   ${combatant.conditions.map((cond, i) =>
-                    `<span class="condition-tag">${cond}
+              `<span class="condition-tag">${cond}
                       <button class="remove-condition" data-id="${combatant.id}" data-index="${i}"
                               style="background: none; border: none; color: white; cursor: pointer; font-weight: 700; margin-left: 0.25rem;">×</button>
                     </span>`
-                  ).join('')}
+            ).join('')}
                 </div>` : ''}
 
               <div style="margin-top: 0.75rem;">
@@ -325,11 +332,11 @@
           e.stopPropagation();
           const id = parseFloat(e.target.dataset.id);
           console.log('Removing combatant with ID:', id);
-          console.log('Before removal:', initiativeState.combatants.map(c => ({id: c.id, name: c.name})));
+          console.log('Before removal:', initiativeState.combatants.map(c => ({ id: c.id, name: c.name })));
 
           initiativeState.combatants = initiativeState.combatants.filter(c => c.id !== id);
 
-          console.log('After removal:', initiativeState.combatants.map(c => ({id: c.id, name: c.name})));
+          console.log('After removal:', initiativeState.combatants.map(c => ({ id: c.id, name: c.name })));
 
           // Reset current turn if needed
           if (initiativeState.combatants.length === 0) {
@@ -563,5 +570,5 @@ ${allNPCs.map(c => `- ${c.name}: ${c.hp === 0 ? '💀 Defeated' : '❤️ Surviv
     });
   </script>
 </body>
-</html>
 
+</html>

@@ -631,7 +631,10 @@ th {
   .hero-content,
   .page-content,
   footer,
-  .footer {
+  .footer,
+  .tab-content,
+  .app-header,
+  .tab-nav {
     max-width: calc(100% - 320px);
     padding: var(--space-2xl) var(--space-lg);
     margin: 0 auto;

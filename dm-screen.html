@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>D&D Dungeon Master Screen</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <style>
     /* Narrower app width */
@@ -77,7 +80,8 @@
     }
 
     /* Better form spacing */
-    .input, .textarea {
+    .input,
+    .textarea {
       width: 100%;
       box-sizing: border-box;
     }
@@ -195,6 +199,7 @@
     }
   </style>
 </head>
+
 <body>
   <div id="app">
     <!-- Header -->
@@ -307,8 +312,10 @@
         <div id="new-encounter-modal" class="modal-overlay" style="display: none;">
           <div class="modal">
             <h3 data-i18n="createNewEncounter">Create New Encounter</h3>
-            <input id="new-encounter-name" type="text" data-i18n-placeholder="encounterName" placeholder="Encounter Name" class="input">
-            <textarea id="new-encounter-description" data-i18n-placeholder="descriptionOptional" placeholder="Description (optional)" class="textarea" rows="3"></textarea>
+            <input id="new-encounter-name" type="text" data-i18n-placeholder="encounterName"
+              placeholder="Encounter Name" class="input">
+            <textarea id="new-encounter-description" data-i18n-placeholder="descriptionOptional"
+              placeholder="Description (optional)" class="textarea" rows="3"></textarea>
             <div class="modal-actions">
               <button id="create-encounter-btn" class="btn" data-i18n="create">Create</button>
               <button id="cancel-encounter-btn" class="btn btn-secondary" data-i18n="cancel">Cancel</button>
@@ -356,7 +363,8 @@
               <!-- Monster details will be rendered here -->
             </div>
             <div class="modal-actions">
-              <button id="add-monster-to-encounter-btn" class="btn" data-i18n="addToEncounter">Add to Current Encounter</button>
+              <button id="add-monster-to-encounter-btn" class="btn" data-i18n="addToEncounter">Add to Current
+                Encounter</button>
               <button id="close-monster-modal-btn" class="btn btn-secondary" data-i18n="close">Close</button>
             </div>
           </div>
@@ -373,7 +381,8 @@
           <div class="generator-form">
             <div class="form-group">
               <label data-i18n="npcType">NPC Type</label>
-              <input id="npc-prompt" type="text" data-i18n-placeholder="npcTypePlaceholder" placeholder="e.g., tavern keeper, mysterious wizard..." class="input">
+              <input id="npc-prompt" type="text" data-i18n-placeholder="npcTypePlaceholder"
+                placeholder="e.g., tavern keeper, mysterious wizard..." class="input">
             </div>
 
             <div class="form-row">
@@ -395,7 +404,8 @@
 
               <div class="form-group">
                 <label data-i18n="setting">Setting</label>
-                <input id="npc-setting" type="text" data-i18n-placeholder="settingPlaceholder" placeholder="e.g., medieval city, frontier town..." class="input">
+                <input id="npc-setting" type="text" data-i18n-placeholder="settingPlaceholder"
+                  placeholder="e.g., medieval city, frontier town..." class="input">
               </div>
             </div>
 
@@ -538,7 +548,8 @@
               <button class="btn-dice" data-die="d100">d100</button>
             </div>
             <div class="dice-custom">
-              <label for="custom-dice"><strong data-i18n="customDicePlaceholder">Custom Dice (e.g., 2d6+3 or 2t6+3)</strong></label>
+              <label for="custom-dice"><strong data-i18n="customDicePlaceholder">Custom Dice (e.g., 2d6+3 or
+                  2t6+3)</strong></label>
               <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
                 <input id="custom-dice" type="text" placeholder="2d6+3" class="input">
                 <button id="roll-custom-dice-btn" class="btn" data-i18n="roll">Roll</button>
@@ -578,7 +589,8 @@
             <div class="editor-toolbar">
               <button class="btn-small add-section-btn" data-section="events" data-i18n="events">+ Events</button>
               <button class="btn-small add-section-btn" data-section="npcsMet" data-i18n="npcsMet">+ NPCs Met</button>
-              <button class="btn-small add-section-btn" data-section="locations" data-i18n="locations">+ Locations</button>
+              <button class="btn-small add-section-btn" data-section="locations" data-i18n="locations">+
+                Locations</button>
               <button class="btn-small add-section-btn" data-section="quests" data-i18n="quests">+ Quests</button>
               <button class="btn-small add-section-btn" data-section="loot" data-i18n="loot">+ Loot</button>
               <button class="btn-small add-section-btn" data-section="notes" data-i18n="notes">+ Notes</button>
@@ -613,7 +625,8 @@
         <div id="new-session-modal" class="modal-overlay" style="display: none;">
           <div class="modal">
             <h3 data-i18n="newSession">New Session</h3>
-            <input id="new-session-title" type="text" data-i18n-placeholder="sessionTitle" placeholder="Session Title" class="input">
+            <input id="new-session-title" type="text" data-i18n-placeholder="sessionTitle" placeholder="Session Title"
+              class="input">
             <div class="modal-actions">
               <button id="create-session-btn" class="btn" data-i18n="create">Create</button>
               <button id="cancel-session-btn" class="btn btn-secondary" data-i18n="cancel">Cancel</button>
@@ -625,7 +638,9 @@
     </main>
   </div>
 
-  <script src="storage-utils.js"></script><script type="module" src="auth.js"></script>
+  <script src="ads.js"></script>
+  <script src="storage-utils.js"></script>
+  <script type="module" src="auth.js"></script>
   <script type="module" src="translations.js"></script>
   <script type="module" src="campaign-manager.js"></script>
   <script src="random-data.js"></script>
@@ -668,56 +683,56 @@
         el.textContent = t(key);
       });
 
-    // ========================================
-    // TAB NAVIGATION
-    // ========================================
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-button').forEach(btn => {
-        btn.classList.remove('active');
-      });
-      document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+      // ========================================
+      // TAB NAVIGATION
+      // ========================================
+      function switchTab(tabId) {
+        document.querySelectorAll('.tab-button').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
 
-      document.querySelectorAll('.tab-pane').forEach(pane => {
-        pane.classList.remove('active');
-      });
-      document.getElementById(`tab-${tabId}`).classList.add('active');
-    }
-
-    // ========================================
-    // INITIATIVE TRACKER
-    // ========================================
-    const initiativeState = { combatants: [], round: 1, currentTurn: 0 };
-
-    function loadInitiativeData() {
-      const saved = localStorage.getItem('initiative_tracker');
-      if (saved) {
-        const data = JSON.parse(saved);
-        initiativeState.combatants = data.combatants || [];
-        initiativeState.round = data.round || 1;
-        initiativeState.currentTurn = data.currentTurn || 0;
-      }
-    }
-
-    function saveInitiativeData() {
-      localStorage.setItem('initiative_tracker', JSON.stringify(initiativeState));
-    }
-
-    function renderCombatants() {
-      const list = document.getElementById('combatants-list');
-      const noCombatants = document.getElementById('no-combatants');
-
-      if (initiativeState.combatants.length === 0) {
-        list.innerHTML = '';
-        noCombatants.style.display = 'block';
-        return;
+        document.querySelectorAll('.tab-pane').forEach(pane => {
+          pane.classList.remove('active');
+        });
+        document.getElementById(`tab-${tabId}`).classList.add('active');
       }
 
-      noCombatants.style.display = 'none';
-      const sorted = [...initiativeState.combatants].sort((a, b) => b.initiative - a.initiative);
+      // ========================================
+      // INITIATIVE TRACKER
+      // ========================================
+      const initiativeState = { combatants: [], round: 1, currentTurn: 0 };
 
-      list.innerHTML = sorted.map((combatant, index) => {
-        const isActive = index === initiativeState.currentTurn;
-        return `
+      function loadInitiativeData() {
+        const saved = localStorage.getItem('initiative_tracker');
+        if (saved) {
+          const data = JSON.parse(saved);
+          initiativeState.combatants = data.combatants || [];
+          initiativeState.round = data.round || 1;
+          initiativeState.currentTurn = data.currentTurn || 0;
+        }
+      }
+
+      function saveInitiativeData() {
+        localStorage.setItem('initiative_tracker', JSON.stringify(initiativeState));
+      }
+
+      function renderCombatants() {
+        const list = document.getElementById('combatants-list');
+        const noCombatants = document.getElementById('no-combatants');
+
+        if (initiativeState.combatants.length === 0) {
+          list.innerHTML = '';
+          noCombatants.style.display = 'block';
+          return;
+        }
+
+        noCombatants.style.display = 'none';
+        const sorted = [...initiativeState.combatants].sort((a, b) => b.initiative - a.initiative);
+
+        list.innerHTML = sorted.map((combatant, index) => {
+          const isActive = index === initiativeState.currentTurn;
+          return `
           <div class="combatant ${isActive ? 'active' : ''}" data-id="${combatant.id}">
             <div class="combatant-main">
               <div class="combatant-info">
@@ -731,10 +746,10 @@
                   <span>${t('ac')}: ${combatant.ac}</span>
                 </div>
                 ${combatant.conditions && combatant.conditions.length > 0 ?
-                  `<div class="conditions">
+              `<div class="conditions">
                     ${combatant.conditions.map((cond, i) =>
-                      `<span class="condition-tag">${cond} <button class="remove-condition" data-id="${combatant.id}" data-index="${i}">×</button></span>`
-                    ).join('')}
+                `<span class="condition-tag">${cond} <button class="remove-condition" data-id="${combatant.id}" data-index="${i}">×</button></span>`
+              ).join('')}
                   </div>` : ''}
               </div>
               <div class="combatant-actions">
@@ -744,151 +759,151 @@
             </div>
           </div>
         `;
-      }).join('');
+        }).join('');
 
-      document.getElementById('round-number').textContent = initiativeState.round;
+        document.getElementById('round-number').textContent = initiativeState.round;
 
-      document.querySelectorAll('.hp-input').forEach(input => {
-        input.addEventListener('change', (e) => {
-          const id = parseInt(e.target.dataset.id);
-          const combatant = initiativeState.combatants.find(c => c.id === id);
-          if (combatant) {
-            combatant.hp = parseInt(e.target.value);
-            saveInitiativeData();
-          }
-        });
-      });
-
-      document.querySelectorAll('.condition-input').forEach(input => {
-        input.addEventListener('keyup', (e) => {
-          if (e.key === 'Enter' && e.target.value.trim()) {
+        document.querySelectorAll('.hp-input').forEach(input => {
+          input.addEventListener('change', (e) => {
             const id = parseInt(e.target.dataset.id);
             const combatant = initiativeState.combatants.find(c => c.id === id);
             if (combatant) {
-              if (!combatant.conditions) combatant.conditions = [];
-              combatant.conditions.push(e.target.value.trim());
-              e.target.value = '';
+              combatant.hp = parseInt(e.target.value);
+              saveInitiativeData();
+            }
+          });
+        });
+
+        document.querySelectorAll('.condition-input').forEach(input => {
+          input.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter' && e.target.value.trim()) {
+              const id = parseInt(e.target.dataset.id);
+              const combatant = initiativeState.combatants.find(c => c.id === id);
+              if (combatant) {
+                if (!combatant.conditions) combatant.conditions = [];
+                combatant.conditions.push(e.target.value.trim());
+                e.target.value = '';
+                saveInitiativeData();
+                renderCombatants();
+              }
+            }
+          });
+        });
+
+        document.querySelectorAll('.remove-condition').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const id = parseInt(e.target.dataset.id);
+            const index = parseInt(e.target.dataset.index);
+            const combatant = initiativeState.combatants.find(c => c.id === id);
+            if (combatant && combatant.conditions) {
+              combatant.conditions.splice(index, 1);
               saveInitiativeData();
               renderCombatants();
             }
-          }
+          });
         });
-      });
 
-      document.querySelectorAll('.remove-condition').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const id = parseInt(e.target.dataset.id);
-          const index = parseInt(e.target.dataset.index);
-          const combatant = initiativeState.combatants.find(c => c.id === id);
-          if (combatant && combatant.conditions) {
-            combatant.conditions.splice(index, 1);
+        document.querySelectorAll('.remove-combatant').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const id = parseInt(e.target.dataset.id);
+            initiativeState.combatants = initiativeState.combatants.filter(c => c.id !== id);
+            if (initiativeState.currentTurn >= initiativeState.combatants.length) {
+              initiativeState.currentTurn = 0;
+            }
             saveInitiativeData();
             renderCombatants();
-          }
+          });
         });
-      });
+      }
 
-      document.querySelectorAll('.remove-combatant').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const id = parseInt(e.target.dataset.id);
-          initiativeState.combatants = initiativeState.combatants.filter(c => c.id !== id);
-          if (initiativeState.currentTurn >= initiativeState.combatants.length) {
-            initiativeState.currentTurn = 0;
-          }
+      function addCombatant() {
+        const name = document.getElementById('combatant-name').value.trim();
+        const initiative = parseInt(document.getElementById('combatant-initiative').value);
+        const hp = parseInt(document.getElementById('combatant-hp').value);
+        const ac = parseInt(document.getElementById('combatant-ac').value);
+
+        if (name && !isNaN(initiative) && !isNaN(hp) && !isNaN(ac)) {
+          initiativeState.combatants.push({
+            id: Date.now(),
+            name,
+            initiative,
+            hp,
+            maxHp: hp,
+            ac,
+            conditions: []
+          });
+
+          document.getElementById('combatant-name').value = '';
+          document.getElementById('combatant-initiative').value = '';
+          document.getElementById('combatant-hp').value = '';
+          document.getElementById('combatant-ac').value = '';
+
           saveInitiativeData();
           renderCombatants();
-        });
-      });
-    }
+        }
+      }
 
-    function addCombatant() {
-      const name = document.getElementById('combatant-name').value.trim();
-      const initiative = parseInt(document.getElementById('combatant-initiative').value);
-      const hp = parseInt(document.getElementById('combatant-hp').value);
-      const ac = parseInt(document.getElementById('combatant-ac').value);
+      function nextTurn() {
+        if (initiativeState.combatants.length === 0) return;
 
-      if (name && !isNaN(initiative) && !isNaN(hp) && !isNaN(ac)) {
-        initiativeState.combatants.push({
-          id: Date.now(),
-          name,
-          initiative,
-          hp,
-          maxHp: hp,
-          ac,
-          conditions: []
-        });
-
-        document.getElementById('combatant-name').value = '';
-        document.getElementById('combatant-initiative').value = '';
-        document.getElementById('combatant-hp').value = '';
-        document.getElementById('combatant-ac').value = '';
+        initiativeState.currentTurn++;
+        if (initiativeState.currentTurn >= initiativeState.combatants.length) {
+          initiativeState.currentTurn = 0;
+          initiativeState.round++;
+        }
 
         saveInitiativeData();
         renderCombatants();
       }
-    }
 
-    function nextTurn() {
-      if (initiativeState.combatants.length === 0) return;
-
-      initiativeState.currentTurn++;
-      if (initiativeState.currentTurn >= initiativeState.combatants.length) {
-        initiativeState.currentTurn = 0;
-        initiativeState.round++;
+      function resetCombat() {
+        if (confirm(t('resetCombatConfirm'))) {
+          initiativeState.combatants = [];
+          initiativeState.round = 1;
+          initiativeState.currentTurn = 0;
+          saveInitiativeData();
+          renderCombatants();
+        }
       }
-
-      saveInitiativeData();
-      renderCombatants();
-    }
-
-    function resetCombat() {
-      if (confirm(t('resetCombatConfirm'))) {
-        initiativeState.combatants = [];
-        initiativeState.round = 1;
-        initiativeState.currentTurn = 0;
-        saveInitiativeData();
-        renderCombatants();
-      }
-    }
 
     // Continue in next script tag...
   </script>
 
   <script>
-    // Wait for modules to load
-    window.addEventListener('load', () => {
-    // ========================================
-    // ENCOUNTER BUILDER
-    // ========================================
-    let encounters = [];
-    let editingEncounterId = null;
+      // Wait for modules to load
+      window.addEventListener('load', () => {
+        // ========================================
+        // ENCOUNTER BUILDER
+        // ========================================
+        let encounters = [];
+        let editingEncounterId = null;
 
-    function loadEncounters() {
-      const saved = localStorage.getItem('encounters');
-      if (saved) encounters = JSON.parse(saved);
-    }
+        function loadEncounters() {
+          const saved = localStorage.getItem('encounters');
+          if (saved) encounters = JSON.parse(saved);
+        }
 
-    function saveEncounters() {
-      localStorage.setItem('encounters', JSON.stringify(encounters));
-    }
+        function saveEncounters() {
+          localStorage.setItem('encounters', JSON.stringify(encounters));
+        }
 
-    function renderEncounters() {
-      const list = document.getElementById('encounters-list');
-      const noEncounters = document.getElementById('no-encounters');
+        function renderEncounters() {
+          const list = document.getElementById('encounters-list');
+          const noEncounters = document.getElementById('no-encounters');
 
-      if (encounters.length === 0) {
-        list.innerHTML = '';
-        noEncounters.style.display = 'block';
-        return;
-      }
+          if (encounters.length === 0) {
+            list.innerHTML = '';
+            noEncounters.style.display = 'block';
+            return;
+          }
 
-      noEncounters.style.display = 'none';
+          noEncounters.style.display = 'none';
 
-      list.innerHTML = encounters.map(encounter => {
-        const totalCR = encounter.creatures.reduce((sum, c) => sum + (c.cr || 0), 0).toFixed(2);
-        const isEditing = editingEncounterId === encounter.id;
+          list.innerHTML = encounters.map(encounter => {
+            const totalCR = encounter.creatures.reduce((sum, c) => sum + (c.cr || 0), 0).toFixed(2);
+            const isEditing = editingEncounterId === encounter.id;
 
-        return `
+            return `
           <div class="encounter-card">
             <div class="encounter-info">
               <h3>${encounter.name}</h3>
@@ -933,176 +948,176 @@
             ` : ''}
           </div>
         `;
-      }).join('');
+          }).join('');
 
-      document.querySelectorAll('.edit-encounter').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const id = parseInt(e.target.dataset.id);
-          editingEncounterId = editingEncounterId === id ? null : id;
-          renderEncounters();
-        });
-      });
+          document.querySelectorAll('.edit-encounter').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const id = parseInt(e.target.dataset.id);
+              editingEncounterId = editingEncounterId === id ? null : id;
+              renderEncounters();
+            });
+          });
 
-      document.querySelectorAll('.delete-encounter').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          if (confirm(t('deleteEncounterConfirm'))) {
-            const id = parseInt(e.target.dataset.id);
-            encounters = encounters.filter(enc => enc.id !== id);
-            saveEncounters();
-            renderEncounters();
-          }
-        });
-      });
-
-      document.querySelectorAll('.load-encounter').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const id = parseInt(e.target.dataset.id);
-          const encounter = encounters.find(enc => enc.id === id);
-          if (encounter) {
-            let idCounter = Date.now();
-            encounter.creatures.forEach(creature => {
-              const count = creature.count || 1;
-              for (let i = 0; i < count; i++) {
-                initiativeState.combatants.push({
-                  id: idCounter++,
-                  name: count > 1 ? `${creature.name} ${i + 1}` : creature.name,
-                  initiative: 10,
-                  hp: creature.hp,
-                  maxHp: creature.hp,
-                  ac: creature.ac,
-                  cr: creature.cr || 0,
-                  description: creature.reason || '',
-                  conditions: []
-                });
+          document.querySelectorAll('.delete-encounter').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              if (confirm(t('deleteEncounterConfirm'))) {
+                const id = parseInt(e.target.dataset.id);
+                encounters = encounters.filter(enc => enc.id !== id);
+                saveEncounters();
+                renderEncounters();
               }
             });
-            saveInitiativeData();
-            const totalCreatures = encounter.creatures.reduce((sum, c) => sum + (c.count || 1), 0);
-            alert(`${totalCreatures} ${t('creaturesLoaded')}`);
-            switchTab('initiative');
-            renderCombatants();
-          }
-        });
-      });
+          });
 
-      document.querySelectorAll('.remove-creature').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const encounterId = parseInt(e.target.dataset.encounterId);
-          const index = parseInt(e.target.dataset.index);
-          const encounter = encounters.find(enc => enc.id === encounterId);
-          if (encounter) {
-            encounter.creatures.splice(index, 1);
+          document.querySelectorAll('.load-encounter').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const id = parseInt(e.target.dataset.id);
+              const encounter = encounters.find(enc => enc.id === id);
+              if (encounter) {
+                let idCounter = Date.now();
+                encounter.creatures.forEach(creature => {
+                  const count = creature.count || 1;
+                  for (let i = 0; i < count; i++) {
+                    initiativeState.combatants.push({
+                      id: idCounter++,
+                      name: count > 1 ? `${creature.name} ${i + 1}` : creature.name,
+                      initiative: 10,
+                      hp: creature.hp,
+                      maxHp: creature.hp,
+                      ac: creature.ac,
+                      cr: creature.cr || 0,
+                      description: creature.reason || '',
+                      conditions: []
+                    });
+                  }
+                });
+                saveInitiativeData();
+                const totalCreatures = encounter.creatures.reduce((sum, c) => sum + (c.count || 1), 0);
+                alert(`${totalCreatures} ${t('creaturesLoaded')}`);
+                switchTab('initiative');
+                renderCombatants();
+              }
+            });
+          });
+
+          document.querySelectorAll('.remove-creature').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const encounterId = parseInt(e.target.dataset.encounterId);
+              const index = parseInt(e.target.dataset.index);
+              const encounter = encounters.find(enc => enc.id === encounterId);
+              if (encounter) {
+                encounter.creatures.splice(index, 1);
+                saveEncounters();
+                renderEncounters();
+              }
+            });
+          });
+
+          document.querySelectorAll('.add-creature-to-encounter').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const encounterId = parseInt(e.target.dataset.encounterId);
+              const encounter = encounters.find(enc => enc.id === encounterId);
+
+              const nameInput = document.querySelector(`.creature-name-input[data-encounter-id="${encounterId}"]`);
+              const hpInput = document.querySelector(`.creature-hp-input[data-encounter-id="${encounterId}"]`);
+              const acInput = document.querySelector(`.creature-ac-input[data-encounter-id="${encounterId}"]`);
+              const crInput = document.querySelector(`.creature-cr-input[data-encounter-id="${encounterId}"]`);
+              const countInput = document.querySelector(`.creature-count-input[data-encounter-id="${encounterId}"]`);
+
+              const name = nameInput.value.trim();
+              const hp = parseInt(hpInput.value) || 10;
+              const ac = parseInt(acInput.value) || 10;
+              const cr = parseFloat(crInput.value) || 0;
+              const count = parseInt(countInput.value) || 1;
+
+              if (name && encounter) {
+                for (let i = 0; i < count; i++) {
+                  const suffix = count > 1 ? ` ${i + 1}` : '';
+                  encounter.creatures.push({ name: name + suffix, hp, ac, cr });
+                }
+                nameInput.value = '';
+                saveEncounters();
+                renderEncounters();
+              }
+            });
+          });
+        }
+
+        function showNewEncounterModal() {
+          document.getElementById('new-encounter-modal').style.display = 'flex';
+        }
+
+        function hideNewEncounterModal() {
+          document.getElementById('new-encounter-modal').style.display = 'none';
+          document.getElementById('new-encounter-name').value = '';
+          document.getElementById('new-encounter-description').value = '';
+        }
+
+        function createEncounter() {
+          const name = document.getElementById('new-encounter-name').value.trim();
+          const description = document.getElementById('new-encounter-description').value.trim();
+
+          if (name) {
+            encounters.push({ id: Date.now(), name, description, creatures: [] });
             saveEncounters();
             renderEncounters();
+            hideNewEncounterModal();
           }
-        });
-      });
+        }
 
-      document.querySelectorAll('.add-creature-to-encounter').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const encounterId = parseInt(e.target.dataset.encounterId);
-          const encounter = encounters.find(enc => enc.id === encounterId);
-
-          const nameInput = document.querySelector(`.creature-name-input[data-encounter-id="${encounterId}"]`);
-          const hpInput = document.querySelector(`.creature-hp-input[data-encounter-id="${encounterId}"]`);
-          const acInput = document.querySelector(`.creature-ac-input[data-encounter-id="${encounterId}"]`);
-          const crInput = document.querySelector(`.creature-cr-input[data-encounter-id="${encounterId}"]`);
-          const countInput = document.querySelector(`.creature-count-input[data-encounter-id="${encounterId}"]`);
-
-          const name = nameInput.value.trim();
-          const hp = parseInt(hpInput.value) || 10;
-          const ac = parseInt(acInput.value) || 10;
-          const cr = parseFloat(crInput.value) || 0;
-          const count = parseInt(countInput.value) || 1;
-
-          if (name && encounter) {
-            for (let i = 0; i < count; i++) {
-              const suffix = count > 1 ? ` ${i + 1}` : '';
-              encounter.creatures.push({ name: name + suffix, hp, ac, cr });
-            }
-            nameInput.value = '';
-            saveEncounters();
-            renderEncounters();
-          }
-        });
-      });
-    }
-
-    function showNewEncounterModal() {
-      document.getElementById('new-encounter-modal').style.display = 'flex';
-    }
-
-    function hideNewEncounterModal() {
-      document.getElementById('new-encounter-modal').style.display = 'none';
-      document.getElementById('new-encounter-name').value = '';
-      document.getElementById('new-encounter-description').value = '';
-    }
-
-    function createEncounter() {
-      const name = document.getElementById('new-encounter-name').value.trim();
-      const description = document.getElementById('new-encounter-description').value.trim();
-
-      if (name) {
-        encounters.push({ id: Date.now(), name, description, creatures: [] });
-        saveEncounters();
-        renderEncounters();
-        hideNewEncounterModal();
-      }
-    }
-
-    // Continue in next script tag...
+      // Continue in next script tag...
   </script>
 
   <script>
-    // Wait for modules to load
-    window.addEventListener('load', () => {
-    // ========================================
-    // MONSTER BROWSER (Open5e API + D&D Beyond Links)
-    // ========================================
-    let monsters = [];
-    let selectedMonster = null;
+      // Wait for modules to load
+      window.addEventListener('load', () => {
+        // ========================================
+        // MONSTER BROWSER (Open5e API + D&D Beyond Links)
+        // ========================================
+        let monsters = [];
+        let selectedMonster = null;
 
-    async function searchMonsters() {
-      const searchTerm = document.getElementById('monster-search-input').value.trim();
-      const loadingEl = document.getElementById('monsters-loading');
-      const listEl = document.getElementById('monsters-list');
-      const noMonstersEl = document.getElementById('no-monsters');
+        async function searchMonsters() {
+          const searchTerm = document.getElementById('monster-search-input').value.trim();
+          const loadingEl = document.getElementById('monsters-loading');
+          const listEl = document.getElementById('monsters-list');
+          const noMonstersEl = document.getElementById('no-monsters');
 
-      loadingEl.style.display = 'block';
-      listEl.innerHTML = '';
-      noMonstersEl.style.display = 'none';
+          loadingEl.style.display = 'block';
+          listEl.innerHTML = '';
+          noMonstersEl.style.display = 'none';
 
-      try {
-        const url = searchTerm
-          ? `https://api.open5e.com/monsters/?search=${encodeURIComponent(searchTerm)}`
-          : 'https://api.open5e.com/monsters/?limit=20';
+          try {
+            const url = searchTerm
+              ? `https://api.open5e.com/monsters/?search=${encodeURIComponent(searchTerm)}`
+              : 'https://api.open5e.com/monsters/?limit=20';
 
-        const response = await fetch(url);
-        const data = await response.json();
-        monsters = data.results;
+            const response = await fetch(url);
+            const data = await response.json();
+            monsters = data.results;
 
-        loadingEl.style.display = 'none';
+            loadingEl.style.display = 'none';
 
-        if (monsters.length === 0) {
-          noMonstersEl.style.display = 'block';
-          return;
+            if (monsters.length === 0) {
+              noMonstersEl.style.display = 'block';
+              return;
+            }
+
+            renderMonsters();
+
+          } catch (error) {
+            loadingEl.style.display = 'none';
+            listEl.innerHTML = `<p class="error-message">Error loading monsters: ${error.message}</p>`;
+          }
         }
 
-        renderMonsters();
+        function renderMonsters() {
+          const listEl = document.getElementById('monsters-list');
 
-      } catch (error) {
-        loadingEl.style.display = 'none';
-        listEl.innerHTML = `<p class="error-message">Error loading monsters: ${error.message}</p>`;
-      }
-    }
+          listEl.innerHTML = monsters.map(monster => {
+            const dndBeyondSlug = monster.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
-    function renderMonsters() {
-      const listEl = document.getElementById('monsters-list');
-
-      listEl.innerHTML = monsters.map(monster => {
-        const dndBeyondSlug = monster.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-
-        return `
+            return `
           <div class="monster-card" data-slug="${monster.slug}">
             <h3>${monster.name}</h3>
             <p><em>${monster.size} ${monster.type}, ${monster.alignment}</em></p>
@@ -1121,24 +1136,24 @@
             </div>
           </div>
         `;
-      }).join('');
+          }).join('');
 
-      // Add click handlers
-      document.querySelectorAll('.monster-card').forEach(card => {
-        card.addEventListener('click', () => {
-          const slug = card.dataset.slug;
-          const monster = monsters.find(m => m.slug === slug);
-          if (monster) showMonsterDetails(monster);
-        });
-      });
-    }
+          // Add click handlers
+          document.querySelectorAll('.monster-card').forEach(card => {
+            card.addEventListener('click', () => {
+              const slug = card.dataset.slug;
+              const monster = monsters.find(m => m.slug === slug);
+              if (monster) showMonsterDetails(monster);
+            });
+          });
+        }
 
-    function showMonsterDetails(monster) {
-      selectedMonster = monster;
-      const content = document.getElementById('monster-details-content');
-      const dndBeyondSlug = monster.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        function showMonsterDetails(monster) {
+          selectedMonster = monster;
+          const content = document.getElementById('monster-details-content');
+          const dndBeyondSlug = monster.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
-      content.innerHTML = `
+          content.innerHTML = `
         <h2>${monster.name}</h2>
         <p><em>${monster.size} ${monster.type}, ${monster.alignment}</em></p>
 
@@ -1206,66 +1221,66 @@
         </div>
       `;
 
-      document.getElementById('monster-details-modal').style.display = 'flex';
-    }
+          document.getElementById('monster-details-modal').style.display = 'flex';
+        }
 
-    function addMonsterToEncounter() {
-      if (!selectedMonster) return;
+        function addMonsterToEncounter() {
+          if (!selectedMonster) return;
 
-      // Check if there's an active encounter being edited in Encounters tab
-      if (encounters.length === 0) {
-        alert('Please create an encounter first in the Encounters tab!');
-        return;
-      }
+          // Check if there's an active encounter being edited in Encounters tab
+          if (encounters.length === 0) {
+            alert('Please create an encounter first in the Encounters tab!');
+            return;
+          }
 
-      // Add to the most recent encounter (or you could add UI to select which encounter)
-      const encounter = encounters[0];
+          // Add to the most recent encounter (or you could add UI to select which encounter)
+          const encounter = encounters[0];
 
-      encounter.creatures.push({
-        name: selectedMonster.name,
-        hp: selectedMonster.hit_points,
-        ac: selectedMonster.armor_class,
-        cr: parseFloat(selectedMonster.challenge_rating) || 0
-      });
+          encounter.creatures.push({
+            name: selectedMonster.name,
+            hp: selectedMonster.hit_points,
+            ac: selectedMonster.armor_class,
+            cr: parseFloat(selectedMonster.challenge_rating) || 0
+          });
 
-      saveEncounters();
-      alert(`${selectedMonster.name} added to "${encounter.name}"!`);
-      document.getElementById('monster-details-modal').style.display = 'none';
-    }
+          saveEncounters();
+          alert(`${selectedMonster.name} added to "${encounter.name}"!`);
+          document.getElementById('monster-details-modal').style.display = 'none';
+        }
 
-    // Continue in next script tag...
+      // Continue in next script tag...
   </script>
 
   <script>
-    // Wait for modules to load
-    window.addEventListener('load', () => {
-    // ========================================
-    // NPC GENERATOR
-    // ========================================
-    let savedNPCs = [];
-    let generatedNPC = null;
+      // Wait for modules to load
+      window.addEventListener('load', () => {
+        // ========================================
+        // NPC GENERATOR
+        // ========================================
+        let savedNPCs = [];
+        let generatedNPC = null;
 
-    function loadSavedNPCs() {
-      const saved = localStorage.getItem('saved_npcs');
-      if (saved) savedNPCs = JSON.parse(saved);
-    }
+        function loadSavedNPCs() {
+          const saved = localStorage.getItem('saved_npcs');
+          if (saved) savedNPCs = JSON.parse(saved);
+        }
 
-    function saveSavedNPCs() {
-      localStorage.setItem('saved_npcs', JSON.stringify(savedNPCs));
-    }
+        function saveSavedNPCs() {
+          localStorage.setItem('saved_npcs', JSON.stringify(savedNPCs));
+        }
 
-    function renderSavedNPCs() {
-      const section = document.getElementById('saved-npcs-section');
-      const grid = document.getElementById('saved-npcs-grid');
+        function renderSavedNPCs() {
+          const section = document.getElementById('saved-npcs-section');
+          const grid = document.getElementById('saved-npcs-grid');
 
-      if (savedNPCs.length === 0) {
-        section.style.display = 'none';
-        return;
-      }
+          if (savedNPCs.length === 0) {
+            section.style.display = 'none';
+            return;
+          }
 
-      section.style.display = 'block';
+          section.style.display = 'block';
 
-      grid.innerHTML = savedNPCs.map(npc => `
+          grid.innerHTML = savedNPCs.map(npc => `
         <div class="npc-card" data-id="${npc.id}">
           <div class="npc-card-header">
             <h4>${npc.name}</h4>
@@ -1275,52 +1290,52 @@
         </div>
       `).join('');
 
-      document.querySelectorAll('.npc-card').forEach(card => {
-        card.addEventListener('click', (e) => {
-          if (!e.target.classList.contains('delete-npc')) {
-            const id = parseInt(card.dataset.id);
-            const npc = savedNPCs.find(n => n.id === id);
-            if (npc) viewNPC(npc);
-          }
-        });
-      });
+          document.querySelectorAll('.npc-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+              if (!e.target.classList.contains('delete-npc')) {
+                const id = parseInt(card.dataset.id);
+                const npc = savedNPCs.find(n => n.id === id);
+                if (npc) viewNPC(npc);
+              }
+            });
+          });
 
-      document.querySelectorAll('.delete-npc').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          if (confirm(t('deleteNPCConfirm'))) {
-            const id = parseInt(e.target.dataset.id);
-            savedNPCs = savedNPCs.filter(n => n.id !== id);
-            saveSavedNPCs();
-            renderSavedNPCs();
-          }
-        });
-      });
-    }
+          document.querySelectorAll('.delete-npc').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              if (confirm(t('deleteNPCConfirm'))) {
+                const id = parseInt(e.target.dataset.id);
+                savedNPCs = savedNPCs.filter(n => n.id !== id);
+                saveSavedNPCs();
+                renderSavedNPCs();
+              }
+            });
+          });
+        }
 
-    function viewNPC(npc) {
-      document.getElementById('viewing-npc-name').textContent = npc.name;
-      document.getElementById('viewing-npc-content').innerHTML = formatNPC(npc.content);
-      document.getElementById('view-npc-modal').style.display = 'flex';
-    }
+        function viewNPC(npc) {
+          document.getElementById('viewing-npc-name').textContent = npc.name;
+          document.getElementById('viewing-npc-content').innerHTML = formatNPC(npc.content);
+          document.getElementById('view-npc-modal').style.display = 'flex';
+        }
 
-    function formatNPC(content) {
-      return content
-        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-        .replace(/\n/g, '<br>');
-    }
+        function formatNPC(content) {
+          return content
+            .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+            .replace(/\n/g, '<br>');
+        }
 
-    async function generateNPC() {
-      const npcPrompt = document.getElementById('npc-prompt').value.trim();
-      const npcRace = document.getElementById('npc-race').value;
-      const setting = document.getElementById('npc-setting').value.trim();
+        async function generateNPC() {
+          const npcPrompt = document.getElementById('npc-prompt').value.trim();
+          const npcRace = document.getElementById('npc-race').value;
+          const setting = document.getElementById('npc-setting').value.trim();
 
-      const generateBtn = document.getElementById('generate-npc-btn');
-      generateBtn.disabled = true;
-      generateBtn.textContent = t('generating');
+          const generateBtn = document.getElementById('generate-npc-btn');
+          generateBtn.disabled = true;
+          generateBtn.textContent = t('generating');
 
-      const prompt = `Generate a detailed D&D 5e NPC with the following specifications:
+          const prompt = `Generate a detailed D&D 5e NPC with the following specifications:
 ${npcPrompt ? `Role/Type: ${npcPrompt}` : ''}
 ${npcRace ? `Race: ${npcRace}` : ''}
 ${setting ? `Setting: ${setting}` : ''}
@@ -1337,224 +1352,224 @@ Please provide:
 
 Format as clear sections. Be creative and specific!`;
 
-      try {
-        const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: prompt }] }]
-            })
+          try {
+            const response = await fetch(
+              `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`,
+              {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  contents: [{ parts: [{ text: prompt }] }]
+                })
+              }
+            );
+
+            if (!response.ok) throw new Error(`API Error: ${response.status}`);
+
+            const data = await response.json();
+            const content = data.candidates[0].content.parts[0].text;
+            const nameMatch = content.match(/(?:Name|NPC Name):\s*\*?\*?([^\n*]+)\*?\*?/i);
+            const name = nameMatch ? nameMatch[1].trim() : 'Generated NPC';
+
+            generatedNPC = { name, content, timestamp: Date.now() };
+
+            document.getElementById('generated-npc-name').textContent = name;
+            document.getElementById('generated-npc-content').innerHTML = formatNPC(content);
+            document.getElementById('generated-npc-display').style.display = 'block';
+            document.getElementById('npc-error').style.display = 'none';
+
+          } catch (err) {
+            document.getElementById('npc-error').textContent = `${t('generateError')} ${err.message}`;
+            document.getElementById('npc-error').style.display = 'block';
+          } finally {
+            generateBtn.disabled = false;
+            generateBtn.textContent = t('generateNPC');
           }
-        );
+        }
 
-        if (!response.ok) throw new Error(`API Error: ${response.status}`);
+        function saveGeneratedNPC() {
+          if (generatedNPC) {
+            const preview = generatedNPC.content.substring(0, 100).replace(/[*#]/g, '');
+            savedNPCs.unshift({
+              id: Date.now(),
+              name: generatedNPC.name,
+              content: generatedNPC.content,
+              preview,
+              timestamp: generatedNPC.timestamp
+            });
+            saveSavedNPCs();
+            renderSavedNPCs();
+            alert(t('npcSaved'));
+          }
+        }
 
-        const data = await response.json();
-        const content = data.candidates[0].content.parts[0].text;
-        const nameMatch = content.match(/(?:Name|NPC Name):\s*\*?\*?([^\n*]+)\*?\*?/i);
-        const name = nameMatch ? nameMatch[1].trim() : 'Generated NPC';
-
-        generatedNPC = { name, content, timestamp: Date.now() };
-
-        document.getElementById('generated-npc-name').textContent = name;
-        document.getElementById('generated-npc-content').innerHTML = formatNPC(content);
-        document.getElementById('generated-npc-display').style.display = 'block';
-        document.getElementById('npc-error').style.display = 'none';
-
-      } catch (err) {
-        document.getElementById('npc-error').textContent = `${t('generateError')} ${err.message}`;
-        document.getElementById('npc-error').style.display = 'block';
-      } finally {
-        generateBtn.disabled = false;
-        generateBtn.textContent = t('generateNPC');
-      }
-    }
-
-    function saveGeneratedNPC() {
-      if (generatedNPC) {
-        const preview = generatedNPC.content.substring(0, 100).replace(/[*#]/g, '');
-        savedNPCs.unshift({
-          id: Date.now(),
-          name: generatedNPC.name,
-          content: generatedNPC.content,
-          preview,
-          timestamp: generatedNPC.timestamp
-        });
-        saveSavedNPCs();
-        renderSavedNPCs();
-        alert(t('npcSaved'));
-      }
-    }
-
-    // Continue in next script tag...
+      // Continue in next script tag...
   </script>
 
   <script>
-    // Wait for modules to load
-    window.addEventListener('load', () => {
-    // ========================================
-    // RANDOM TABLES
-    // ========================================
-    function roll(num, sides) {
-      let total = 0;
-      for (let i = 0; i < num; i++) {
-        total += Math.floor(Math.random() * sides) + 1;
-      }
-      return total;
-    }
-
-    function randomFrom(array) {
-      return array[Math.floor(Math.random() * array.length)];
-    }
-
-    function generateName() {
-      const nameType = document.getElementById('name-type').value;
-      const type = names[currentLanguage][nameType];
-      const first = randomFrom(type.first);
-      const last = randomFrom(type.last);
-      document.querySelector('.name-result').textContent = `${first} ${last}`;
-    }
-
-    function generateTavern() {
-      const tavernType = document.getElementById('tavern-type').value;
-      const options = tavernNames[currentLanguage][tavernType];
-      document.querySelector('.tavern-result').textContent = randomFrom(options);
-    }
-
-    function generatePlotHook() {
-      const hooks = plotHooks[currentLanguage];
-      document.querySelector('.plot-result').textContent = randomFrom(hooks);
-    }
-
-    function generateTreasure() {
-      const treasureType = document.getElementById('treasure-type').value;
-
-      let treasure = '';
-      if (currentLanguage === 'da') {
-        if (treasureType === 'minor') {
-          treasure = `${roll(2, 6) * 10} GP<br>${roll(1, 4)} Ædelsten (10 GP hver)`;
-        } else if (treasureType === 'moderate') {
-          treasure = `${roll(4, 6) * 100} GP<br>${roll(2, 6)} Ædelsten (50 GP hver)<br>1 Kunstgenstand (250 GP)<br>Rul på Magisk Genstand Tabel B`;
-        } else {
-          treasure = `${roll(1, 8) * 1000} GP<br>${roll(3, 6)} Ædelsten (500 GP hver)<br>${roll(1, 4)} Kunstgenstande (2500 GP hver)<br>Rul på Magisk Genstand Tabel F`;
+      // Wait for modules to load
+      window.addEventListener('load', () => {
+        // ========================================
+        // RANDOM TABLES
+        // ========================================
+        function roll(num, sides) {
+          let total = 0;
+          for (let i = 0; i < num; i++) {
+            total += Math.floor(Math.random() * sides) + 1;
+          }
+          return total;
         }
-      } else {
-        if (treasureType === 'minor') {
-          treasure = `${roll(2, 6) * 10} GP<br>${roll(1, 4)} Gems (10 GP each)`;
-        } else if (treasureType === 'moderate') {
-          treasure = `${roll(4, 6) * 100} GP<br>${roll(2, 6)} Gems (50 GP each)<br>1 Art Object (250 GP)<br>Roll on Magic Item Table B`;
-        } else {
-          treasure = `${roll(1, 8) * 1000} GP<br>${roll(3, 6)} Gems (500 GP each)<br>${roll(1, 4)} Art Objects (2500 GP each)<br>Roll on Magic Item Table F`;
+
+        function randomFrom(array) {
+          return array[Math.floor(Math.random() * array.length)];
         }
-      }
 
-      document.querySelector('.treasure-result').innerHTML = treasure;
-    }
+        function generateName() {
+          const nameType = document.getElementById('name-type').value;
+          const type = names[currentLanguage][nameType];
+          const first = randomFrom(type.first);
+          const last = randomFrom(type.last);
+          document.querySelector('.name-result').textContent = `${first} ${last}`;
+        }
 
-    function generateEncounter() {
-      const environment = document.getElementById('encounter-environment').value;
-      const options = encounters[currentLanguage][environment];
-      document.querySelector('.encounter-result').textContent = randomFrom(options);
-    }
+        function generateTavern() {
+          const tavernType = document.getElementById('tavern-type').value;
+          const options = tavernNames[currentLanguage][tavernType];
+          document.querySelector('.tavern-result').textContent = randomFrom(options);
+        }
 
-    function generateRumor() {
-      const rumorList = rumors[currentLanguage];
-      document.querySelector('.rumor-result').textContent = randomFrom(rumorList);
-    }
+        function generatePlotHook() {
+          const hooks = plotHooks[currentLanguage];
+          document.querySelector('.plot-result').textContent = randomFrom(hooks);
+        }
 
-    function generateMagicItem() {
-      const rarity = document.getElementById('item-rarity').value;
-      const options = magicItems[currentLanguage][rarity];
-      document.querySelector('.magic-result').textContent = randomFrom(options);
-    }
+        function generateTreasure() {
+          const treasureType = document.getElementById('treasure-type').value;
 
-    function generateWeather() {
-      const weatherList = weather[currentLanguage];
-      document.querySelector('.weather-result').textContent = randomFrom(weatherList);
-    }
+          let treasure = '';
+          if (currentLanguage === 'da') {
+            if (treasureType === 'minor') {
+              treasure = `${roll(2, 6) * 10} GP<br>${roll(1, 4)} Ædelsten (10 GP hver)`;
+            } else if (treasureType === 'moderate') {
+              treasure = `${roll(4, 6) * 100} GP<br>${roll(2, 6)} Ædelsten (50 GP hver)<br>1 Kunstgenstand (250 GP)<br>Rul på Magisk Genstand Tabel B`;
+            } else {
+              treasure = `${roll(1, 8) * 1000} GP<br>${roll(3, 6)} Ædelsten (500 GP hver)<br>${roll(1, 4)} Kunstgenstande (2500 GP hver)<br>Rul på Magisk Genstand Tabel F`;
+            }
+          } else {
+            if (treasureType === 'minor') {
+              treasure = `${roll(2, 6) * 10} GP<br>${roll(1, 4)} Gems (10 GP each)`;
+            } else if (treasureType === 'moderate') {
+              treasure = `${roll(4, 6) * 100} GP<br>${roll(2, 6)} Gems (50 GP each)<br>1 Art Object (250 GP)<br>Roll on Magic Item Table B`;
+            } else {
+              treasure = `${roll(1, 8) * 1000} GP<br>${roll(3, 6)} Gems (500 GP each)<br>${roll(1, 4)} Art Objects (2500 GP each)<br>Roll on Magic Item Table F`;
+            }
+          }
 
-    function rollDice(die) {
-      const sides = parseInt(die.substring(1));
-      const result = roll(1, sides);
-      document.getElementById('dice-result-text').textContent = `${die}: ${result}`;
-      document.getElementById('dice-result').style.display = 'block';
-    }
+          document.querySelector('.treasure-result').innerHTML = treasure;
+        }
 
-    function rollCustomDice() {
-      const customDice = document.getElementById('custom-dice').value.trim();
-      try {
-        const match = customDice.match(/(\d+)[dt](\d+)([+-]\d+)?/);
-        if (match) {
-          const num = parseInt(match[1]);
-          const sides = parseInt(match[2]);
-          const modifier = match[3] ? parseInt(match[3]) : 0;
-          const result = roll(num, sides) + modifier;
-          document.getElementById('dice-result-text').textContent = `${customDice}: ${result}`;
-          document.getElementById('dice-result').style.display = 'block';
-        } else {
-          document.getElementById('dice-result-text').textContent = t('invalidDiceFormat');
+        function generateEncounter() {
+          const environment = document.getElementById('encounter-environment').value;
+          const options = encounters[currentLanguage][environment];
+          document.querySelector('.encounter-result').textContent = randomFrom(options);
+        }
+
+        function generateRumor() {
+          const rumorList = rumors[currentLanguage];
+          document.querySelector('.rumor-result').textContent = randomFrom(rumorList);
+        }
+
+        function generateMagicItem() {
+          const rarity = document.getElementById('item-rarity').value;
+          const options = magicItems[currentLanguage][rarity];
+          document.querySelector('.magic-result').textContent = randomFrom(options);
+        }
+
+        function generateWeather() {
+          const weatherList = weather[currentLanguage];
+          document.querySelector('.weather-result').textContent = randomFrom(weatherList);
+        }
+
+        function rollDice(die) {
+          const sides = parseInt(die.substring(1));
+          const result = roll(1, sides);
+          document.getElementById('dice-result-text').textContent = `${die}: ${result}`;
           document.getElementById('dice-result').style.display = 'block';
         }
-      } catch (e) {
-        document.getElementById('dice-result-text').textContent = t('diceRollError');
-        document.getElementById('dice-result').style.display = 'block';
-      }
-    }
 
-    // Continue in next script tag...
+        function rollCustomDice() {
+          const customDice = document.getElementById('custom-dice').value.trim();
+          try {
+            const match = customDice.match(/(\d+)[dt](\d+)([+-]\d+)?/);
+            if (match) {
+              const num = parseInt(match[1]);
+              const sides = parseInt(match[2]);
+              const modifier = match[3] ? parseInt(match[3]) : 0;
+              const result = roll(num, sides) + modifier;
+              document.getElementById('dice-result-text').textContent = `${customDice}: ${result}`;
+              document.getElementById('dice-result').style.display = 'block';
+            } else {
+              document.getElementById('dice-result-text').textContent = t('invalidDiceFormat');
+              document.getElementById('dice-result').style.display = 'block';
+            }
+          } catch (e) {
+            document.getElementById('dice-result-text').textContent = t('diceRollError');
+            document.getElementById('dice-result').style.display = 'block';
+          }
+        }
+
+      // Continue in next script tag...
   </script>
 
   <script>
-    // Wait for modules to load
-    window.addEventListener('load', () => {
-    // ========================================
-    // NOTE TAKER
-    // ========================================
-    let sessions = [];
-    let currentSession = null;
-    let saveTimeout = null;
+      // Wait for modules to load
+      window.addEventListener('load', () => {
+        // ========================================
+        // NOTE TAKER
+        // ========================================
+        let sessions = [];
+        let currentSession = null;
+        let saveTimeout = null;
 
-    function loadSessions() {
-      const saved = localStorage.getItem('session_notes');
-      if (saved) sessions = JSON.parse(saved);
-    }
+        function loadSessions() {
+          const saved = localStorage.getItem('session_notes');
+          if (saved) sessions = JSON.parse(saved);
+        }
 
-    function saveSessions() {
-      localStorage.setItem('session_notes', JSON.stringify(sessions));
-      document.getElementById('save-status').textContent = t('allChangesSaved');
-    }
+        function saveSessions() {
+          localStorage.setItem('session_notes', JSON.stringify(sessions));
+          document.getElementById('save-status').textContent = t('allChangesSaved');
+        }
 
-    function autoSave() {
-      document.getElementById('save-status').textContent = t('saving');
-      clearTimeout(saveTimeout);
-      saveTimeout = setTimeout(() => saveSessions(), 1000);
-    }
+        function autoSave() {
+          document.getElementById('save-status').textContent = t('saving');
+          clearTimeout(saveTimeout);
+          saveTimeout = setTimeout(() => saveSessions(), 1000);
+        }
 
-    function renderSessions() {
-      const sidebar = document.getElementById('sessions-sidebar');
-      const noSessions = document.getElementById('no-sessions');
+        function renderSessions() {
+          const sidebar = document.getElementById('sessions-sidebar');
+          const noSessions = document.getElementById('no-sessions');
 
-      if (sessions.length === 0) {
-        sidebar.innerHTML = '';
-        noSessions.style.display = 'block';
-        return;
-      }
+          if (sessions.length === 0) {
+            sidebar.innerHTML = '';
+            noSessions.style.display = 'block';
+            return;
+          }
 
-      noSessions.style.display = 'none';
+          noSessions.style.display = 'none';
 
-      sidebar.innerHTML = sessions.map(session => {
-        const date = new Date(session.date);
-        const formattedDate = date.toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
+          sidebar.innerHTML = sessions.map(session => {
+            const date = new Date(session.date);
+            const formattedDate = date.toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            });
 
-        return `
+            return `
           <div class="session-item ${currentSession && currentSession.id === session.id ? 'active' : ''}" data-id="${session.id}">
             <div class="session-info">
               <h4>${session.title}</h4>
@@ -1563,52 +1578,52 @@ Format as clear sections. Be creative and specific!`;
             <button class="btn-tiny btn-danger delete-session" data-id="${session.id}">×</button>
           </div>
         `;
-      }).join('');
+          }).join('');
 
-      document.querySelectorAll('.session-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-          if (!e.target.classList.contains('delete-session')) {
-            const id = parseInt(item.dataset.id);
-            const session = sessions.find(s => s.id === id);
-            if (session) selectSession(session);
-          }
-        });
-      });
+          document.querySelectorAll('.session-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+              if (!e.target.classList.contains('delete-session')) {
+                const id = parseInt(item.dataset.id);
+                const session = sessions.find(s => s.id === id);
+                if (session) selectSession(session);
+              }
+            });
+          });
 
-      document.querySelectorAll('.delete-session').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          if (confirm(t('deleteSessionConfirm'))) {
-            const id = parseInt(e.target.dataset.id);
-            sessions = sessions.filter(s => s.id !== id);
-            if (currentSession && currentSession.id === id) {
-              currentSession = null;
-              document.getElementById('note-editor').style.display = 'none';
-              document.getElementById('no-session-selected').style.display = 'block';
-            }
-            saveSessions();
-            renderSessions();
-          }
-        });
-      });
-    }
+          document.querySelectorAll('.delete-session').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              if (confirm(t('deleteSessionConfirm'))) {
+                const id = parseInt(e.target.dataset.id);
+                sessions = sessions.filter(s => s.id !== id);
+                if (currentSession && currentSession.id === id) {
+                  currentSession = null;
+                  document.getElementById('note-editor').style.display = 'none';
+                  document.getElementById('no-session-selected').style.display = 'block';
+                }
+                saveSessions();
+                renderSessions();
+              }
+            });
+          });
+        }
 
-    function selectSession(session) {
-      currentSession = session;
-      document.getElementById('note-editor').style.display = 'block';
-      document.getElementById('no-session-selected').style.display = 'none';
-      document.getElementById('current-session-title').textContent = session.title;
-      document.getElementById('save-status').textContent = t('allChangesSaved');
-      renderSections();
-      renderQuickNotes();
-      renderSessions();
-    }
+        function selectSession(session) {
+          currentSession = session;
+          document.getElementById('note-editor').style.display = 'block';
+          document.getElementById('no-session-selected').style.display = 'none';
+          document.getElementById('current-session-title').textContent = session.title;
+          document.getElementById('save-status').textContent = t('allChangesSaved');
+          renderSections();
+          renderQuickNotes();
+          renderSessions();
+        }
 
-    function renderSections() {
-      if (!currentSession) return;
+        function renderSections() {
+          if (!currentSession) return;
 
-      const container = document.getElementById('sections-container');
-      container.innerHTML = currentSession.sections.map((section, index) => `
+          const container = document.getElementById('sections-container');
+          container.innerHTML = currentSession.sections.map((section, index) => `
         <div class="section">
           <div class="section-header">
             <input type="text" class="section-title-input" value="${section.title}" data-index="${index}">
@@ -1618,236 +1633,236 @@ Format as clear sections. Be creative and specific!`;
         </div>
       `).join('');
 
-      container.querySelectorAll('.section-title-input').forEach(input => {
-        input.addEventListener('input', (e) => {
-          const index = parseInt(e.target.dataset.index);
-          currentSession.sections[index].title = e.target.value;
-          autoSave();
-        });
-      });
+          container.querySelectorAll('.section-title-input').forEach(input => {
+            input.addEventListener('input', (e) => {
+              const index = parseInt(e.target.dataset.index);
+              currentSession.sections[index].title = e.target.value;
+              autoSave();
+            });
+          });
 
-      container.querySelectorAll('.section-textarea').forEach(textarea => {
-        textarea.addEventListener('input', (e) => {
-          const index = parseInt(e.target.dataset.index);
-          currentSession.sections[index].content = e.target.value;
-          autoSave();
-        });
-      });
+          container.querySelectorAll('.section-textarea').forEach(textarea => {
+            textarea.addEventListener('input', (e) => {
+              const index = parseInt(e.target.dataset.index);
+              currentSession.sections[index].content = e.target.value;
+              autoSave();
+            });
+          });
 
-      container.querySelectorAll('.remove-section-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const index = parseInt(e.target.dataset.index);
-          currentSession.sections.splice(index, 1);
-          autoSave();
-          renderSections();
-        });
-      });
-    }
+          container.querySelectorAll('.remove-section-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const index = parseInt(e.target.dataset.index);
+              currentSession.sections.splice(index, 1);
+              autoSave();
+              renderSections();
+            });
+          });
+        }
 
-    function renderQuickNotes() {
-      if (!currentSession) return;
+        function renderQuickNotes() {
+          if (!currentSession) return;
 
-      const list = document.getElementById('quick-notes-list');
-      list.innerHTML = currentSession.quickNotes.map((note, index) => `
+          const list = document.getElementById('quick-notes-list');
+          list.innerHTML = currentSession.quickNotes.map((note, index) => `
         <div class="quick-note">
           <span>${note.timestamp} - ${note.text}</span>
           <button class="btn-tiny remove-quick-note" data-index="${index}">×</button>
         </div>
       `).join('');
 
-      list.querySelectorAll('.remove-quick-note').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const index = parseInt(e.target.dataset.index);
-          currentSession.quickNotes.splice(index, 1);
-          autoSave();
-          renderQuickNotes();
-        });
-      });
-    }
-
-    function addSection(title) {
-      if (currentSession) {
-        currentSession.sections.push({ title, content: '' });
-        autoSave();
-        renderSections();
-      }
-    }
-
-    function addQuickNote() {
-      const input = document.getElementById('quick-note-text');
-      const text = input.value.trim();
-
-      if (text && currentSession) {
-        const timestamp = new Date().toLocaleTimeString('en-US', {
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-        currentSession.quickNotes.push({ timestamp, text });
-        input.value = '';
-        autoSave();
-        renderQuickNotes();
-      }
-    }
-
-    function showNewSessionModal() {
-      document.getElementById('new-session-modal').style.display = 'flex';
-    }
-
-    function hideNewSessionModal() {
-      document.getElementById('new-session-modal').style.display = 'none';
-      document.getElementById('new-session-title').value = '';
-    }
-
-    function createSession() {
-      const title = document.getElementById('new-session-title').value.trim();
-
-      if (title) {
-        const newSession = {
-          id: Date.now(),
-          title,
-          date: new Date().toISOString(),
-          sections: [
-            { title: t('sessionSummary'), content: '' },
-            { title: t('events'), content: '' },
-            { title: t('npcsMet'), content: '' },
-            { title: t('quests'), content: '' }
-          ],
-          quickNotes: []
-        };
-
-        sessions.unshift(newSession);
-        currentSession = newSession;
-        saveSessions();
-        renderSessions();
-        selectSession(newSession);
-        hideNewSessionModal();
-      }
-    }
-
-    // ========================================
-    // INITIALIZATION
-    // ========================================
-    document.addEventListener('DOMContentLoaded', () => {
-      // Language selector
-      const languageSelector = document.getElementById('language');
-      languageSelector.value = currentLanguage;
-      languageSelector.addEventListener('change', (e) => {
-        currentLanguage = e.target.value;
-        localStorage.setItem('language', currentLanguage);
-        updateTranslations();
-      });
-
-      // Tab navigation
-      document.querySelectorAll('.tab-button').forEach(btn => {
-        btn.addEventListener('click', () => switchTab(btn.dataset.tab));
-      });
-
-      // Modal close on overlay click
-      document.querySelectorAll('.modal-overlay').forEach(overlay => {
-        overlay.addEventListener('click', (e) => {
-          if (e.target === overlay) overlay.style.display = 'none';
-        });
-      });
-
-      // Initiative Tracker
-      document.getElementById('add-combatant-btn').addEventListener('click', addCombatant);
-      document.getElementById('combatant-name').addEventListener('keyup', (e) => {
-        if (e.key === 'Enter') addCombatant();
-      });
-      document.getElementById('next-turn-btn').addEventListener('click', nextTurn);
-      document.getElementById('reset-combat-btn').addEventListener('click', resetCombat);
-
-      // Encounter Builder
-      document.getElementById('new-encounter-btn').addEventListener('click', showNewEncounterModal);
-      document.getElementById('cancel-encounter-btn').addEventListener('click', hideNewEncounterModal);
-      document.getElementById('create-encounter-btn').addEventListener('click', createEncounter);
-      document.getElementById('new-encounter-name').addEventListener('keyup', (e) => {
-        if (e.key === 'Enter') createEncounter();
-      });
-
-      // NPC Generator
-      document.getElementById('generate-npc-btn').addEventListener('click', generateNPC);
-      document.getElementById('save-npc-btn').addEventListener('click', saveGeneratedNPC);
-      document.getElementById('close-npc-modal-btn').addEventListener('click', () => {
-        document.getElementById('view-npc-modal').style.display = 'none';
-      });
-
-      // Random Tables
-      document.querySelector('.generate-name-btn').addEventListener('click', generateName);
-      document.querySelector('.generate-tavern-btn').addEventListener('click', generateTavern);
-      document.querySelector('.generate-plot-btn').addEventListener('click', generatePlotHook);
-      document.querySelector('.generate-treasure-btn').addEventListener('click', generateTreasure);
-      document.querySelector('.generate-encounter-btn').addEventListener('click', generateEncounter);
-      document.querySelector('.generate-rumor-btn').addEventListener('click', generateRumor);
-      document.querySelector('.generate-magic-btn').addEventListener('click', generateMagicItem);
-      document.querySelector('.generate-weather-btn').addEventListener('click', generateWeather);
-
-      document.querySelectorAll('.btn-dice').forEach(btn => {
-        btn.addEventListener('click', () => rollDice(btn.dataset.die));
-      });
-
-      document.getElementById('roll-custom-dice-btn').addEventListener('click', rollCustomDice);
-      document.getElementById('custom-dice').addEventListener('keyup', (e) => {
-        if (e.key === 'Enter') rollCustomDice();
-      });
-
-      // Note Taker
-      document.getElementById('new-session-btn').addEventListener('click', showNewSessionModal);
-      document.getElementById('cancel-session-btn').addEventListener('click', hideNewSessionModal);
-      document.getElementById('create-session-btn').addEventListener('click', createSession);
-      document.getElementById('new-session-title').addEventListener('keyup', (e) => {
-        if (e.key === 'Enter') createSession();
-      });
-
-      document.querySelectorAll('.add-section-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const sectionName = t(btn.dataset.section);
-          addSection(sectionName);
-        });
-      });
-
-      document.getElementById('add-quick-note-btn').addEventListener('click', addQuickNote);
-      document.getElementById('quick-note-text').addEventListener('keyup', (e) => {
-        if (e.key === 'Enter') addQuickNote();
-      });
-
-      // Monster Browser
-      document.getElementById('search-monsters-btn').addEventListener('click', searchMonsters);
-      document.getElementById('monster-search-input').addEventListener('keyup', (e) => {
-        if (e.key === 'Enter') searchMonsters();
-      });
-      document.getElementById('close-monster-modal-btn').addEventListener('click', () => {
-        document.getElementById('monster-details-modal').style.display = 'none';
-      });
-      document.getElementById('add-monster-to-encounter-btn').addEventListener('click', addMonsterToEncounter);
-
-      // Load initial monsters when switching to monsters tab
-      document.querySelector('[data-tab="monsters"]').addEventListener('click', () => {
-        const listEl = document.getElementById('monsters-list');
-        if (listEl.children.length === 0 && monsters.length === 0) {
-          searchMonsters(); // Auto-load initial monsters
+          list.querySelectorAll('.remove-quick-note').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const index = parseInt(e.target.dataset.index);
+              currentSession.quickNotes.splice(index, 1);
+              autoSave();
+              renderQuickNotes();
+            });
+          });
         }
-      });
 
-      // Load data and render
-      loadInitiativeData();
-      loadEncounters();
-      loadSavedNPCs();
-      loadSessions();
+        function addSection(title) {
+          if (currentSession) {
+            currentSession.sections.push({ title, content: '' });
+            autoSave();
+            renderSections();
+          }
+        }
 
-      updateTranslations();
-      renderCombatants();
-      renderEncounters();
-      renderSavedNPCs();
-      renderSessions();
+        function addQuickNote() {
+          const input = document.getElementById('quick-note-text');
+          const text = input.value.trim();
 
-      if (sessions.length === 0) {
-        document.getElementById('no-session-selected').style.display = 'block';
-      } else {
-        document.getElementById('no-session-selected').style.display = 'none';
-      }
-    });
+          if (text && currentSession) {
+            const timestamp = new Date().toLocaleTimeString('en-US', {
+              hour: '2-digit',
+              minute: '2-digit'
+            });
+            currentSession.quickNotes.push({ timestamp, text });
+            input.value = '';
+            autoSave();
+            renderQuickNotes();
+          }
+        }
+
+        function showNewSessionModal() {
+          document.getElementById('new-session-modal').style.display = 'flex';
+        }
+
+        function hideNewSessionModal() {
+          document.getElementById('new-session-modal').style.display = 'none';
+          document.getElementById('new-session-title').value = '';
+        }
+
+        function createSession() {
+          const title = document.getElementById('new-session-title').value.trim();
+
+          if (title) {
+            const newSession = {
+              id: Date.now(),
+              title,
+              date: new Date().toISOString(),
+              sections: [
+                { title: t('sessionSummary'), content: '' },
+                { title: t('events'), content: '' },
+                { title: t('npcsMet'), content: '' },
+                { title: t('quests'), content: '' }
+              ],
+              quickNotes: []
+            };
+
+            sessions.unshift(newSession);
+            currentSession = newSession;
+            saveSessions();
+            renderSessions();
+            selectSession(newSession);
+            hideNewSessionModal();
+          }
+        }
+
+        // ========================================
+        // INITIALIZATION
+        // ========================================
+        document.addEventListener('DOMContentLoaded', () => {
+          // Language selector
+          const languageSelector = document.getElementById('language');
+          languageSelector.value = currentLanguage;
+          languageSelector.addEventListener('change', (e) => {
+            currentLanguage = e.target.value;
+            localStorage.setItem('language', currentLanguage);
+            updateTranslations();
+          });
+
+          // Tab navigation
+          document.querySelectorAll('.tab-button').forEach(btn => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+          });
+
+          // Modal close on overlay click
+          document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+              if (e.target === overlay) overlay.style.display = 'none';
+            });
+          });
+
+          // Initiative Tracker
+          document.getElementById('add-combatant-btn').addEventListener('click', addCombatant);
+          document.getElementById('combatant-name').addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') addCombatant();
+          });
+          document.getElementById('next-turn-btn').addEventListener('click', nextTurn);
+          document.getElementById('reset-combat-btn').addEventListener('click', resetCombat);
+
+          // Encounter Builder
+          document.getElementById('new-encounter-btn').addEventListener('click', showNewEncounterModal);
+          document.getElementById('cancel-encounter-btn').addEventListener('click', hideNewEncounterModal);
+          document.getElementById('create-encounter-btn').addEventListener('click', createEncounter);
+          document.getElementById('new-encounter-name').addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') createEncounter();
+          });
+
+          // NPC Generator
+          document.getElementById('generate-npc-btn').addEventListener('click', generateNPC);
+          document.getElementById('save-npc-btn').addEventListener('click', saveGeneratedNPC);
+          document.getElementById('close-npc-modal-btn').addEventListener('click', () => {
+            document.getElementById('view-npc-modal').style.display = 'none';
+          });
+
+          // Random Tables
+          document.querySelector('.generate-name-btn').addEventListener('click', generateName);
+          document.querySelector('.generate-tavern-btn').addEventListener('click', generateTavern);
+          document.querySelector('.generate-plot-btn').addEventListener('click', generatePlotHook);
+          document.querySelector('.generate-treasure-btn').addEventListener('click', generateTreasure);
+          document.querySelector('.generate-encounter-btn').addEventListener('click', generateEncounter);
+          document.querySelector('.generate-rumor-btn').addEventListener('click', generateRumor);
+          document.querySelector('.generate-magic-btn').addEventListener('click', generateMagicItem);
+          document.querySelector('.generate-weather-btn').addEventListener('click', generateWeather);
+
+          document.querySelectorAll('.btn-dice').forEach(btn => {
+            btn.addEventListener('click', () => rollDice(btn.dataset.die));
+          });
+
+          document.getElementById('roll-custom-dice-btn').addEventListener('click', rollCustomDice);
+          document.getElementById('custom-dice').addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') rollCustomDice();
+          });
+
+          // Note Taker
+          document.getElementById('new-session-btn').addEventListener('click', showNewSessionModal);
+          document.getElementById('cancel-session-btn').addEventListener('click', hideNewSessionModal);
+          document.getElementById('create-session-btn').addEventListener('click', createSession);
+          document.getElementById('new-session-title').addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') createSession();
+          });
+
+          document.querySelectorAll('.add-section-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const sectionName = t(btn.dataset.section);
+              addSection(sectionName);
+            });
+          });
+
+          document.getElementById('add-quick-note-btn').addEventListener('click', addQuickNote);
+          document.getElementById('quick-note-text').addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') addQuickNote();
+          });
+
+          // Monster Browser
+          document.getElementById('search-monsters-btn').addEventListener('click', searchMonsters);
+          document.getElementById('monster-search-input').addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') searchMonsters();
+          });
+          document.getElementById('close-monster-modal-btn').addEventListener('click', () => {
+            document.getElementById('monster-details-modal').style.display = 'none';
+          });
+          document.getElementById('add-monster-to-encounter-btn').addEventListener('click', addMonsterToEncounter);
+
+          // Load initial monsters when switching to monsters tab
+          document.querySelector('[data-tab="monsters"]').addEventListener('click', () => {
+            const listEl = document.getElementById('monsters-list');
+            if (listEl.children.length === 0 && monsters.length === 0) {
+              searchMonsters(); // Auto-load initial monsters
+            }
+          });
+
+          // Load data and render
+          loadInitiativeData();
+          loadEncounters();
+          loadSavedNPCs();
+          loadSessions();
+
+          updateTranslations();
+          renderCombatants();
+          renderEncounters();
+          renderSavedNPCs();
+          renderSessions();
+
+          if (sessions.length === 0) {
+            document.getElementById('no-session-selected').style.display = 'block';
+          } else {
+            document.getElementById('no-session-selected').style.display = 'none';
+          }
+        });
   </script>
 </body>
-</html>
 
+</html>
