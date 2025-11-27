@@ -142,9 +142,8 @@ function createPlaceholderContainer(position) {
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  // Use placeholder ads until you have AdSense approval
-  // Comment out this line and uncomment initializeAds() when ready
-  createPlaceholderAds();
+  // Ads temporarily disabled
+  // createPlaceholderAds();
 
   // Uncomment this when you have your AdSense client ID
   // initializeAds();
