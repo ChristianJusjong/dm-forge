@@ -33,10 +33,12 @@ export default async function handler(request, response) {
         const shareableMatch = url.match(/characters\/\d+\/([a-zA-Z0-9]+)/);
 
         if (shareableMatch && shareableMatch[1]) {
-            // If it has a token, we MUST use the public URL + /json to pass the privacy check
-            // The API endpoint doesn't trivially accept the token in the URL path.
-            // We append /json to the original URL (ensuring no double slash)
-            targetUrl = url.endsWith('/') ? `${url}json` : `${url}/json`;
+            // Found a token (e.g. FGrkV2). Use the internal API with the key parameter.
+            // This works for private characters via shareable links.
+            // We use v3 to ensure compatibility with our parser.
+            const id = url.match(/characters\/(\d+)/)[1];
+            const token = shareableMatch[1];
+            targetUrl = `https://character-service.dndbeyond.com/character/v3/character/${id}?key=${token}`;
         } else {
             // Standard ID extraction for public characters
             const match = url.match(/characters\/(\d+)/);
