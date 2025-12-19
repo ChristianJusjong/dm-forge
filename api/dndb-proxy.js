@@ -63,10 +63,21 @@ export default async function handler(request, response) {
     }
 }
 
-function fetchJson(url) {
+function fetchJson(url, redirectCount = 0) {
     return new Promise((resolve, reject) => {
         https.get(url, (res) => {
             let data = '';
+
+            if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+                // Handle Redirect
+                if (redirectCount > 5) {
+                    reject(new Error('Too many redirects'));
+                    return;
+                }
+                // Follow redirect
+                resolve(fetchJson(res.headers.location, redirectCount + 1));
+                return;
+            }
 
             if (res.statusCode >= 400) {
                 reject(new Error(`Status Code: ${res.statusCode}`));
