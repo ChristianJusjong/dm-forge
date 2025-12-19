@@ -26,7 +26,11 @@ export default async function handler(request, response) {
         // Formats: 
         // https://www.dndbeyond.com/characters/12345
         // https://www.dndbeyond.com/profile/User/characters/12345
+        // https://www.dndbeyond.com/characters/145316872/FGrkV2 (Shareable link)
+
+        // Regex looks for "characters/" followed by digits
         const match = url.match(/characters\/(\d+)/);
+
         if (match && match[1]) {
             targetUrl = `https://character-service.dndbeyond.com/character/v3/character/${match[1]}`;
         } else if (url.endsWith('.json')) {
