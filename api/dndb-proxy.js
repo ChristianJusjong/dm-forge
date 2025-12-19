@@ -35,10 +35,10 @@ export default async function handler(request, response) {
         if (shareableMatch && shareableMatch[1]) {
             // Found a token (e.g. FGrkV2). Use the internal API with the key parameter.
             // This works for private characters via shareable links.
-            // We use v3 to ensure compatibility with our parser.
+            // We use v5 because v3 does not accept the key parameter for access tokens.
             const id = url.match(/characters\/(\d+)/)[1];
             const token = shareableMatch[1];
-            targetUrl = `https://character-service.dndbeyond.com/character/v3/character/${id}?key=${token}`;
+            targetUrl = `https://character-service.dndbeyond.com/character/v5/character/${id}?key=${token}`;
         } else {
             // Standard ID extraction for public characters
             const match = url.match(/characters\/(\d+)/);

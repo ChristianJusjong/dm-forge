@@ -12,8 +12,11 @@ const DndBeyondParser = {
     parse(json) {
         try {
             const data = typeof json === 'string' ? JSON.parse(json) : json;
-            // Handle root or wrapped
-            const charData = data.character || data;
+            // Handle root types:
+            // v3 public: root is character
+            // v3 wrapped: root has character property
+            // v5 internal: root has data property
+            const charData = data.character || data.data || data;
 
             if (!charData || !charData.name) {
                 throw new Error('Invalid D&D Beyond JSON: Missing character data');
