@@ -23,21 +23,32 @@ export default async function handler(request, response) {
         targetUrl = `https://character-service.dndbeyond.com/character/v3/character/${charId}`;
     } else if (url) {
         // Extract ID from URL if full URL is provided
-        // Formats: 
+        // Formats:
         // https://www.dndbeyond.com/characters/12345
         // https://www.dndbeyond.com/profile/User/characters/12345
         // https://www.dndbeyond.com/characters/145316872/FGrkV2 (Shareable link)
 
-        // Regex looks for "characters/" followed by digits
-        const match = url.match(/characters\/(\d+)/);
+        // Check for shareable link first (has token after ID)
+        // Regex: characters/[ID]/[Token]
+        const shareableMatch = url.match(/characters\/\d+\/([a-zA-Z0-9]+)/);
 
-        if (match && match[1]) {
-            targetUrl = `https://character-service.dndbeyond.com/character/v3/character/${match[1]}`;
-        } else if (url.endsWith('.json')) {
-            targetUrl = url;
+        if (shareableMatch && shareableMatch[1]) {
+            // If it has a token, we MUST use the public URL + /json to pass the privacy check
+            // The API endpoint doesn't trivially accept the token in the URL path.
+            // We append /json to the original URL (ensuring no double slash)
+            targetUrl = url.endsWith('/') ? `${url}json` : `${url}/json`;
         } else {
-            response.status(400).json({ error: 'Invalid URL format. Could not extract Character ID.' });
-            return;
+            // Standard ID extraction for public characters
+            const match = url.match(/characters\/(\d+)/);
+
+            if (match && match[1]) {
+                targetUrl = `https://character-service.dndbeyond.com/character/v3/character/${match[1]}`;
+            } else if (url.endsWith('.json')) {
+                targetUrl = url;
+            } else {
+                response.status(400).json({ error: 'Invalid URL format. Could not extract Character ID.' });
+                return;
+            }
         }
     } else {
         response.status(400).json({ error: 'Missing charId or url parameter' });
