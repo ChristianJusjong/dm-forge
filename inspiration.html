@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +8,16 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="design-system.css">
   <link rel="stylesheet" href="medieval-theme.css">
   <link rel="stylesheet" href="responsive-design.css">
   <link rel="stylesheet" href="global-overrides.css">
 </head>
+
 <body>
   <div id="app">
     <!-- Navigation will be inserted here by nav.js -->
@@ -101,7 +105,8 @@
             <div style="display: flex; gap: 0.5rem;">
               <button class="btn generate-tavern-btn" data-i18n="generate" style="flex: 1;">Generate</button>
               <button class="btn btn-secondary save-tavern-btn" style="display: none;">📝 Save</button>
-              <button class="btn btn-secondary translate-tavern-btn" style="display: none;" title="Translate description">
+              <button class="btn btn-secondary translate-tavern-btn" style="display: none;"
+                title="Translate description">
                 <span>🌐</span> <span data-i18n="translate">Translate</span>
               </button>
             </div>
@@ -164,7 +169,8 @@
             <div style="display: flex; gap: 0.5rem;">
               <button class="btn generate-encounter-btn" data-i18n="generate" style="flex: 1;">Generate</button>
               <button class="btn btn-secondary save-encounter-btn" style="display: none;">📝 Save</button>
-              <button class="btn btn-secondary translate-encounter-btn" style="display: none;" title="Translate description">
+              <button class="btn btn-secondary translate-encounter-btn" style="display: none;"
+                title="Translate description">
                 <span>🌐</span> <span data-i18n="translate">Translate</span>
               </button>
             </div>
@@ -185,7 +191,8 @@
             <div style="display: flex; gap: 0.5rem;">
               <button class="btn generate-rumor-btn" data-i18n="generate" style="flex: 1;">Generate</button>
               <button class="btn btn-secondary save-rumor-btn" style="display: none;">📝 Save</button>
-              <button class="btn btn-secondary translate-rumor-btn" style="display: none;" title="Translate description">
+              <button class="btn btn-secondary translate-rumor-btn" style="display: none;"
+                title="Translate description">
                 <span>🌐</span> <span data-i18n="translate">Translate</span>
               </button>
             </div>
@@ -212,7 +219,8 @@
             <div style="display: flex; gap: 0.5rem;">
               <button class="btn generate-magic-btn" data-i18n="generate" style="flex: 1;">Generate</button>
               <button class="btn btn-secondary save-magic-btn" style="display: none;">📝 Save</button>
-              <button class="btn btn-secondary translate-magic-btn" style="display: none;" title="Translate description">
+              <button class="btn btn-secondary translate-magic-btn" style="display: none;"
+                title="Translate description">
                 <span>🌐</span> <span data-i18n="translate">Translate</span>
               </button>
             </div>
@@ -240,7 +248,8 @@
             <button class="btn-dice" data-die="d100">d100</button>
           </div>
           <div class="dice-custom">
-            <input id="custom-dice" type="text" data-i18n-placeholder="customDicePlaceholder" placeholder="e.g., 2d6+3" class="input">
+            <input id="custom-dice" type="text" data-i18n-placeholder="customDicePlaceholder" placeholder="e.g., 2d6+3"
+              class="input">
             <button id="roll-custom-dice-btn" class="btn" data-i18n="roll">Roll</button>
           </div>
           <div id="dice-result" class="dice-result" style="display: none;">
@@ -251,7 +260,8 @@
     </main>
   </div>
 
-  <script src="storage-utils.js"></script><script type="module" src="auth.js"></script>
+  <script src="storage-utils.js"></script>
+  <script type="module" src="auth.js"></script>
   <script type="module" src="translations.js"></script>
   <script type="module" src="campaign-manager.js"></script>
   <script type="module" src="nav.js"></script>
@@ -441,26 +451,25 @@ ${text}`;
       return array[Math.floor(Math.random() * array.length)];
     }
 
+    function checkApiKey() {
+      const apiKey = typeof window.getGroqApiKey === 'function' ? window.getGroqApiKey() : null;
+      if (!apiKey) {
+        if (confirm('⚠️ AI Features Disabled\n\nNo API key found. please add a free Groq API key in Settings to use the Generator.\n\nGo to Settings now?')) {
+          window.location.href = 'configuration.html';
+        }
+        return null;
+      }
+      return apiKey;
+    }
+
     async function generateWithAI(prompt) {
       console.log('🎲 generateWithAI called');
-      console.log('🔍 Checking if getGroqApiKey exists:', typeof window.getGroqApiKey);
 
-      // Check for API key
-      const apiKey = typeof window.getGroqApiKey === 'function' ? window.getGroqApiKey() : null;
-
-      console.log('🔑 API key result:', apiKey ? 'FOUND' : 'NOT FOUND');
+      const apiKey = checkApiKey();
+      if (!apiKey) return null;
 
       if (!USE_AI) {
         console.log('⚠️ USE_AI is false');
-        return null;
-      }
-
-      if (!apiKey) {
-        console.error('❌ No API key found!');
-        console.log('Debug: Current user:', getCurrentUser());
-        console.log('Debug: Users array:', JSON.parse(localStorage.getItem('dm_codex_users') || '[]'));
-        console.error('⚠️ Groq API Key Required - Please check Configuration > AI Settings');
-        // Removed auto-redirect to allow debugging
         return null;
       }
 
@@ -481,12 +490,16 @@ ${text}`;
           })
         });
 
-        if (!response.ok) return null;
+        if (!response.ok) {
+          const err = await response.json();
+          throw new Error(err.error?.message || response.statusText);
+        }
 
         const data = await response.json();
         return data.choices[0].message.content.trim();
       } catch (error) {
         console.error('AI generation error:', error);
+        alert('AI Generation Failed: ' + error.message);
         return null;
       }
     }
@@ -642,7 +655,7 @@ Reward: A magical +1 shield with dwarven runes of protection`;
           `;
 
           // Store for saving and show save button
-          lastGeneratedContent.name = `NPC: ${name}\n${desc}\n\n${translatedQuests.filter(q => q !== null).map((q, i) => `Quest ${i+1}:\n${q.dialog}\n${q.mission}\n${q.reward}`).join('\n\n')}`;
+          lastGeneratedContent.name = `NPC: ${name}\n${desc}\n\n${translatedQuests.filter(q => q !== null).map((q, i) => `Quest ${i + 1}:\n${q.dialog}\n${q.mission}\n${q.reward}`).join('\n\n')}`;
           document.querySelector('.save-name-btn').style.display = 'block';
           if (desc || questsHTML) {
             document.querySelector('.translate-name-btn').style.display = 'block';
@@ -1099,5 +1112,5 @@ Description: A silver ring with a dark amethyst. The wearer can teleport 30 feet
     });
   </script>
 </body>
-</html>
 
+</html>

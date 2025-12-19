@@ -209,7 +209,7 @@ function initializeNav() {
 
   // Language toggle is now in configuration page
   // This function can be called from configuration.html
-  window.changeLanguage = function(lang) {
+  window.changeLanguage = function (lang) {
     currentLanguage = lang;
     localStorage.setItem('language', currentLanguage);
     updateTranslations();
@@ -310,4 +310,9 @@ window.updateTranslations = updateTranslations;
 window.translateWithGroq = translateWithGroq;
 
 // Call this after DOM is loaded
-document.addEventListener('DOMContentLoaded', initializeNav);
+// Call this after DOM is loaded or if it's already loaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeNav);
+} else {
+  initializeNav();
+}

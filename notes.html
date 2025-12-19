@@ -117,15 +117,15 @@
     let saveTimeout = null;
 
     function loadSessions() {
-      const saved = localStorage.getItem('session_notes');
-      if (saved) {
-        sessions = JSON.parse(saved);
-      }
+      sessions = safeLocalStorageGet('session_notes', []);
     }
 
     function saveSessions() {
-      localStorage.setItem('session_notes', JSON.stringify(sessions));
-      document.getElementById('save-status').textContent = t('allChangesSaved');
+      if (safeLocalStorageSet('session_notes', sessions)) {
+        document.getElementById('save-status').textContent = t('allChangesSaved');
+      } else {
+        document.getElementById('save-status').textContent = '⚠️ Save failed!';
+      }
     }
 
     function autoSave() {
@@ -311,28 +311,37 @@
     }
 
     function createSession() {
-      const title = document.getElementById('new-session-title').value.trim();
+      try {
+        const titleInput = document.getElementById('new-session-title');
+        const title = titleInput.value.trim();
 
-      if (title) {
-        const newSession = {
-          id: Date.now(),
-          title,
-          date: new Date().toISOString(),
-          sections: [
-            { title: t('sessionSummary'), content: '' },
-            { title: t('events'), content: '' },
-            { title: t('npcsMet'), content: '' },
-            { title: t('quests'), content: '' }
-          ],
-          quickNotes: []
-        };
+        if (title) {
+          const newSession = {
+            id: Date.now(),
+            title,
+            date: new Date().toISOString(),
+            sections: [
+              { title: t('sessionSummary'), content: '' },
+              { title: t('events'), content: '' },
+              { title: t('npcsMet'), content: '' },
+              { title: t('quests'), content: '' }
+            ],
+            quickNotes: []
+          };
 
-        sessions.unshift(newSession);
-        currentSession = newSession;
-        saveSessions();
-        renderSessions();
-        selectSession(newSession);
-        hideNewSessionModal();
+          sessions.unshift(newSession);
+          currentSession = newSession;
+          saveSessions();
+          renderSessions();
+          selectSession(newSession);
+          hideNewSessionModal();
+        } else {
+          alert(t('enterSessionTitle') || 'Please enter a session title');
+          titleInput.focus();
+        }
+      } catch (error) {
+        console.error('Error creating session:', error);
+        alert('Failed to create session: ' + error.message);
       }
     }
 

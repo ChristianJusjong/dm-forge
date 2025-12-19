@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +8,16 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="design-system.css">
   <link rel="stylesheet" href="medieval-theme.css">
   <link rel="stylesheet" href="responsive-design.css">
   <link rel="stylesheet" href="global-overrides.css">
 </head>
+
 <body>
   <div id="app">
     <!-- Navigation will be inserted here by nav.js -->
@@ -28,7 +32,8 @@
         <div class="generator-form">
           <div class="form-group">
             <label data-i18n="npcType">NPC Type</label>
-            <input id="npc-prompt" type="text" data-i18n-placeholder="npcTypePlaceholder" placeholder="e.g., tavern keeper, mysterious wizard..." class="input">
+            <input id="npc-prompt" type="text" data-i18n-placeholder="npcTypePlaceholder"
+              placeholder="e.g., tavern keeper, mysterious wizard..." class="input">
           </div>
 
           <div class="form-row">
@@ -50,12 +55,14 @@
 
             <div class="form-group">
               <label data-i18n="setting">Setting</label>
-              <input id="npc-setting" type="text" data-i18n-placeholder="settingPlaceholder" placeholder="e.g., medieval city, frontier town..." class="input">
+              <input id="npc-setting" type="text" data-i18n-placeholder="settingPlaceholder"
+                placeholder="e.g., medieval city, frontier town..." class="input">
             </div>
           </div>
 
           <button id="generate-npc-btn" class="btn btn-large" data-i18n="generateNPC">Generate NPC</button>
-          <p id="npc-api-warning" class="warning" style="display: none;" data-i18n="apiKeyWarning">Please enter your Gemini API key</p>
+          <p id="npc-api-warning" class="warning" style="display: none;" data-i18n="apiKeyWarning">Please enter your
+            Gemini API key</p>
         </div>
 
         <!-- Generated NPC Display -->
@@ -98,7 +105,8 @@
     </main>
   </div>
 
-  <script src="storage-utils.js"></script><script type="module" src="auth.js"></script>
+  <script src="storage-utils.js"></script>
+  <script type="module" src="auth.js"></script>
   <script type="module" src="translations.js"></script>
   <script type="module" src="campaign-manager.js"></script>
   <script type="module" src="nav.js"></script>
@@ -438,9 +446,24 @@ Return fully translated content with game mechanics in English:`;
       return data.choices[0].message.content;
     }
 
+    function checkApiKey() {
+      const apiKey = typeof window.getGroqApiKey === 'function' ? window.getGroqApiKey() : null;
+      if (!apiKey) {
+        if (confirm('⚠️ AI Features Disabled\n\nNo API key found. please add a free Groq API key in Settings to use the NPC Generator.\n\nGo to Settings now?')) {
+          window.location.href = 'configuration.html';
+        }
+        return null;
+      }
+      return apiKey;
+    }
+
     async function generateNPC() {
       document.getElementById('npc-error').style.display = 'none';
       document.getElementById('npc-api-warning').style.display = 'none';
+
+      // fast-fail if no key
+      const apiKey = checkApiKey();
+      if (!apiKey) return;
 
       const npcPrompt = document.getElementById('npc-prompt').value.trim();
       const npcRace = document.getElementById('npc-race').value;
@@ -448,7 +471,7 @@ Return fully translated content with game mechanics in English:`;
 
       const generateBtn = document.getElementById('generate-npc-btn');
       generateBtn.disabled = true;
-      generateBtn.textContent = t('generating');
+      generateBtn.textContent = '⏳ Generating...';
 
       const prompt = `D&D 5e NPC:
 Role: ${npcPrompt || 'Random'}
@@ -470,22 +493,13 @@ Be specific and creative. Answer in English.`;
       try {
         let content;
 
-        // Try Groq first if enabled and API key is available
-        const apiKey = typeof window.getGroqApiKey === 'function' ? window.getGroqApiKey() : null;
-
-        if (USE_GROQ && apiKey) {
-          try {
-            content = await generateWithGroq(prompt);
-            console.log('✅ Generated with Groq (fast & unlimited)');
-          } catch (groqError) {
-            console.warn('⚠️ Groq failed, using Gemini:', groqError.message);
-            content = await generateWithGemini(prompt);
-            console.log('✅ Generated with Gemini (fallback)');
-          }
-        } else {
-          // Use Gemini by default
-          content = await generateWithGemini(prompt);
-          console.log('✅ Generated with Gemini');
+        // We already checked for key, so we try Groq first
+        try {
+          content = await generateWithGroq(prompt);
+          console.log('✅ Generated with Groq');
+        } catch (groqError) {
+          console.warn('⚠️ Groq failed:', groqError.message);
+          throw new Error('AI Service Unavailable: ' + groqError.message);
         }
 
         // Translate ONLY names to Danish if language is Danish
@@ -600,5 +614,5 @@ Be specific and creative. Answer in English.`;
     });
   </script>
 </body>
-</html>
 
+</html>

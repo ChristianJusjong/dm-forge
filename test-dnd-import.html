@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>D&D Beyond Parser Test</title>
+    <script src="dndbeyond-parser.js"></script>
+</head>
+
+<body>
+    <h1>Parser Test</h1>
+    <div id="result">Running...</div>
+    <script>
+        const sampleJson = {
+            "character": {
+                "name": "Test Hero",
+                "race": { "fullName": "High Elf" },
+                "classes": [
+                    {
+                        "level": 5,
+                        "definition": { "name": "Wizard" }
+                    }
+                ]
+            }
+        };
+
+        try {
+            const result = DndBeyondParser.parse(sampleJson);
+            console.log('Parsed:', result);
+
+            if (result.name === "Test Hero" &&
+                result.race === "High Elf" &&
+                result.class === "Wizard" &&
+                result.level === 5) {
+                document.getElementById('result').textContent = "PASS: " + JSON.stringify(result);
+                document.getElementById('result').style.color = "green";
+            } else {
+                document.getElementById('result').textContent = "FAIL: " + JSON.stringify(result);
+                document.getElementById('result').style.color = "red";
+            }
+        } catch (e) {
+            document.getElementById('result').textContent = "ERROR: " + e.message;
+            document.getElementById('result').style.color = "red";
+        }
+    </script>
+</body>
+
+</html>

@@ -13,34 +13,9 @@
 }
 
 /* Medieval Color Palette */
-:root {
-  --parchment: #f4e8d0;
-  --parchment-dark: #e8d5b7;
-  --parchment-darker: #d4c3a0;
-  --leather-brown: #4a3728;
-  --leather-dark: #2d1f15;
-  --wood-brown: #5c4033;
-  --wood-light: #8b6f47;
-  --gold: #d4af37;
-  --gold-light: #f0d06b;
-  --gold-dark: #b8941f;
-  --bronze: #cd7f32;
-  --iron: #4a4a4a;
-  --blood-red: #8b0000;
-  --dark-green: #2d5016;
-  --ink: #1a1a1a;
-  --text-color: #e8d5b7;
-  /* Updated for readability */
-  --text-secondary: #b8956a;
-  /* Updated for readability */
-  --shadow: rgba(0, 0, 0, 0.3);
-  --shadow-heavy: rgba(0, 0, 0, 0.6);
-  --border-dark: #8b7355;
-  --accent: #c9b037;
-  --success: #4a7c59;
-  --danger: #a0292a;
-  --warning: #c67b00;
-}
+/* Medieval Color Palette */
+/* Variables now loaded from medieval-theme.css */
+
 
 /* Body & Background - Diablo Inspired */
 body {

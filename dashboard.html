@@ -156,9 +156,19 @@
   <script type="module" src="auth.js"></script>
   <script type="module" src="translations.js"></script>
   <script type="module" src="campaign-manager.js"></script>
+  <!-- Import Session Managers -->
+  <script type="module" src="cloud-store.js"></script>
+  <script type="module" src="session-manager.js"></script>
+
   <script type="module" src="nav.js"></script>
   <script type="module" src="ads.js"></script>
-  <script>
+  <script type="module">
+    import { sessionManager } from './session-manager.js';
+    import { db } from './cloud-store.js';
+
+    // Make available to window for inline onclick handlers
+    window.sessionManager = sessionManager;
+
     // Wait for modules to load
     window.addEventListener('load', () => {
       // Require authentication
@@ -166,12 +176,15 @@
         // User will be redirected to login
         throw new Error('Authentication required');
       }
+
+      // Initialize Session UI
+      renderSessionHistory();
     });
 
     // Display campaign info and session management
-    function updateCampaignInfo() {
+    window.updateCampaignInfo = function () {
       const campaign = getActiveCampaign();
-      const session = getActiveSession();
+      const session = getActiveSession(); // This is the old "active session" check from campaign-manager
       const infoDiv = document.getElementById('campaign-info');
 
       if (!campaign) {
@@ -191,52 +204,38 @@
 
       infoDiv.style.display = 'block';
 
+      // NEW: Enhanced Dashboard with Session Manager Controls
       if (!session) {
-        // No active session - show start button
+        // No active session - show start button AND Restore options
         const settings = campaign.settings || {};
-        const worldNames = {
-          'forgotten-realms': 'Forgotten Realms',
-          'eberron': 'Eberron',
-          'greyhawk': 'Greyhawk',
-          'dragonlance': 'Dragonlance',
-          'ravenloft': 'Ravenloft',
-          'spelljammer': 'Spelljammer',
-          'planescape': 'Planescape',
-          'dark-sun': 'Dark Sun',
-          'mystara': 'Mystara',
-          'birthright': 'Birthright',
-          'critical-role': 'Critical Role',
-          'homebrew': 'Homebrew',
-          'other': 'Other'
-        };
-        const worldName = worldNames[settings.world] || settings.world || 'Forgotten Realms';
-        const edition = settings.edition || '5e';
-        const partyStatus = campaign.partyConfirmed
-          ? '<span style="color: #4caf50;">✓ Confirmed</span>'
-          : '<span style="color: #ff9800;">⚠ Not Confirmed</span>';
 
         infoDiv.innerHTML = `
           <h2 class="text-gold mb-sm">📖 ${escapeHTML(campaign.name)}</h2>
           <p class="text-muted text-sm mb-md">
-            ${worldName} • ${edition.toUpperCase()}
+            ${settings.world || 'Forgotten Realms'} • Code: <code>${campaign.code}</code>
           </p>
-          <p class="text-primary mb-md">
-            Party: <strong class="text-gold-light">${campaign.party.length} members</strong> ${partyStatus} |
-            Sessions Completed: <strong class="text-gold-light">${campaign.sessions.length}</strong>
-          </p>
-          <p class="text-muted text-sm mb-lg">
-            Campaign Code: <code style="background: rgba(0,0,0,0.3); padding: 0.25rem 0.75rem; border-radius: 4px; letter-spacing: 0.1rem;">${campaign.code}</code>
-          </p>
-          <div class="d-flex flex-wrap justify-center gap-md">
-            <button class="btn btn-primary" onclick="startNewSession()">
-              ⚔️ Start New Session
-            </button>
-            <button class="btn btn-secondary" onclick="window.location.href='configuration.html'">
-              ⚙️ Configure Campaign
-            </button>
-            <button class="btn btn-secondary" onclick="window.location.href='campaign-start.html'">
-              🔄 Switch Campaign
-            </button>
+          
+          <div class="session-controls" style="background: rgba(0, 0, 0, 0.3); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-dark);">
+            <h3 class="text-gold-light mb-md" style="font-size: 1.1rem;">🛡️ Session Command</h3>
+            <div class="d-flex flex-wrap justify-center gap-md">
+              <button class="btn btn-primary" onclick="window.startNewSession()">
+                ⚔️ Start New Session
+              </button>
+              <button class="btn btn-secondary" onclick="window.renderSessionHistory(true)">
+                📂 Load Previous Session
+              </button>
+            </div>
+            <div id="session-history-container" class="mt-lg" style="display:none; text-align: left;">
+                <h4 class="text-muted text-xs uppercase mb-sm">Recent Sessions</h4>
+                <div id="session-history-list" class="flex-column gap-sm">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+          </div>
+          
+          <div class="mt-md d-flex justify-center gap-sm">
+             <button class="btn-tiny btn-secondary" onclick="window.location.href='configuration.html'">⚙️ Configure</button>
+             <button class="btn-tiny btn-secondary" onclick="window.location.href='campaign-start.html'">🔄 Switch Campaign</button>
           </div>
         `;
       } else {
@@ -244,66 +243,92 @@
         const duration = Math.floor((Date.now() - session.startedAt) / 60000);
         infoDiv.innerHTML = `
           <h2 class="text-gold mb-sm">📖 ${escapeHTML(campaign.name)}</h2>
-          <p class="text-success text-bold mb-md">
-            ✅ Session Active (${duration} min)
-          </p>
-          <p class="text-primary mb-lg">
-            Party Members: <strong class="text-gold-light">${campaign.party.length}</strong>
-          </p>
-          <button class="btn btn-secondary" onclick="showEndSessionModal()">
-            🚪 End Session
-          </button>
+          <div style="background: rgba(40, 167, 69, 0.1); border: 1px solid #28a745; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+            <p class="text-success text-bold mb-sm" style="font-size: 1.1rem;">
+              ✅ Session Active
+            </p>
+            <p class="text-sm text-primary mb-md">Running for ${duration} minutes</p>
+            <button class="btn btn-danger" onclick="showEndSessionModal()">
+              🚪 Close Session & Save
+            </button>
+          </div>
         `;
       }
     }
 
-    // Start new session
-    function startNewSession() {
-      console.log('startNewSession called');
-      const campaign = getActiveCampaign();
-      console.log('Campaign:', campaign);
+    // New: Render Session History
+    window.renderSessionHistory = async function (toggle = false) {
+      const container = document.getElementById('session-history-container');
+      const list = document.getElementById('session-history-list');
 
+      if (toggle && container) {
+        container.style.display = container.style.display === 'none' ? 'block' : 'none';
+      }
+
+      if (!list) return;
+
+      const sessions = await sessionManager.getSessionHistory();
+      if (sessions.length === 0) {
+        list.innerHTML = '<p class="text-muted text-sm text-center">No saved sessions found.</p>';
+        return;
+      }
+
+      list.innerHTML = sessions.map(s => `
+            <div style="background: rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 4px; border: 1px solid var(--border-dark); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div class="text-gold-light text-sm font-bold">Session ${new Date(s.timestamp).toLocaleDateString()}</div>
+                    <div class="text-muted text-xs text-truncate" style="max-width: 200px;">${s.closingNotes || 'No notes'}</div>
+                </div>
+                <button class="btn-tiny btn-secondary" onclick="restoreSession('${s.id}')">Restore ↩️</button>
+            </div>
+        `).join('');
+    }
+
+    window.restoreSession = async function (id) {
+      if (confirm('Restoring this session will overwrite your current initiative board. Continue?')) {
+        try {
+          await sessionManager.restoreSession(id);
+          alert('Session restored!');
+          window.location.href = 'initiative.html';
+        } catch (e) {
+          alert('Error restoring session: ' + e.message);
+        }
+      }
+    }
+
+    // Start new session (Wrapper)
+    window.startNewSession = function () {
+      const campaign = getActiveCampaign();
       if (!campaign) {
         alert('No active campaign found!');
         window.location.href = 'campaign-start.html';
         return;
       }
 
-      if (!campaign.party || campaign.party.length === 0) {
-        alert('Please set up your party first before starting a session!');
-        window.location.href = 'configuration.html';
-        return;
-      }
-
-      if (!campaign.partyConfirmed) {
-        alert('Please confirm your party setup first!\n\nGo to Party Setup and click "Confirm Party & Continue".');
-        window.location.href = 'configuration.html';
-        return;
-      }
-
-      console.log('Starting session...');
+      // Start the "Legacy" session tracker (for compatibility with existing code)
       startSession();
       updateCampaignInfo();
-
-      // Redirect to notes to start session notes
-      console.log('Redirecting to notes.html');
       window.location.href = 'notes.html';
     }
 
     // Show end session modal
-    function showEndSessionModal() {
+    window.showEndSessionModal = function () {
       document.getElementById('end-session-modal').style.display = 'flex';
     }
 
     // End session now
-    function endSessionNow() {
+    window.endSessionNow = async function () {
       const notes = document.getElementById('session-notes-textarea').value;
       const campaign = getActiveCampaign();
 
+      // 1. New Session Manager Logic
+      const sessionId = 'sess_' + Date.now();
+      await sessionManager.closeSession(sessionId, notes);
+
+      // 2. Legacy Logic (to keep campaign-manager.js happy)
       endSession(notes);
 
-      // Show campaign code
-      alert(`Session ended!\n\nYour campaign code: ${campaign.code}\n\nUse this code to continue your campaign later.`);
+      alert(`Session closed and saved successfully!`);
 
       document.getElementById('end-session-modal').style.display = 'none';
       updateCampaignInfo();
@@ -311,7 +336,8 @@
 
     // Add staggered entrance animation to cards
     window.addEventListener('load', () => {
-      updateCampaignInfo();
+      // Small delay to ensure DB is ready
+      setTimeout(updateCampaignInfo, 100);
 
       const cards = document.querySelectorAll('.feature-card');
       cards.forEach((card, index) => {

@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Monster Browser - Dungeon Master Forge</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="design-system.css">
   <link rel="stylesheet" href="medieval-theme.css">
   <link rel="stylesheet" href="responsive-design.css">
   <link rel="stylesheet" href="global-overrides.css">
 </head>
+
 <body>
   <div id="app">
     <!-- Navigation will be inserted here by nav.js -->
@@ -29,8 +33,10 @@
         <div class="input-group" style="margin-bottom: 0;">
           <label class="input-label" data-i18n="searchMonsters">Search Monsters</label>
           <div style="display: flex; gap: var(--space-sm); align-items: center;">
-            <input id="monster-search" type="text" placeholder="e.g., goblin, dragon..." class="input" style="margin-bottom: 0;">
-            <button id="search-btn" class="btn" style="white-space: nowrap;">🔍 <span data-i18n="search">Search</span></button>
+            <input id="monster-search" type="text" placeholder="e.g., goblin, dragon..." class="input"
+              style="margin-bottom: 0;">
+            <button id="search-btn" class="btn" style="white-space: nowrap;">🔍 <span
+                data-i18n="search">Search</span></button>
           </div>
         </div>
       </div>
@@ -55,7 +61,8 @@
           <p id="monster-type" style="font-style: italic; color: var(--text-secondary);"></p>
 
           <div class="card" style="margin-top: 1.5rem;">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1rem; text-align: center;">
+            <div
+              style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1rem; text-align: center;">
               <div>
                 <div style="font-size: 0.9rem; color: var(--text-secondary);">AC</div>
                 <div id="monster-ac" style="font-size: 1.5rem; font-weight: 700; color: var(--gold);"></div>
@@ -82,7 +89,8 @@
     </main>
   </div>
 
-  <script src="storage-utils.js"></script><script type="module" src="auth.js"></script>
+  <script src="storage-utils.js"></script>
+  <script type="module" src="auth.js"></script>
   <script type="module" src="translations.js"></script>
   <script type="module" src="campaign-manager.js"></script>
   <script type="module" src="nav.js"></script>
@@ -123,7 +131,7 @@
         if (!response.ok) throw new Error('API Error');
 
         const data = await response.json();
-        monsters = data.results;
+        monsters = sortMonsters(data.results, searchTerm);
 
         loading.style.display = 'none';
 
@@ -138,6 +146,29 @@
         loading.style.display = 'none';
         grid.innerHTML = `<div class="error-message">Error loading monsters: ${error.message}. Try again later.</div>`;
       }
+    }
+
+    function sortMonsters(monsters, searchTerm) {
+      if (!searchTerm) return monsters;
+      const term = searchTerm.toLowerCase();
+      return monsters.sort((a, b) => {
+        const nameA = a.name.toLowerCase();
+        const nameB = b.name.toLowerCase();
+
+        // Exact match
+        if (nameA === term && nameB !== term) return -1;
+        if (nameB === term && nameA !== term) return 1;
+
+        // Starts with
+        if (nameA.startsWith(term) && !nameB.startsWith(term)) return -1;
+        if (nameB.startsWith(term) && !nameA.startsWith(term)) return 1;
+
+        // Contains in name
+        if (nameA.includes(term) && !nameB.includes(term)) return -1;
+        if (nameB.includes(term) && !nameA.includes(term)) return 1;
+
+        return 0;
+      });
     }
 
     function renderMonsters() {
@@ -286,5 +317,5 @@
     });
   </script>
 </body>
-</html>
 
+</html>

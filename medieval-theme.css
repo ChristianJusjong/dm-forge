@@ -1,5 +1,34 @@
 /* Medieval Theme Enhancements */
 
+:root {
+  --parchment: #f4e8d0;
+  --parchment-dark: #e8d5b7;
+  --parchment-darker: #d4c3a0;
+  --leather-brown: #4a3728;
+  --leather-dark: #2d1f15;
+  --wood-brown: #5c4033;
+  --wood-light: #8b6f47;
+  --gold: #d4af37;
+  --gold-light: #f0d06b;
+  --gold-dark: #b8941f;
+  --bronze: #cd7f32;
+  --iron: #4a4a4a;
+  --blood-red: #8b0000;
+  --dark-green: #2d5016;
+  --ink: #1a1a1a;
+  --text-color: #e8d5b7;
+  /* Updated for readability */
+  --text-secondary: #b8956a;
+  /* Updated for readability */
+  --shadow: rgba(0, 0, 0, 0.3);
+  --shadow-heavy: rgba(0, 0, 0, 0.6);
+  --border-dark: #8b7355;
+  --accent: #c9b037;
+  --success: #4a7c59;
+  --danger: #a0292a;
+  --warning: #c67b00;
+}
+
 /* Stone texture background pattern using CSS */
 .stone-texture {
   background-color: #2a2420;
@@ -72,8 +101,15 @@
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
 .hero-logo-glow {
@@ -89,8 +125,17 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-  50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
+
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
 }
 
 /* Medieval title styling */
@@ -199,13 +244,11 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 10px,
-    rgba(212, 175, 55, 0.02) 10px,
-    rgba(212, 175, 55, 0.02) 20px
-  );
+  background: repeating-linear-gradient(45deg,
+      transparent,
+      transparent 10px,
+      rgba(212, 175, 55, 0.02) 10px,
+      rgba(212, 175, 55, 0.02) 20px);
   pointer-events: none;
 }
 
@@ -227,11 +270,11 @@
 .medieval-divider {
   height: 4px;
   background: linear-gradient(90deg,
-    transparent 0%,
-    #d4af37 20%,
-    #f0d06b 50%,
-    #d4af37 80%,
-    transparent 100%);
+      transparent 0%,
+      #d4af37 20%,
+      #f0d06b 50%,
+      #d4af37 80%,
+      transparent 100%);
   margin: 3rem auto;
   max-width: 600px;
   position: relative;
@@ -270,8 +313,15 @@
 }
 
 @keyframes flicker {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
 }
 
 /* Aged paper effect for cards */
