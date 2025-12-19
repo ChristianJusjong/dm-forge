@@ -324,16 +324,25 @@
   <div id="import-dndb-modal" class="modal-overlay" style="display: none;">
     <div class="modal">
       <h3>📥 Import from D&D Beyond</h3>
-      <p class="text-muted mb-md">Paste your character JSON below.</p>
-      <textarea id="dndb-json-input" class="textarea" rows="10" placeholder='Paste JSON here...'></textarea>
+      <p class="text-muted mb-md">Import directly from D&D Beyond URL or paste JSON.</p>
+
+      <div class="input-group mb-md">
+        <label class="input-label">D&D Beyond URL (e.g., dndbeyond.com/.../12345)</label>
+        <div style="display: flex; gap: 0.5rem;">
+          <input type="text" id="dndb-url-input" class="input" placeholder="https://www.dndbeyond.com/characters/..." />
+          <button id="fetch-dndb-btn" class="btn btn-primary">Fetch</button>
+        </div>
+        <p id="fetch-status" class="text-sm mt-sm" style="display:none;"></p>
+      </div>
+
+      <div style="text-align: center; margin: 1rem 0; color: var(--gold-dark);">- OR -</div>
+
+      <textarea id="dndb-json-input" class="textarea" rows="5" placeholder='Paste JSON here...'></textarea>
       <div id="import-error" class="text-danger mb-md" style="display: none;"></div>
       <div class="modal-actions">
         <button id="process-import-btn" class="btn">Import Character</button>
         <button id="cancel-import-btn" class="btn btn-secondary">Cancel</button>
       </div>
-      <p class="text-sm text-muted mt-md">
-        <strong>How to get JSON:</strong> Add <code>/json</code> to the end of your D&D Beyond character sheet URL.
-      </p>
     </div>
   </div>
 
@@ -871,7 +880,7 @@
       const errorDiv = document.getElementById('import-error');
 
       if (!jsonInput) {
-        errorDiv.textContent = 'Please paste some JSON data.';
+        errorDiv.textContent = 'Please paste some JSON data or fetch from URL first.';
         errorDiv.style.display = 'block';
         return;
       }
@@ -885,11 +894,59 @@
 
         // Success
         hideImportModal();
-        alert(`Successfully imported ${character.name} (Level ${character.level} ${character.race} ${character.class})!`);
+        alert(`Successfully imported ${character.name} (Level ${character.level} ${character.race} ${character.class})!\n\nStats: HP ${character.hp.max} | AC ${character.ac} | STR ${character.stats.STR} DEX ${character.stats.DEX}`);
 
       } catch (err) {
         errorDiv.textContent = err.message;
         errorDiv.style.display = 'block';
+      }
+    }
+
+    async function fetchCharacterFromUrl() {
+      const urlInput = document.getElementById('dndb-url-input');
+      const status = document.getElementById('fetch-status');
+      const jsonArea = document.getElementById('dndb-json-input');
+
+      const url = urlInput.value.trim();
+
+      if (!url) {
+        status.style.display = 'block';
+        status.innerHTML = '<span class="text-danger">Please enter a URL</span>';
+        return;
+      }
+
+      status.style.display = 'block';
+      status.innerHTML = '<span class="text-gold">Fetching... (this needs Vercel deployment)</span>';
+
+      try {
+        // Use Vercel Serverless Function Proxy
+        const proxyUrl = `/api/dndb-proxy?url=${encodeURIComponent(url)}`;
+
+        const response = await fetch(proxyUrl);
+
+        if (!response.ok) {
+          // Fallback message for local development
+          if (response.status === 404) {
+            throw new Error('Proxy API not found. Are you running local? Deploy to Vercel to use URL fetch.');
+          }
+          const err = await response.json();
+          throw new Error(err.error || 'Fetch failed');
+        }
+
+        const data = await response.json();
+
+        // Auto-fill JSON area
+        jsonArea.value = JSON.stringify(data, null, 2);
+        status.innerHTML = '<span class="text-success">✓ Data fetched! Click "Import Character" below.</span>';
+
+      } catch (error) {
+        console.error(error);
+        // If local, show helpful message
+        if (window.location.hostname === 'localhost' || window.location.protocol === 'file:') {
+          status.innerHTML = `<span class="text-warning">⚠️ URL Fetch requires Vercel Proxy. <br>For local test, please paste JSON manually.</span>`;
+        } else {
+          status.innerHTML = `<span class="text-danger">❌ Error: ${error.message}</span>`;
+        }
       }
     }
 
@@ -898,6 +955,11 @@
       const importBtn = document.getElementById('import-dndb-btn');
       if (importBtn) {
         importBtn.addEventListener('click', showImportModal);
+      }
+
+      const fetchBtn = document.getElementById('fetch-dndb-btn');
+      if (fetchBtn) {
+        fetchBtn.addEventListener('click', fetchCharacterFromUrl);
       }
 
       const processBtn = document.getElementById('process-import-btn');
