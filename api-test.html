@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="da">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>API Test - DM Codex</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="design-system.css">
   <style>
@@ -76,7 +79,7 @@
     .test-result {
       margin-top: 0.75rem;
       padding: 0.75rem;
-      background: rgba(0,0,0,0.05);
+      background: rgba(0, 0, 0, 0.05);
       border-radius: 4px;
       font-family: monospace;
       font-size: 0.85rem;
@@ -85,8 +88,15 @@
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.7;
+      }
     }
 
     .run-all-btn {
@@ -109,6 +119,7 @@
     }
   </style>
 </head>
+
 <body>
   <div id="app">
     <!-- Navigation will be inserted here by nav.js -->
@@ -165,7 +176,8 @@
     </main>
   </div>
 
-  <script src="storage-utils.js"></script><script type="module" src="auth.js"></script>
+  <script src="storage-utils.js"></script>
+  <script type="module" src="auth.js"></script>
   <script type="module" src="translations.js"></script>
   <script type="module" src="campaign-manager.js"></script>
   <script type="module" src="nav.js"></script>
@@ -179,7 +191,7 @@
     });
 
     // GROQ_API_KEY is already declared in nav.js
-    const GEMINI_API_KEY = 'AIzaSyC_FPJb1pVXl4x8_cWd8xX9T-c1z238wiI';
+    const GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY_HERE'; // User must provide this
 
     const tests = {
       groq: { passed: false, message: '' },
@@ -359,5 +371,5 @@
     });
   </script>
 </body>
-</html>
 
+</html>

@@ -1,35 +1,6 @@
 /* Medieval Theme Enhancements */
 
-:root {
-  --parchment: #f4e8d0;
-  --parchment-dark: #e8d5b7;
-  --parchment-darker: #d4c3a0;
-  --leather-brown: #4a3728;
-  --leather-dark: #2d1f15;
-  --wood-brown: #5c4033;
-  --wood-light: #8b6f47;
-  --gold: #d4af37;
-  --gold-light: #f0d06b;
-  --gold-dark: #b8941f;
-  --bronze: #cd7f32;
-  --iron: #4a4a4a;
-  --blood-red: #8b0000;
-  --dark-green: #2d5016;
-  --ink: #1a1a1a;
-  --text-color: #e8d5b7;
-  /* Updated for readability */
-  --text-secondary: #b8956a;
-  /* Updated for readability */
-  --shadow: rgba(0, 0, 0, 0.3);
-  --shadow-heavy: rgba(0, 0, 0, 0.6);
-  --border-dark: #8b7355;
-  --accent: #c9b037;
-  --success: #4a7c59;
-  --danger: #a0292a;
-  --warning: #c67b00;
-}
-
-/* Stone texture background pattern using CSS */
+/* stone texture background pattern using CSS */
 .stone-texture {
   background-color: #2a2420;
   background-image:
@@ -42,7 +13,7 @@
 
 /* Parchment texture */
 .parchment-texture {
-  background-color: #f4e8d0;
+  background-color: var(--color-parchment);
   background-image:
     linear-gradient(0deg, transparent 24%, rgba(139, 115, 85, .05) 25%, rgba(139, 115, 85, .05) 26%, transparent 27%, transparent 74%, rgba(139, 115, 85, .05) 75%, rgba(139, 115, 85, .05) 76%, transparent 77%, transparent),
     linear-gradient(90deg, transparent 24%, rgba(139, 115, 85, .05) 25%, rgba(139, 115, 85, .05) 26%, transparent 27%, transparent 74%, rgba(139, 115, 85, .05) 75%, rgba(139, 115, 85, .05) 76%, transparent 77%, transparent);
@@ -143,7 +114,7 @@
   font-family: 'Cinzel', serif;
   font-size: 1.875rem;
   font-weight: 700;
-  color: #d4af37;
+  color: var(--color-gold);
   text-transform: uppercase;
   letter-spacing: 0.15rem;
   text-shadow:
@@ -164,7 +135,7 @@
   top: 50%;
   transform: translateY(-50%);
   font-size: 1.25rem;
-  color: #d4af37;
+  color: var(--color-gold);
   text-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
 }
 
@@ -193,8 +164,8 @@
 .medieval-border {
   position: relative;
   padding: 2rem;
-  border: 3px solid #d4af37;
-  border-image: linear-gradient(135deg, #d4af37 0%, #f0d06b 50%, #d4af37 100%) 1;
+  border: 3px solid var(--color-gold);
+  border-image: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 50%, var(--color-gold) 100%) 1;
   box-shadow:
     0 0 30px rgba(212, 175, 55, 0.3),
     inset 0 0 30px rgba(212, 175, 55, 0.1);
@@ -206,8 +177,8 @@
   position: absolute;
   width: 20px;
   height: 20px;
-  border: 3px solid #d4af37;
-  background: radial-gradient(circle, #d4af37 0%, transparent 70%);
+  border: 3px solid var(--color-gold);
+  background: radial-gradient(circle, var(--color-gold) 0%, transparent 70%);
 }
 
 .medieval-border::before {
@@ -254,7 +225,7 @@
 
 .feature-card-enhanced:hover {
   transform: translateY(-8px) scale(1.02);
-  border-color: #d4af37;
+  border-color: var(--color-gold);
   box-shadow:
     0 20px 50px rgba(212, 175, 55, 0.4),
     0 0 50px rgba(212, 175, 55, 0.3),
@@ -271,9 +242,9 @@
   height: 4px;
   background: linear-gradient(90deg,
       transparent 0%,
-      #d4af37 20%,
-      #f0d06b 50%,
-      #d4af37 80%,
+      var(--color-gold) 20%,
+      var(--color-gold-light) 50%,
+      var(--color-gold) 80%,
       transparent 100%);
   margin: 3rem auto;
   max-width: 600px;
@@ -286,7 +257,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #d4af37;
+  color: var(--color-gold);
   font-size: 1.5rem;
   background: #0d0806;
   padding: 0 1rem;
@@ -327,7 +298,7 @@
 /* Aged paper effect for cards */
 .aged-paper {
   background:
-    linear-gradient(135deg, #f4e8d0 0%, #e8dcc4 100%);
+    linear-gradient(135deg, var(--color-parchment) 0%, #e8dcc4 100%);
   box-shadow:
     0 4px 8px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.5),
@@ -347,9 +318,9 @@
 
 /* Metallic button effect */
 .btn-medieval {
-  background: linear-gradient(135deg, #8b7355 0%, #5d4a37 100%);
-  border: 2px solid #d4af37;
-  color: #f0d06b;
+  background: linear-gradient(135deg, var(--color-primary-dark) 0%, #5d4a37 100%);
+  border: 2px solid var(--color-gold);
+  color: var(--color-gold-light);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
   box-shadow:
     0 4px 8px rgba(0, 0, 0, 0.4),
@@ -377,7 +348,7 @@
 }
 
 .btn-medieval:hover {
-  border-color: #f0d06b;
+  border-color: var(--color-gold-light);
   box-shadow:
     0 6px 16px rgba(212, 175, 55, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
@@ -388,8 +359,8 @@
 .tutorial-tooltip {
   position: absolute;
   width: 300px;
-  background: var(--parchment);
-  border: 2px solid var(--gold);
+  background: var(--color-parchment);
+  border: 2px solid var(--color-gold);
   border-radius: 8px;
   padding: 0;
   z-index: 1000;
@@ -406,19 +377,19 @@
   margin-left: -10px;
   border-width: 10px;
   border-style: solid;
-  border-color: transparent transparent var(--gold) transparent;
+  border-color: transparent transparent var(--color-gold) transparent;
 }
 
 .tooltip-header {
-  background: var(--leather-brown);
-  color: var(--gold);
+  background: var(--color-leather);
+  color: var(--color-gold);
   padding: 0.5rem 0.75rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
-  border-bottom: 1px solid var(--gold-dark);
+  border-bottom: 1px solid var(--color-gold-dark);
 }
 
 .tooltip-title {
@@ -430,7 +401,7 @@
 .tooltip-close {
   background: none;
   border: none;
-  color: var(--gold);
+  color: var(--color-gold);
   font-size: 1.2rem;
   cursor: pointer;
   padding: 0;
@@ -443,7 +414,7 @@
 
 .tooltip-content {
   padding: 1rem;
-  color: var(--wood-brown);
+  color: var(--color-wood);
   font-size: 0.95rem;
   line-height: 1.5;
 }

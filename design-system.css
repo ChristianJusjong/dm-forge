@@ -40,6 +40,26 @@
   --color-info: #7fd77f;              /* Info blue-green */
 
   /* ==========================================
+     MEDIEVAL PALETTE EXTENSIONS
+     ========================================== */
+  --color-parchment: #f4e8d0;
+  --color-parchment-dark: #e8d5b7;
+  --color-parchment-darker: #d4c3a0;
+  
+  --color-leather: #4a3728;
+  --color-leather-dark: #2d1f15;
+  
+  --color-wood: #5c4033;
+  --color-wood-light: #8b6f47;
+  
+  --color-gold: #d4af37;
+  --color-gold-light: #f0d06b;
+  --color-gold-dark: #b8941f;
+  
+  --color-bronze: #cd7f32;
+  --color-ink: #1a1a1a;
+
+  /* ==========================================
      TYPOGRAPHY
      ========================================== */
 
