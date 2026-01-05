@@ -1,11 +1,10 @@
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+
 import { VitePWA } from 'vite-plugin-pwa'
 import { visualizer } from 'rollup-plugin-visualizer'
 
 export default defineConfig({
   plugins: [
-    vue(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'robots.txt', 'apple-touch-icon.png'],
@@ -68,9 +67,6 @@ export default defineConfig({
       output: {
         // Manual code splitting for better caching
         manualChunks: {
-          // Vendor chunk (Vue and large dependencies)
-          'vendor': ['vue'],
-
           // Utils chunk (shared utilities) - Support both .js and .ts
           'utils': [
             './storage-utils.js',
@@ -146,7 +142,7 @@ export default defineConfig({
 
   // Optimization hints
   optimizeDeps: {
-    include: ['vue', 'firebase/app', 'firebase/firestore', 'firebase/auth'],
+    include: ['firebase/app', 'firebase/firestore', 'firebase/auth'],
     exclude: []
   },
 

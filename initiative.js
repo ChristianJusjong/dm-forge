@@ -1,0 +1,486 @@
+
+// Wait for modules to load
+window.addEventListener('load', () => {
+    // Check Tutorial Prerequisites
+    if (typeof checkPrerequisites === 'function') {
+        if (!checkPrerequisites('combat')) {
+            // Redirect handled by function
+            return;
+        }
+    }
+
+    // Require authentication
+    if (typeof requireAuth === 'function' && !requireAuth()) {
+        throw new Error('Authentication required');
+    }
+});
+
+// ========================================
+// INITIATIVE TRACKER
+// ========================================
+
+const initiativeState = {
+    combatants: [],
+    round: 1,
+    currentTurn: 0
+};
+
+let monsterCache = {};
+
+function loadInitiativeData() {
+    const saved = localStorage.getItem('initiative_tracker');
+    if (saved) {
+        const data = JSON.parse(saved);
+        initiativeState.combatants = data.combatants || [];
+        initiativeState.round = data.round || 1;
+        initiativeState.currentTurn = data.currentTurn || 0;
+    }
+}
+
+function saveInitiativeData() {
+    localStorage.setItem('initiative_tracker', JSON.stringify(initiativeState));
+}
+
+// Fetch monster details from Open5e API
+async function fetchMonsterDetails(monsterName) {
+    const cacheKey = monsterName.toLowerCase().replace(/\s+/g, '-');
+    if (monsterCache[cacheKey]) {
+        return monsterCache[cacheKey];
+    }
+
+    try {
+        const response = await fetch(`https://api.open5e.com/v1/monsters/?search=${encodeURIComponent(monsterName)}&limit=1`);
+        if (!response.ok) return null;
+        const data = await response.json();
+        if (data.results && data.results.length > 0) {
+            monsterCache[cacheKey] = data.results[0];
+            return data.results[0];
+        }
+    } catch (error) {
+        console.error('Error fetching monster:', error);
+    }
+    return null;
+}
+
+function adjustHP(combatantId, amount) {
+    const combatant = initiativeState.combatants.find(c => c.id === combatantId);
+    if (combatant) {
+        combatant.hp = Math.max(0, Math.min(combatant.maxHp, combatant.hp + amount));
+        saveInitiativeData();
+        renderCombatants();
+    }
+}
+
+async function showMonsterDetails(combatantId) {
+    const combatant = initiativeState.combatants.find(c => c.id === combatantId);
+    if (!combatant) return;
+
+    // Extract base monster name (remove numbers like "Goblin 1" -> "Goblin")
+    const baseName = combatant.name.replace(/\s+\d+$/, '').trim();
+
+    const monster = await fetchMonsterDetails(baseName);
+    if (monster) {
+        const actions = monster.actions ? monster.actions.slice(0, 3).map(a =>
+            `<div style="margin-bottom: 0.5rem;"><strong>${a.name}:</strong> ${a.desc}</div>`
+        ).join('') : '';
+
+        const abilities = monster.special_abilities ? monster.special_abilities.slice(0, 2).map(a =>
+            `<div style="margin-bottom: 0.5rem;"><strong>${a.name}:</strong> ${a.desc}</div>`
+        ).join('') : '';
+
+        const info = `
+      <div style="background: var(--parchment); padding: 1rem; border-radius: 6px; margin-top: 0.5rem; max-height: 300px; overflow-y: auto;">
+        <h4 style="margin-top: 0; color: var(--wood-brown);">${monster.name}</h4>
+        <p style="font-style: italic; margin: 0.5rem 0;">${monster.size} ${monster.type}, ${monster.alignment}</p>
+
+        ${abilities ? `<div style="margin-top: 0.75rem;"><strong>Special Abilities:</strong><br>${abilities}</div>` : ''}
+        ${actions ? `<div style="margin-top: 0.75rem;"><strong>Actions:</strong><br>${actions}</div>` : ''}
+      </div>
+    `;
+
+        // Store monster info in combatant
+        combatant.monsterInfo = info;
+        combatant.monsterInfoVisible = !combatant.monsterInfoVisible;
+        renderCombatants();
+    }
+}
+
+function renderCombatants() {
+    const list = document.getElementById('combatants-list');
+    const noCombatants = document.getElementById('no-combatants');
+
+    if (initiativeState.combatants.length === 0) {
+        list.innerHTML = '';
+        noCombatants.style.display = 'block';
+        return;
+    }
+
+    noCombatants.style.display = 'none';
+
+    // Sort by initiative (highest first)
+    const sorted = [...initiativeState.combatants].sort((a, b) => b.initiative - a.initiative);
+
+    list.innerHTML = sorted.map((combatant, index) => {
+        const isActive = index === initiativeState.currentTurn;
+        const hpPercentage = (combatant.hp / combatant.maxHp) * 100;
+        const hpColor = hpPercentage > 50 ? 'var(--success)' : hpPercentage > 25 ? 'var(--warning)' : 'var(--danger)';
+        const isNPC = combatant.cr !== undefined && combatant.cr !== null;
+
+        return `
+      <div class="combatant-card ${isActive ? 'active' : ''}" data-id="${combatant.id}">
+        <div class="combatant-initiative" title="DC (Dice Check)">${combatant.initiative}</div>
+
+        <div class="combatant-info">
+          <h4>
+            ${combatant.name}
+            ${isNPC ? '<span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: normal;">(NPC)</span>' : '<span style="font-size: 0.8rem; color: var(--gold); font-weight: normal;">(Spiller)</span>'}
+          </h4>
+
+          ${combatant.description ? `
+            <div style="background: linear-gradient(135deg, var(--parchment-dark) 0%, var(--parchment) 100%); padding: 1rem; border-radius: 8px; margin-bottom: 0.75rem; color: var(--leather-brown); font-size: 0.95rem; line-height: 1.5; border-left: 4px solid var(--gold);">
+              <strong style="display: block; margin-bottom: 0.5rem; color: var(--wood-brown); font-size: 1rem;">📋 Om denne creature:</strong>
+              ${combatant.description}
+            </div>
+          ` : ''}
+
+          ${isNPC ? `
+            <div class="combatant-stats" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <strong>HP:</strong>
+                <span style="font-size: 1.2rem; font-weight: 700; color: ${hpColor};">${combatant.hp}</span>
+                <span>/ ${combatant.maxHp}</span>
+                <span style="color: ${hpColor}; font-size: 0.9rem;">(${Math.round(hpPercentage)}%)</span>
+              </div>
+              <div style="display: flex; gap: 0.25rem;">
+                <button class="btn-tiny damage-btn" data-id="${combatant.id}" data-amount="-10" title="Skade 10">-10</button>
+                <button class="btn-tiny damage-btn" data-id="${combatant.id}" data-amount="-5" title="Skade 5">-5</button>
+                <button class="btn-tiny damage-btn" data-id="${combatant.id}" data-amount="-1" title="Skade 1">-1</button>
+                <button class="btn-tiny heal-btn" data-id="${combatant.id}" data-amount="1" title="Helbred 1">+1</button>
+                <button class="btn-tiny heal-btn" data-id="${combatant.id}" data-amount="5" title="Helbred 5">+5</button>
+                <button class="btn-tiny heal-btn" data-id="${combatant.id}" data-amount="10" title="Helbred 10">+10</button>
+              </div>
+            </div>
+          ` : ''}
+
+          <div style="margin-top: 0.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+            <span><strong>AC:</strong> ${combatant.ac}</span>
+            ${combatant.cr !== undefined ? `<span><strong>CR:</strong> ${combatant.cr}</span>` : ''}
+            ${combatant.xp ? `<span><strong>XP:</strong> ${combatant.xp}</span>` : ''}
+          </div>
+
+          ${isNPC && !combatant.monsterInfo ? `
+            <button class="btn-small" data-id="${combatant.id}" style="margin-top: 0.5rem;" onclick="showMonsterDetails(${combatant.id})">
+              📖 Vis Monster Info
+            </button>
+          ` : ''}
+
+          ${combatant.monsterInfoVisible && combatant.monsterInfo ? combatant.monsterInfo : ''}
+
+          ${combatant.conditions && combatant.conditions.length > 0 ?
+                `<div style="margin-top: 0.5rem;">
+              ${combatant.conditions.map((cond, i) =>
+                    `<span class="condition-tag">${cond}
+                  <button class="remove-condition" data-id="${combatant.id}" data-index="${i}"
+                          style="background: none; border: none; color: white; cursor: pointer; font-weight: 700; margin-left: 0.25rem;">×</button>
+                </span>`
+                ).join('')}
+            </div>` : ''}
+
+          <div style="margin-top: 0.75rem;">
+            <input type="text" class="input condition-input" placeholder="Tilføj tilstand" data-id="${combatant.id}"
+                   style="font-size: 0.9rem; padding: 0.4rem 0.75rem;">
+          </div>
+        </div>
+
+        <div class="combatant-actions">
+          <button class="btn-small btn-danger remove-combatant" data-id="${combatant.id}">Fjern</button>
+        </div>
+      </div>
+    `;
+    }).join('');
+
+    document.getElementById('round-number').textContent = initiativeState.round;
+
+    // Add event listeners for damage/heal buttons
+    document.querySelectorAll('.damage-btn, .heal-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = parseFloat(e.target.dataset.id);
+            const amount = parseInt(e.target.dataset.amount);
+            adjustHP(id, amount);
+        });
+    });
+
+    document.querySelectorAll('.condition-input').forEach(input => {
+        input.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter' && e.target.value.trim()) {
+                const id = parseFloat(e.target.dataset.id);
+                const combatant = initiativeState.combatants.find(c => c.id === id);
+                if (combatant) {
+                    if (!combatant.conditions) combatant.conditions = [];
+                    combatant.conditions.push(e.target.value.trim());
+                    e.target.value = '';
+                    saveInitiativeData();
+                    renderCombatants();
+                }
+            }
+        });
+    });
+
+    document.querySelectorAll('.remove-condition').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const id = parseFloat(e.target.dataset.id);
+            const index = parseInt(e.target.dataset.index);
+            const combatant = initiativeState.combatants.find(c => c.id === id);
+            if (combatant && combatant.conditions) {
+                combatant.conditions.splice(index, 1);
+                saveInitiativeData();
+                renderCombatants();
+            }
+        });
+    });
+
+    document.querySelectorAll('.remove-combatant').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = parseFloat(e.target.dataset.id);
+            console.log('Removing combatant with ID:', id);
+            console.log('Before removal:', initiativeState.combatants.map(c => ({ id: c.id, name: c.name })));
+
+            initiativeState.combatants = initiativeState.combatants.filter(c => c.id !== id);
+
+            console.log('After removal:', initiativeState.combatants.map(c => ({ id: c.id, name: c.name })));
+
+            // Reset current turn if needed
+            if (initiativeState.combatants.length === 0) {
+                initiativeState.currentTurn = 0;
+                initiativeState.round = 1;
+            } else if (initiativeState.currentTurn >= initiativeState.combatants.length) {
+                initiativeState.currentTurn = 0;
+            }
+
+            saveInitiativeData();
+            renderCombatants();
+        });
+    });
+}
+
+function addCombatant() {
+    const name = document.getElementById('combatant-name').value.trim();
+    const initiative = parseInt(document.getElementById('combatant-initiative').value);
+    const hp = parseInt(document.getElementById('combatant-hp').value);
+    const ac = parseInt(document.getElementById('combatant-ac').value);
+    const xp = parseInt(document.getElementById('combatant-xp').value);
+
+    if (name && !isNaN(initiative) && !isNaN(hp) && !isNaN(ac)) {
+        const combatant = {
+            id: Date.now(),
+            name,
+            initiative,
+            hp,
+            maxHp: hp,
+            ac,
+            conditions: []
+        };
+
+        // Add XP if provided (marks as NPC)
+        if (!isNaN(xp) && xp > 0) {
+            combatant.xp = xp;
+            combatant.cr = 0; // Mark as NPC
+        }
+
+        initiativeState.combatants.push(combatant);
+
+        document.getElementById('combatant-name').value = '';
+        document.getElementById('combatant-initiative').value = '';
+        document.getElementById('combatant-hp').value = '';
+        document.getElementById('combatant-ac').value = '';
+        document.getElementById('combatant-xp').value = '';
+
+        saveInitiativeData();
+        renderCombatants();
+    }
+}
+
+// End Combat - Save to session notes with XP
+function endCombat() {
+    if (initiativeState.combatants.length === 0) {
+        alert('Ingen kamp at afslutte!');
+        return;
+    }
+
+    // Calculate total XP from defeated enemies
+    const defeatedNPCs = initiativeState.combatants.filter(c => c.xp && c.hp === 0);
+    const totalXP = defeatedNPCs.reduce((sum, c) => sum + c.xp, 0);
+
+    // Calculate total possible XP
+    const allNPCs = initiativeState.combatants.filter(c => c.xp);
+    const totalPossibleXP = allNPCs.reduce((sum, c) => sum + c.xp, 0);
+
+    // Create combat summary
+    const combatSummary = `
+🏆 Kamp Afsluttet
+Runder: ${initiativeState.round}
+Deltagere: ${initiativeState.combatants.length}
+
+Enemies:
+${allNPCs.map(c => `- ${c.name}: ${c.hp === 0 ? '💀 Defeated' : '❤️ Survived'} (${c.xp || 0} XP)`).join('\n')}
+
+💰 Total XP Optjent: ${totalXP}${totalPossibleXP > 0 ? ` / ${totalPossibleXP}` : ''}
+  `.trim();
+
+    // Save to session notes
+    const sessions = JSON.parse(localStorage.getItem('session_notes') || '[]');
+
+    if (sessions.length > 0) {
+        const currentSession = sessions[0];
+
+        // Find or create Combat section
+        let combatSection = currentSession.sections.find(s =>
+            s.title.toLowerCase().includes('combat') || s.title.toLowerCase().includes('kamp')
+        );
+
+        if (!combatSection) {
+            combatSection = { title: 'Kampe', content: '' };
+            currentSession.sections.push(combatSection);
+        }
+
+        // Append combat summary
+        const timestamp = new Date().toLocaleString('da-DK', {
+            day: 'numeric',
+            month: 'short',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        combatSection.content += (combatSection.content ? '\n\n' : '') + `[${timestamp}]\n${combatSummary}`;
+
+        localStorage.setItem('session_notes', JSON.stringify(sessions));
+
+        alert(`Kamp gemt til session notes!\n\nTotal XP: ${totalXP}`);
+    } else {
+        alert('Ingen session fundet! Opret en session i Notes først.\n\nTotal XP: ' + totalXP);
+    }
+
+    // Reset combat
+    if (confirm('Vil du nulstille kampen?')) {
+        resetCombat();
+    }
+}
+
+function nextTurn() {
+    if (initiativeState.combatants.length === 0) return;
+
+    initiativeState.currentTurn++;
+    if (initiativeState.currentTurn >= initiativeState.combatants.length) {
+        initiativeState.currentTurn = 0;
+        initiativeState.round++;
+    }
+
+    saveInitiativeData();
+    renderCombatants();
+
+    // Scroll to active combatant
+    setTimeout(() => {
+        const activeCard = document.querySelector('.combatant-card.active');
+        if (activeCard) {
+            activeCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }, 100);
+}
+
+function resetCombat() {
+    if (confirm('Nulstil kamp? Dette vil fjerne alle deltagere.')) {
+        initiativeState.combatants = [];
+        initiativeState.round = 1;
+        initiativeState.currentTurn = 0;
+        saveInitiativeData();
+        renderCombatants();
+    }
+}
+
+function addPartyToCombat() {
+    const partyData = localStorage.getItem('party_members');
+    if (!partyData) {
+        if (confirm('Intet hold fundet! Vil du oprette dit hold først?')) {
+            window.location.href = 'configuration.html';
+        }
+        return;
+    }
+
+    const party = JSON.parse(partyData);
+    if (party.length === 0) {
+        alert('Dit hold er tomt! Tilføj medlemmer i Hold Opsætning.');
+        return;
+    }
+
+    // Add each party member with default initiative and stats
+    let idCounter = Date.now();
+    party.forEach(member => {
+        // Estimate HP based on class and level (simplified)
+        const hpMap = {
+            'Barbarian': 12, 'Fighter': 10, 'Paladin': 10, 'Ranger': 10,
+            'Cleric': 8, 'Druid': 8, 'Monk': 8, 'Rogue': 8, 'Warlock': 8,
+            'Bard': 8, 'Sorcerer': 6, 'Wizard': 6
+        };
+        const hpPerLevel = hpMap[member.class] || 8;
+        const estimatedHP = hpPerLevel + ((member.level - 1) * (hpPerLevel / 2 + 1));
+
+        // Estimate AC based on class
+        const acMap = {
+            'Barbarian': 14, 'Fighter': 16, 'Paladin': 16, 'Ranger': 14,
+            'Cleric': 16, 'Druid': 14, 'Monk': 16, 'Rogue': 15, 'Warlock': 12,
+            'Bard': 14, 'Sorcerer': 12, 'Wizard': 12
+        };
+        const estimatedAC = acMap[member.class] || 14;
+
+        initiativeState.combatants.push({
+            id: idCounter++,
+            name: member.name,
+            initiative: 10, // Default - user should update
+            hp: Math.round(estimatedHP),
+            maxHp: Math.round(estimatedHP),
+            ac: estimatedAC,
+            conditions: []
+        });
+    });
+
+    saveInitiativeData();
+    renderCombatants();
+    alert(`${party.length} holdmedlemmer tilføjet! Opdater deres initiativ værdier.`);
+}
+
+// New Combat - Shows the form
+function newCombat() {
+    const section = document.getElementById('add-combatant-section');
+    if (section.style.display === 'none') {
+        section.style.display = 'block';
+        document.getElementById('combatant-name').focus();
+    } else {
+        section.style.display = 'none';
+    }
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('new-combat-btn').addEventListener('click', newCombat);
+    document.getElementById('add-combatant-btn').addEventListener('click', addCombatant);
+    document.getElementById('combatant-name').addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') {
+            document.getElementById('combatant-initiative').focus();
+        }
+    });
+    document.getElementById('combatant-xp').addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') addCombatant();
+    });
+    document.getElementById('next-turn-btn').addEventListener('click', nextTurn);
+    document.getElementById('end-combat-btn').addEventListener('click', endCombat);
+    document.getElementById('reset-combat-btn').addEventListener('click', resetCombat);
+    document.getElementById('add-party-btn').addEventListener('click', addPartyToCombat);
+
+    loadInitiativeData();
+    renderCombatants();
+});
+
+// Expose functions to global scope for HTML inline calls (onclick="showMonsterDetails(...)")
+window.showMonsterDetails = showMonsterDetails;

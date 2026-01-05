@@ -9,12 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "firebase": "^12.5.0",
-    "vue": "^3.4.0"
+    "firebase": "^12.5.0"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
-    "@vitejs/plugin-vue": "^5.0.0",
     "rollup-plugin-visualizer": "^6.0.5",
     "terser": "^5.44.1",
     "typescript": "^5.9.3",

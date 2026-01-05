@@ -1,0 +1,501 @@
+
+// Wait for modules to load
+window.addEventListener('load', () => {
+    // Require authentication
+    if (typeof requireAuth === 'function' && !requireAuth()) {
+        throw new Error('Authentication required');
+    }
+});
+
+// ========================================
+// NPC GENERATOR
+// ========================================
+
+// Groq API key is retrieved from campaign settings via window.getGroqApiKey()
+const USE_GROQ = true; // Using Groq for better performance and no rate limits
+
+const GEMINI_API_KEY = 'AIzaSyC_FPJb1pVXl4x8_cWd8xX9T-c1z238wiI';
+let savedNPCs = [];
+let generatedNPC = null;
+let viewingNPC = null;
+
+// ========================================
+// NOTES INTEGRATION
+// ========================================
+
+function saveToNotes(content, category) {
+    const sessions = JSON.parse(localStorage.getItem('session_notes') || '[]');
+
+    if (sessions.length === 0) {
+        alert('Please create a session in Notes first!');
+        window.location.href = 'notes.html';
+        return;
+    }
+
+    // Get or create the most recent session
+    const currentSession = sessions[0];
+
+    // Find or create appropriate section
+    let section = currentSession.sections.find(s =>
+        s.title.toLowerCase().includes(category.toLowerCase())
+    );
+
+    if (!section) {
+        // Create new section
+        section = { title: category, content: '' };
+        currentSession.sections.push(section);
+    }
+
+    // Append content with timestamp
+    const timestamp = new Date().toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+
+    section.content += (section.content ? '\n\n' : '') + `[${timestamp}]\n${content}`;
+
+    localStorage.setItem('session_notes', JSON.stringify(sessions));
+    alert('Saved to Notes!');
+}
+
+function loadSavedNPCs() {
+    const saved = localStorage.getItem('saved_npcs');
+    if (saved) {
+        savedNPCs = JSON.parse(saved);
+    }
+}
+
+function saveSavedNPCs() {
+    localStorage.setItem('saved_npcs', JSON.stringify(savedNPCs));
+}
+
+function renderSavedNPCs() {
+    const section = document.getElementById('saved-npcs-section');
+    const grid = document.getElementById('saved-npcs-grid');
+
+    if (savedNPCs.length === 0) {
+        section.style.display = 'none';
+        return;
+    }
+
+    section.style.display = 'block';
+
+    grid.innerHTML = savedNPCs.map(npc => `
+    <div class="npc-card" data-id="${npc.id}">
+      <div class="npc-card-header">
+        <h4>${npc.name}</h4>
+        <div style="display: flex; gap: 0.25rem;">
+          <button class="btn-tiny btn-secondary save-npc-to-notes" data-id="${npc.id}">📝</button>
+          <button class="btn-tiny btn-danger delete-npc" data-id="${npc.id}">${t('delete')}</button>
+        </div>
+      </div>
+      <p class="npc-preview">${npc.preview}</p>
+    </div>
+  `).join('');
+
+    document.querySelectorAll('.npc-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('delete-npc') && !e.target.classList.contains('save-npc-to-notes')) {
+                const id = parseInt(card.dataset.id);
+                const npc = savedNPCs.find(n => n.id === id);
+                if (npc) {
+                    viewNPC(npc);
+                }
+            }
+        });
+    });
+
+    document.querySelectorAll('.save-npc-to-notes').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = parseInt(btn.dataset.id);
+            const npc = savedNPCs.find(n => n.id === id);
+            if (npc) {
+                const content = `NPC: ${npc.name}\n${npc.fullContent || npc.preview}`;
+                saveToNotes(content, 'NPCs Met');
+            }
+        });
+    });
+
+    document.querySelectorAll('.delete-npc').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (confirm(t('deleteNPCConfirm'))) {
+                const id = parseInt(e.target.dataset.id);
+                savedNPCs = savedNPCs.filter(n => n.id !== id);
+                saveSavedNPCs();
+                renderSavedNPCs();
+            }
+        });
+    });
+}
+
+function viewNPC(npc) {
+    viewingNPC = npc;
+    document.getElementById('viewing-npc-name').textContent = npc.name;
+    document.getElementById('viewing-npc-content').innerHTML = formatNPC(npc.content);
+    document.getElementById('view-npc-modal').style.display = 'flex';
+}
+
+function closeNPCModal() {
+    viewingNPC = null;
+    document.getElementById('view-npc-modal').style.display = 'none';
+}
+
+function formatNPC(content) {
+    return content
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+        .replace(/\n/g, '<br>');
+}
+
+async function generateWithGroq(prompt) {
+    // Check for API key
+    const apiKey = typeof window.getGroqApiKey === 'function' ? window.getGroqApiKey() : null;
+
+    if (!apiKey) {
+        alert('⚠️ Groq API Key Required\n\nTo use AI features, please add your free Groq API key in:\nConfiguration > AI Settings\n\nClick OK to go to Configuration now.');
+        window.location.href = 'configuration.html';
+        return;
+    }
+
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+            model: 'llama-3.1-8b-instant',
+            messages: [{ role: 'user', content: prompt }],
+            temperature: 0.8,
+            max_tokens: 1000
+        })
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(`Groq API: ${error.error?.message || response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data.choices[0].message.content;
+}
+
+async function generateWithGemini(prompt) {
+    const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-goog-api-key': GEMINI_API_KEY
+            },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }]
+            })
+        }
+    );
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        if (response.status === 503) {
+            throw new Error('Google Gemini serveren er overbelastet lige nu. Prøv igen om et øjeblik.');
+        } else if (response.status === 429) {
+            throw new Error('For mange forespørgsler. Vent venligst et minut og prøv igen.');
+        } else {
+            throw new Error(`API fejl ${response.status}`);
+        }
+    }
+
+    const data = await response.json();
+    return data.candidates[0].content.parts[0].text;
+}
+
+async function translateNamesOnly(content, targetLang) {
+    if (targetLang !== 'da') return content;
+
+    console.log('🌐 translateNamesOnly called');
+    console.log('🔍 getGroqApiKey function exists?', typeof window.getGroqApiKey);
+
+    // Check for API key
+    const apiKey = typeof window.getGroqApiKey === 'function' ? window.getGroqApiKey() : null;
+
+    console.log('🔑 API key for translation:', apiKey ? 'FOUND' : 'NOT FOUND');
+
+    if (!apiKey) {
+        console.error('❌ No API key for translation!');
+        console.error('⚠️ Groq API Key Required - Please check Configuration > AI Settings');
+        // Removed auto-redirect to allow debugging
+        return content; // Return original content untranslated
+    }
+
+    console.log('✅ Translating with Groq...');
+
+    const translatePrompt = `You are translating D&D content from English to Danish.
+
+CRITICAL RULES:
+1. ONLY translate proper names (NPC names, location names, place names)
+2. Keep EVERYTHING else in English: descriptions, personality traits, stats, abilities, items, spells, conditions, backgrounds, motivations, quirks, secrets, plot hooks
+3. Keep ALL game mechanics in English: HP, AC, CR, ability scores, damage values
+
+Example:
+Input: "Name: John the Brave\nHP: 45, AC: 16\nAppearance: A tall warrior with scars\nPersonality: Brave and loyal"
+
+Output: "Name: Johan den Modige\nHP: 45, AC: 16\nAppearance: A tall warrior with scars\nPersonality: Brave and loyal"
+
+Only the name "John the Brave" becomes "Johan den Modige". Everything else stays in English.
+
+Content to translate:
+${content}
+
+Return the content with ONLY proper names translated to Danish:`;
+
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+            model: 'llama-3.1-8b-instant',
+            messages: [{ role: 'user', content: translatePrompt }],
+            temperature: 0.2,
+            max_tokens: 1500
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error('Translation failed');
+    }
+
+    const data = await response.json();
+    return data.choices[0].message.content;
+}
+
+async function translateDescriptions(content, targetLang) {
+    if (targetLang !== 'da') return content;
+
+    console.log('🌐 translateDescriptions called');
+
+    // Check for API key
+    const apiKey = typeof window.getGroqApiKey === 'function' ? window.getGroqApiKey() : null;
+
+    console.log('🔑 API key for descriptions:', apiKey ? 'FOUND' : 'NOT FOUND');
+
+    if (!apiKey) {
+        console.error('❌ No API key for description translation!');
+        console.error('⚠️ Groq API Key Required - Please check Configuration > AI Settings');
+        // Removed auto-redirect to allow debugging
+        return content; // Return original content untranslated
+    }
+
+    console.log('✅ Translating descriptions with Groq...');
+
+    const translatePrompt = `Translate this D&D NPC description from English to Danish.
+
+CRITICAL RULES:
+1. Translate ALL narrative text: descriptions, personality, background, motivations, quirks, secrets, plot hooks
+2. Keep proper names in their current form (already translated)
+3. Keep ALL game mechanics in English: HP, AC, CR, ability scores, damage values, spell names, item names, conditions
+
+Example:
+Input: "Name: Johan den Modige\nHP: 45, AC: 16\nAppearance: A tall warrior with scars\nPersonality: Brave and loyal"
+
+Output: "Name: Johan den Modige\nHP: 45, AC: 16\nAppearance: En høj kriger med ar\nPersonality: Modig og loyal"
+
+Content to translate:
+${content}
+
+Return fully translated content with game mechanics in English:`;
+
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+            model: 'llama-3.1-8b-instant',
+            messages: [{ role: 'user', content: translatePrompt }],
+            temperature: 0.2,
+            max_tokens: 1500
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error('Translation failed');
+    }
+
+    const data = await response.json();
+    return data.choices[0].message.content;
+}
+
+function checkApiKey() {
+    const apiKey = typeof window.getGroqApiKey === 'function' ? window.getGroqApiKey() : null;
+    if (!apiKey) {
+        if (confirm('⚠️ AI Features Disabled\n\nNo API key found. please add a free Groq API key in Settings to use the NPC Generator.\n\nGo to Settings now?')) {
+            window.location.href = 'configuration.html';
+        }
+        return null;
+    }
+    return apiKey;
+}
+
+async function generateNPC() {
+    document.getElementById('npc-error').style.display = 'none';
+    document.getElementById('npc-api-warning').style.display = 'none';
+
+    // fast-fail if no key
+    const apiKey = checkApiKey();
+    if (!apiKey) return;
+
+    const npcPrompt = document.getElementById('npc-prompt').value.trim();
+    const npcRace = document.getElementById('npc-race').value;
+    const setting = document.getElementById('npc-setting').value.trim();
+
+    const generateBtn = document.getElementById('generate-npc-btn');
+    generateBtn.disabled = true;
+    generateBtn.textContent = '⏳ Generating...';
+
+    const prompt = `D&D 5e NPC:
+Role: ${npcPrompt || 'Random'}
+Race: ${npcRace || 'Any'}
+Setting: ${setting || 'Generic'}
+
+Generate in ENGLISH:
+- Name
+- Appearance (2 sentences)
+- Personality (key traits)
+- Background (short)
+- Goal/motivation
+- Quirk/secret
+- Stats (HP, AC, abilities if relevant)
+- Plot hooks (2-3)
+
+Be specific and creative. Answer in English.`;
+
+    try {
+        let content;
+
+        // We already checked for key, so we try Groq first
+        try {
+            content = await generateWithGroq(prompt);
+            console.log('✅ Generated with Groq');
+        } catch (groqError) {
+            console.warn('⚠️ Groq failed:', groqError.message);
+            throw new Error('AI Service Unavailable: ' + groqError.message);
+        }
+
+        // Translate ONLY names to Danish if language is Danish
+        let displayContent = content;
+        if (getCurrentLanguage() === 'da') {
+            displayContent = await translateNamesOnly(content, 'da');
+        }
+
+        // Extract name from translated content
+        const nameMatch = displayContent.match(/(?:Name|NPC Name):\s*\*?\*?([^\n*]+)\*?\*?/i);
+        const name = nameMatch ? nameMatch[1].trim() : 'Generated NPC';
+
+        generatedNPC = {
+            name,
+            content: displayContent,
+            timestamp: Date.now()
+        };
+
+        document.getElementById('generated-npc-name').textContent = name;
+        document.getElementById('generated-npc-content').innerHTML = formatNPC(displayContent);
+        document.getElementById('generated-npc-display').style.display = 'block';
+
+    } catch (err) {
+        document.getElementById('npc-error').textContent = `Kunne ikke generere NPC: ${err.message}`;
+        document.getElementById('npc-error').style.display = 'block';
+    } finally {
+        generateBtn.disabled = false;
+        generateBtn.textContent = t('generateNPC');
+    }
+}
+
+let isTranslated = false;
+let originalContent = null;
+
+async function toggleTranslation() {
+    if (!generatedNPC) return;
+
+    const btn = document.getElementById('translate-npc-btn');
+    const contentDiv = document.getElementById('generated-npc-content');
+    const icon = document.getElementById('translate-icon');
+
+    btn.disabled = true;
+    btn.innerHTML = '<span>⏳</span> Translating...';
+
+    try {
+        if (!isTranslated) {
+            // Save original and translate to Danish
+            originalContent = generatedNPC.content;
+            const translated = await translateDescriptions(generatedNPC.content, 'da');
+            generatedNPC.content = translated;
+            contentDiv.innerHTML = formatNPC(translated);
+            isTranslated = true;
+            btn.innerHTML = '<span>🔙</span> <span data-i18n="showOriginal">Show Original</span>';
+        } else {
+            // Restore original English
+            generatedNPC.content = originalContent;
+            contentDiv.innerHTML = formatNPC(originalContent);
+            isTranslated = false;
+            btn.innerHTML = '<span id="translate-icon">🌐</span> <span data-i18n="translate">Translate</span>';
+        }
+    } catch (err) {
+        alert('Translation failed: ' + err.message);
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+function saveGeneratedNPC() {
+    if (generatedNPC) {
+        const preview = generatedNPC.content.substring(0, 100).replace(/[*#]/g, '');
+        savedNPCs.unshift({
+            id: Date.now(),
+            name: generatedNPC.name,
+            content: generatedNPC.content,
+            preview,
+            timestamp: generatedNPC.timestamp
+        });
+        saveSavedNPCs();
+        renderSavedNPCs();
+        alert(t('npcSaved'));
+    }
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('generate-npc-btn').addEventListener('click', generateNPC);
+    document.getElementById('translate-npc-btn').addEventListener('click', toggleTranslation);
+    document.getElementById('save-npc-btn').addEventListener('click', saveGeneratedNPC);
+    document.getElementById('save-npc-notes-btn').addEventListener('click', () => {
+        if (generatedNPC) {
+            const content = `NPC: ${generatedNPC.name}\n${generatedNPC.fullContent}`;
+            saveToNotes(content, 'NPCs Met');
+        }
+    });
+    document.getElementById('save-viewing-npc-notes-btn').addEventListener('click', () => {
+        if (viewingNPC) {
+            const content = `NPC: ${viewingNPC.name}\n${viewingNPC.fullContent || viewingNPC.preview}`;
+            saveToNotes(content, 'NPCs Met');
+        }
+    });
+    document.getElementById('close-npc-modal-btn').addEventListener('click', closeNPCModal);
+
+    // Close modal on overlay click
+    document.getElementById('view-npc-modal').addEventListener('click', (e) => {
+        if (e.target.id === 'view-npc-modal') {
+            closeNPCModal();
+        }
+    });
+
+    loadSavedNPCs();
+    renderSavedNPCs();
+});
