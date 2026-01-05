@@ -37,7 +37,7 @@ const STATIC_ASSETS = [
   '/validation-schemas.js',
   '/sync-utils.js',
   '/performance-loader.js',
-  '/campaign-manager.js',
+  '/campaign-manager.ts',
   '/auth.js',
   '/translations.js'
 ];

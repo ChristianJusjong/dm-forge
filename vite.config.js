@@ -86,7 +86,7 @@ export default defineConfig({
           ],
 
           // Feature chunks (lazy loaded)
-          'campaign': ['./campaign-manager.js'],
+          'campaign': ['./campaign-manager.ts'],
           'auth': ['./auth.js']
         },
 
