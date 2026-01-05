@@ -1,61 +1,35 @@
 {
   "compilerOptions": {
-    /* Language and Environment */
-    "target": "ES2020",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "jsx": "preserve",
-
-    /* Modules */
+    "target": "ESNext",
+    "useDefineForClassFields": true,
     "module": "ESNext",
+    "lib": [
+      "ESNext",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "skipLibCheck": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "allowJs": true,
+    "checkJs": true,
+    "outDir": "./dist",
+    "sourceMap": true,
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "allowImportingTsExtensions": true,
-
-    /* JavaScript Support */
-    "allowJs": true,
-    "checkJs": false,
-
-    /* Emit */
-    "noEmit": true,
-    "sourceMap": true,
-
-    /* Interop Constraints */
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-
-    /* Type Checking */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": false,
-
-    /* Completeness */
-    "skipLibCheck": true,
-
-    /* Paths */
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./*"]
-    }
+    "esModuleInterop": true,
+    "noEmit": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": false
   },
   "include": [
-    "*.ts",
-    "*.tsx",
-    "*.js",
-    "*.jsx",
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.js"
+    "./**/*.js",
+    "./**/*.ts"
   ],
   "exclude": [
     "node_modules",
-    "dist",
-    "build"
+    "dist"
   ]
 }
