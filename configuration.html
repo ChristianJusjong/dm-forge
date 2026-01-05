@@ -351,6 +351,7 @@
   <script src="storage-utils.js"></script>
   <script src="dndbeyond-parser.js"></script>
   <script type="module" src="auth.js"></script>
+  <script type="module" src="data-manager.js"></script>
   <script type="module" src="translations.js"></script>
   <script type="module" src="campaign-manager.ts"></script>
   <script type="module" src="nav.js"></script>
@@ -364,6 +365,47 @@
         throw new Error('Authentication required');
       }
 
+      // Backup Handlers
+      document.getElementById('export-btn').addEventListener('click', () => {
+        if (confirm('Download a backup of all your data?')) {
+          window.dataManager.downloadExport();
+        }
+      });
+
+      document.getElementById('import-file').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (confirm('⚠️ WARNING: This will OVERWRITE your current data with the backup.\n\nAre you sure?')) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            const result = window.dataManager.importData(event.target.result);
+            if (result.success) {
+              alert(`✅ Success! Restored ${result.count} data items.\n\nThe page will now reload.`);
+              window.location.reload();
+            } else {
+              alert('❌ Import Failed: ' + result.error);
+            }
+          };
+          reader.readAsText(file);
+        } else {
+          e.target.value = ''; // Reset input
+        }
+      });
+
+      document.getElementById('clear-data-btn').addEventListener('click', () => {
+        if (confirm('⚠️ DANGER: This will delete ALL campaigns, characters, and settings.\n\nType "DELETE" to confirm.')) {
+          const response = prompt('Type "DELETE" to confirm:');
+          if (response === 'DELETE') {
+            localStorage.clear();
+            alert('All data erased.');
+            window.location.href = 'index.html';
+          }
+        }
+      });
+
+      // Load saved settings
+      loadSettings();
       // Load saved API key
       loadApiKey();
     });

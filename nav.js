@@ -98,12 +98,16 @@ function updateTranslations() {
 
 // Initialize navigation bar
 import { initHelpSystem } from './help-system.js';
+import { GlobalDiceRoller } from './dice-roller.js';
 
 function initializeNav() {
   const currentPage = window.location.pathname.split('/').pop() || 'index.html';
 
   // Initialize Help System
   initHelpSystem();
+
+  // Initialize Global Dice Roller
+  new GlobalDiceRoller();
 
   const navHTML = `
     <nav class="main-nav">
