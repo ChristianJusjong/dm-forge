@@ -178,9 +178,12 @@
         successDiv.textContent = 'Login successful! Redirecting...';
         successDiv.style.display = 'block';
 
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirect = urlParams.get('redirect');
+
         setTimeout(() => {
-          console.log('Redirecting to campaign-start.html');
-          window.location.href = 'campaign-start.html';
+          console.log(`Redirecting to ${redirect || 'campaign-start.html'}`);
+          window.location.href = redirect || 'campaign-start.html';
         }, 1000);
       } else {
         console.error('Login failed:', result.message);

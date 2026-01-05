@@ -1,0 +1,301 @@
+/* Player App Styles
+   Extends design-system.css
+*/
+
+.player-layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+/* Character Card (Dashboard) */
+.char-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.char-card {
+    background: var(--surface-card);
+    border: 2px solid var(--border-gold);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    cursor: pointer;
+}
+
+.char-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    border-color: var(--primary-gold);
+}
+
+.char-card-header {
+    background: linear-gradient(135deg, var(--primary-gold) 0%, var(--primary-dark) 100%);
+    padding: 1rem;
+    color: var(--text-dark);
+}
+
+.char-card-header h3 {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+}
+
+.char-card-body {
+    padding: 1rem;
+}
+
+.char-summary {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.char-stats-preview {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    margin-top: 1rem;
+}
+
+.stat-box-mini {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label-mini {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.stat-val-mini {
+    font-weight: bold;
+    color: var(--text-base);
+}
+
+/* Wizard / Creator Styles */
+.wizard-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--surface-card);
+    border: 1px solid var(--border-gold);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.wizard-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.wizard-steps::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--border-muted);
+    z-index: 1;
+    transform: translateY(-50%);
+}
+
+.step-indicator {
+    background: var(--bg-main);
+    border: 2px solid var(--border-muted);
+    color: var(--text-muted);
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    z-index: 2;
+    position: relative;
+    transition: all 0.3s;
+}
+
+.step-indicator.active {
+    border-color: var(--primary-gold);
+    color: var(--primary-gold);
+    box-shadow: 0 0 10px var(--primary-gold-dim);
+}
+
+.step-indicator.completed {
+    background: var(--primary-gold);
+    border-color: var(--primary-gold);
+    color: var(--text-dark);
+}
+
+/* Sheet Styles */
+.sheet-header-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    align-items: center;
+}
+
+.vitals-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.75rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-muted);
+}
+
+.vital-box {
+    text-align: center;
+    flex: 1;
+}
+
+.vital-val {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-gold);
+    font-family: var(--font-heading);
+}
+
+.vital-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.ability-scores-grid {
+    display: flex;
+    justify-content: space-between;
+    /* grid-template-columns: repeat(6, 1fr); Use flex for better wrapping on mobile */
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.ability-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--radius-md);
+    width: 90px;
+    text-align: center;
+    padding: 0.75rem 0.25rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ability-mod-box {
+    width: 50px;
+    height: 50px;
+    border: 2px solid var(--primary-gold);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    background: var(--bg-main);
+}
+
+.ability-score-tiny {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-top: 4px;
+}
+
+.sheet-cols {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .sheet-cols {
+        grid-template-columns: 1fr;
+    }
+
+    .sheet-header-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Skills List */
+.skills-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.skill-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4rem 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.skill-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.skill-proficient {
+    color: var(--primary-gold);
+    font-weight: bold;
+}
+
+.skill-expert {
+    color: var(--primary-red);
+}
+
+.skill-mod {
+    font-family: monospace;
+    font-size: 1.1em;
+}
+
+/* Spell Slots */
+.spell-slots-container {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.slot-bubble {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--border-gold);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.slot-bubble.used {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--border-muted);
+}
+
+.slot-bubble.available {
+    background: var(--primary-gold);
+    box-shadow: 0 0 5px var(--primary-gold-dim);
+}

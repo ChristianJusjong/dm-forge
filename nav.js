@@ -137,6 +137,9 @@ function initializeNav() {
           <a href="dm-screen.html" class="nav-link ${currentPage === 'dm-screen.html' ? 'active' : ''}">
             <span class="icon">🛡️</span> ${t('dmScreen')}
           </a>
+          <a href="player-dashboard.html" class="nav-link ${currentPage === 'player-dashboard.html' || currentPage === 'character-sheet.html' || currentPage === 'character-creator.html' ? 'active' : ''}">
+             <span class="icon">👤</span> Characters
+          </a>
           <a href="notes.html" class="nav-link ${currentPage === 'notes.html' ? 'active' : ''}">
              <span class="icon">📝</span> ${t('notes')}
           </a>

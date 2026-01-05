@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Sheet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="medieval-theme.css">
+    <link rel="stylesheet" href="player-app.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Nav inserted by script -->
+
+        <main class="player-layout">
+            <div id="loading" style="text-align: center; margin-top: 5rem;">Loading scroll...</div>
+
+            <div id="sheet-content" style="display: none;">
+                <!-- Header -->
+                <div class="sheet-header-grid">
+                    <div>
+                        <h1 id="char-name" class="page-title" style="margin: 0; font-size: 2rem;">Name</h1>
+                        <div id="char-summary" style="color: var(--text-muted);">Level 1 Human Fighter</div>
+                    </div>
+
+                    <div style="text-align: right;">
+                        <button id="short-rest-btn" class="btn btn-secondary btn-sm">Short Rest</button>
+                        <button id="long-rest-btn" class="btn btn-primary btn-sm">Long Rest</button>
+                        <button id="edit-char-btn" class="btn btn-secondary btn-sm"
+                            style="margin-left: 0.5rem;">Edit</button>
+                    </div>
+                </div>
+
+                <!-- Vitals -->
+                <div class="sheet-header-grid" style="margin-top: 1rem;">
+                    <div class="vitals-bar">
+                        <div class="vital-box">
+                            <label class="vital-label">Armor Class</label>
+                            <div id="val-ac" class="vital-val">10</div>
+                        </div>
+                        <div class="vital-box">
+                            <label class="vital-label">Initiative</label>
+                            <div id="val-init" class="vital-val">+0</div>
+                        </div>
+                        <div class="vital-box">
+                            <label class="vital-label">Speed</label>
+                            <div id="val-speed" class="vital-val">30</div>
+                        </div>
+                        <div class="vital-box">
+                            <label class="vital-label">Prof. Bonus</label>
+                            <div id="val-prof" class="vital-val">+2</div>
+                        </div>
+                    </div>
+                    <div class="vitals-bar"
+                        style="background: rgba(139, 0, 0, 0.2); border-color: rgba(139, 0, 0, 0.4);">
+                        <div class="vital-box">
+                            <label class="vital-label">Current / Max HP</label>
+                            <div class="vital-val">
+                                <span id="val-hp-current">10</span> <span
+                                    style="font-size: 0.6em; color: var(--text-muted)">/ <span
+                                        id="val-hp-max">10</span></span>
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <button class="btn btn-tiny btn-danger" onclick="charAction.damage(1)">-1</button>
+                            <button class="btn btn-tiny btn-success" onclick="charAction.heal(1)">+1</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tab-container" style="margin-top: 2rem;">
+                    <button class="tab-btn active" data-tab="main">Main Stats</button>
+                    <button class="tab-btn" data-tab="combat">Combat</button>
+                    <button class="tab-btn" data-tab="spells">Spells</button>
+                    <button class="tab-btn" data-tab="inventory">Inventory</button>
+                    <button class="tab-btn" data-tab="bio">Bio</button>
+                </div>
+
+                <!-- MAIN TAB -->
+                <div id="tab-main" class="tab-content active">
+                    <div class="sheet-cols">
+                        <div>
+                            <h3>Attributes</h3>
+                            <div class="ability-scores-grid" id="ability-scores-container"></div>
+                        </div>
+                        <div>
+                            <h3>Skills & Saves</h3>
+                            <div class="card">
+                                <ul id="skills-list" class="skills-list"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COMBAT TAB (Placeholder) -->
+                <div id="tab-combat" class="tab-content">
+                    <h3>Attacks</h3>
+                    <p class="text-muted">No attacks configured.</p>
+                </div>
+
+                <!-- SPELLS TAB -->
+                <div id="tab-spells" class="tab-content">
+                    <h3>Spell Slots</h3>
+                    <div class="spell-slots-container">
+                        <!-- TODO: Real slots -->
+                        <div style="font-size: 0.9em; color: var(--text-muted)">Slot tracking coming soon.</div>
+                    </div>
+
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
+                        <h3>Grimoire</h3>
+                        <button class="btn btn-secondary btn-sm" onclick="addItem('spell')">+ Add Spell</button>
+                    </div>
+                    <div id="spells-list" class="inventory-list">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+
+                <!-- INVENTORY TAB -->
+                <div id="tab-inventory" class="tab-content">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3>Equipment</h3>
+                        <button class="btn btn-secondary btn-sm" onclick="addItem('item')">+ Add Item</button>
+                    </div>
+                    <ul id="inventory-list" class="skills-list" style="margin-bottom: 2rem;">
+                        <!-- Rendered by JS -->
+                    </ul>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3>Artifacts</h3>
+                        <button class="btn btn-secondary btn-sm" onclick="addItem('artifact')">+ Artifact</button>
+                    </div>
+                    <ul id="artifacts-list" class="skills-list" style="margin-bottom: 2rem;">
+                        <!-- Rendered by JS -->
+                    </ul>
+
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-muted); padding-top: 1rem;">
+                        <span>Gold (GP): <input type="number" id="val-gold" class="input"
+                                style="width: 80px; display: inline-block;"></span>
+                    </div>
+                </div>
+
+                <!-- BIO TAB -->
+                <div id="tab-bio" class="tab-content">
+                    <h3>Backstory</h3>
+                    <textarea id="bio-backstory" class="input" rows="10" style="width: 100%"></textarea>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="nav.js"></script>
+    <script src="auth.js"></script>
+    <script type="module">
+        import { Character } from './character-model.js';
+        import { GlobalDiceRoller } from './dice-roller.js';
+        import { SessionManager } from './session-manager.js';
+
+        // Auth Check
+        if (!isLoggedIn()) {
+            // If we have a session param, we want to preserve it after login
+            const currentUrl = encodeURIComponent(window.location.href);
+            // NOTE: our simplistic login.html?redirect= might not handle complex encoded params well, 
+            // but let's try just sending the path or a full redirect.
+            // Simpler: Redirect to dashboard if no auth, let them navigate back.
+            window.location.href = 'login.html?redirect=player-dashboard.html';
+        }
+        const currentUser = getCurrentUser();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const charId = parseFloat(urlParams.get('id'));
+        const sessionCode = urlParams.get('session');
+
+        let character = null;
+        let session = null;
+
+        // Global Action Handler
+        window.charAction = {
+            damage: (amt) => {
+                if (character) {
+                    character.takeDamage(amt);
+                    saveAndRender();
+                    broadcastUpdate();
+                }
+            },
+            heal: (amt) => {
+                if (character) {
+                    character.heal(amt);
+                    saveAndRender();
+                    broadcastUpdate();
+                }
+            }
+        };
+
+        // Roll Helpers
+        window.rollStat = (stat) => {
+            if (!character) return;
+            const mod = character.getModifier(stat);
+            const label = `${stat.toUpperCase()} Check`;
+            if (window.globalDiceRoller) {
+                window.globalDiceRoller.rollDice(1, 20, mod, label);
+            }
+        };
+
+        window.rollSkill = (label, mod) => {
+            if (window.globalDiceRoller) {
+                window.globalDiceRoller.rollDice(1, 20, mod, label);
+            }
+        };
+        // Item Helpers
+        window.addItem = (type) => {
+            const name = prompt(`Enter ${type} name:`);
+            if (!name) return;
+
+            if (type === 'spell') {
+                if (!character.spells.known) character.spells.known = [];
+                character.spells.known.push({ name, level: 1 }); // Default lvl 1
+            } else {
+                // Item or Artifact
+                if (!character.equipment) character.equipment = [];
+                character.equipment.push({ name, type: type === 'artifact' ? 'artifact' : 'gear', qty: 1 });
+            }
+            saveAndRender();
+        };
+
+        window.removeItem = (type, index) => {
+            if (!confirm('Remove this?')) return;
+
+            if (type === 'spell') {
+                character.spells.known.splice(index, 1);
+            } else {
+                character.equipment.splice(index, 1);
+            }
+            saveAndRender();
+        };
+
+        async function init() {
+            if (!charId) {
+                window.location.href = 'player-dashboard.html';
+                return;
+            }
+
+            // Load from Scoped Storage
+            const key = `player_characters_${currentUser.id}`;
+            const saved = localStorage.getItem(key);
+
+            if (saved) {
+                const chars = JSON.parse(saved);
+                const data = chars.find(c => c.id === charId);
+                if (data) {
+                    character = Character.fromJSON(data);
+
+                    // Connect to Session
+                    if (sessionCode) {
+                        session = new SessionManager('client', sessionCode);
+                        session.connect();
+                        // Broadcast initial state
+                        setTimeout(broadcastUpdate, 500);
+                    }
+
+                    renderSheet();
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('sheet-content').style.display = 'block';
+                } else {
+                    alert('Character not found');
+                    window.location.href = 'player-dashboard.html';
+                }
+            }
+        }
+
+        function broadcastUpdate() {
+            if (session && character) {
+                session.send('CHARACTER_UPDATE', {
+                    id: character.id,
+                    name: character.name,
+                    hp: character.hp,
+                    ac: character.ac,
+                    level: character.level,
+                    class: character.class,
+                    playerUser: currentUser.username // Send Auth Username
+                });
+            }
+        }
+
+        function saveAndRender() {
+            // Save to Scoped Storage
+            const key = `player_characters_${currentUser.id}`;
+            const saved = JSON.parse(localStorage.getItem(key) || '[]');
+            const idx = saved.findIndex(c => c.id === character.id);
+            if (idx !== -1) {
+                saved[idx] = character;
+                localStorage.setItem(key, JSON.stringify(saved));
+            }
+            renderSheet();
+        }
+
+        function renderSheet() {
+            // Header
+            document.getElementById('char-name').textContent = character.name;
+            document.getElementById('char-summary').textContent = `Level ${character.level} ${character.race} ${character.class}`;
+
+            // Vitals
+            document.getElementById('val-ac').textContent = character.ac;
+            document.getElementById('val-init').textContent = (character.getModifier('dex') >= 0 ? '+' : '') + character.getModifier('dex');
+            document.getElementById('val-speed').textContent = character.speed;
+            document.getElementById('val-prof').textContent = `+${character.proficiencyBonus}`;
+
+            document.getElementById('val-hp-current').textContent = character.hp.current;
+            if (character.hp.current <= character.hp.max / 4) {
+                document.getElementById('val-hp-current').style.color = 'var(--danger)';
+            } else {
+                document.getElementById('val-hp-current').style.color = 'var(--primary-gold)';
+            }
+            document.getElementById('val-hp-max').textContent = character.hp.max;
+
+            // Stats
+            const statsContainer = document.getElementById('ability-scores-container');
+            statsContainer.innerHTML = '';
+
+            const stats = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
+            stats.forEach(stat => {
+                const val = character.stats[stat];
+                const mod = character.getModifier(stat);
+                const sign = mod >= 0 ? '+' : '';
+
+                statsContainer.innerHTML += `
+                    <div class="ability-card" onclick="rollStat('${stat}')" style="cursor: pointer;">
+                        <label style="text-transform: uppercase; font-size: 0.8rem; font-weight: bold;">${stat}</label>
+                        <div class="ability-mod-box">${sign}${mod}</div>
+                        <div class="ability-score-tiny">${val}</div>
+                    </div>
+                `;
+            });
+
+            // Skills
+            const skillsListAC = [
+                { id: 'acrobatics', stat: 'dex', label: 'Acrobatics' },
+                { id: 'athletics', stat: 'str', label: 'Athletics' },
+                { id: 'stealth', stat: 'dex', label: 'Stealth' },
+                { id: 'perception', stat: 'wis', label: 'Perception' },
+                { id: 'insight', stat: 'wis', label: 'Insight' },
+                { id: 'survival', stat: 'wis', label: 'Survival' },
+                { id: 'persuasion', stat: 'cha', label: 'Persuasion' }
+                // Add full list in production
+            ];
+
+            const skillsContainer = document.getElementById('skills-list');
+            skillsContainer.innerHTML = skillsListAC.map(skill => {
+                const mod = character.getSkillModifier(skill.id, skill.stat);
+                const isProf = character.proficiencies.has(skill.id);
+                return `
+                    <li class="skill-item" onclick="rollSkill('${skill.label}', ${mod})" style="cursor: pointer;">
+                        <span>
+                            <span style="color: ${isProf ? '#d4af37' : 'inherit'}">${isProf ? '●' : '○'}</span>
+                            ${skill.label} <span style="opacity: 0.6; font-size: 0.8em">(${skill.stat.toUpperCase()})</span>
+                        </span>
+                        <span class="skill-mod">${mod >= 0 ? '+' : ''}${mod}</span>
+                    </li>
+                `;
+            }).join('');
+
+            // Gold
+            document.getElementById('val-gold').value = character.currency.gp || 0;
+            document.getElementById('val-gold').onchange = (e) => {
+                character.currency.gp = parseInt(e.target.value);
+                saveAndRender();
+            };
+
+            // Inventory & Artifacts
+            const equip = character.equipment || [];
+            const gearList = equip.map((item, i) => ({ ...item, origIndex: i })).filter(i => i.type !== 'artifact');
+            const artList = equip.map((item, i) => ({ ...item, origIndex: i })).filter(i => i.type === 'artifact');
+
+            document.getElementById('inventory-list').innerHTML = gearList.map(item => `
+                <li class="skill-item">
+                    <span>${item.name} ${item.qty > 1 ? `x${item.qty}` : ''}</span>
+                    <button class="btn btn-tiny btn-danger" onclick="removeItem('item', ${item.origIndex})">&times;</button>
+                </li>
+            `).join('') || '<li class="text-muted">Empty bag...</li>';
+
+            document.getElementById('artifacts-list').innerHTML = artList.map(item => `
+                <li class="skill-item" style="border-color: var(--primary-gold);">
+                    <span style="color: var(--primary-gold); font-weight: bold;">★ ${item.name}</span>
+                    <button class="btn btn-tiny btn-danger" onclick="removeItem('item', ${item.origIndex})">&times;</button>
+                </li>
+            `).join('') || '<li class="text-muted">No artifacts yet.</li>';
+
+            // Spells
+            const spells = character.spells.known || [];
+            document.getElementById('spells-list').innerHTML = spells.map((spell, i) => `
+                <div class="skill-item">
+                    <span>${spell.name}</span>
+                    <button class="btn btn-tiny btn-danger" onclick="removeItem('spell', ${i})">&times;</button>
+                </div>
+            `).join('') || '<div class="text-muted">Grimoire is empty.</div>';
+        }
+
+        // Tab Switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                btn.classList.add('active');
+                document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+            });
+        });
+
+        // Listen for REST updates
+        document.getElementById('long-rest-btn').addEventListener('click', () => {
+            if (confirm('Take a long rest? Hits points will be restored.')) {
+                character.longRest();
+                saveAndRender();
+            }
+        });
+
+        init();
+    </script>
+</body>
+
+</html>

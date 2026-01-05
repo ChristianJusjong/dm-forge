@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Forge - Character Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="medieval-theme.css">
+    <link rel="stylesheet" href="player-app.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Nav inserted by nav.js -->
+
+        <main class="player-layout">
+            <div class="container fade-in">
+                <div class="page-header" style="text-align: center; margin-bottom: 3rem;">
+                    <div style="position: absolute; top: 1rem; right: 1rem;">
+                        <span id="user-display" style="margin-right: 1rem; color: var(--primary-gold);"></span>
+                        <button onclick="logout()" class="btn btn-tiny btn-secondary">Logout</button>
+                    </div>
+
+                    <h1 class="page-title">🛡️ Player Forge</h1>
+                    <p class="page-subtitle">Manage your heroes and legends</p>
+
+                    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                        <a href="character-creator.html" class="btn btn-primary btn-lg glow-effect">
+                            ⚔️ Create New Character
+                        </a>
+                        <button id="join-session-btn" class="btn btn-secondary btn-lg">
+                            🔗 Join Session
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Join Session Modal -->
+                <div id="join-modal" class="dice-modal-overlay" style="display: none;">
+                    <div class="dice-modal" style="text-align: center;">
+                        <div class="dice-header">
+                            <h2>Join Campaign</h2>
+                            <button id="close-join-modal" class="close-btn">&times;</button>
+                        </div>
+                        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Enter the Campaign Code provided by
+                            your
+                            DM.</p>
+
+                        <div class="input-group">
+                            <input type="text" id="campaign-code-input" class="input" placeholder="XXXX-XXXX"
+                                style="text-align: center; font-family: monospace; font-size: 1.5rem; letter-spacing: 2px; text-transform: uppercase;">
+                        </div>
+
+                        <button id="connect-btn" class="btn btn-primary"
+                            style="width: 100%; margin-top: 1rem;">Connect</button>
+                    </div>
+                </div>
+
+                <div id="character-list" class="char-grid">
+                    <!-- Characters injected here -->
+                </div>
+
+                <div id="empty-state" class="empty-state" style="display: none;">
+                    <div class="empty-state-icon">📜</div>
+                    <h3>No Characters Found</h3>
+                    <p>The chronicles are empty. Forge a new hero to begin!</p>
+                </div>
+        </main>
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="storage-utils.js"></script>
+    <script src="auth.js"></script>
+    <script type="module">
+        import { Character } from './character-model.js';
+
+        // Auth Check
+        if (!requireAuth()) {
+            // requireAuth handles redirect, but let's make sure it includes the return param
+            // Actually requireAuth just goes to login.html. We might need to override it or manually check here.
+            // Since we can't easily modify auth.js without affecting other pages, we'll double check:
+            if (!isLoggedIn()) {
+                window.location.href = 'login.html?redirect=player-dashboard.html';
+            }
+        }
+
+        const currentUser = getCurrentUser();
+        if (currentUser) {
+            document.getElementById('user-display').textContent = `👤 ${currentUser.username}`;
+        }
+
+        const display = document.getElementById('user-display');
+        if (display) display.textContent = `👤 ${currentUser.username}`;
+        }
+
+        function getStorageKey() {
+            return `player_characters_${currentUser.id}`;
+        }
+
+        function loadCharacters() {
+            const key = getStorageKey();
+            const saved = localStorage.getItem(key);
+            const characters = saved ? JSON.parse(saved) : [];
+
+            const listEl = document.getElementById('character-list');
+            const emptyEl = document.getElementById('empty-state');
+
+            if (characters.length === 0) {
+                if (listEl) listEl.innerHTML = '';
+                if (emptyEl) emptyEl.style.display = 'block';
+            } else {
+                if (emptyEl) emptyEl.style.display = 'none';
+                if (listEl) {
+                    listEl.innerHTML = characters.map(char => `
+                        <div class="char-card" data-id="${char.id}">
+                            <div class="char-card-header">
+                                <h3>${char.name}</h3>
+                                <div style="font-size: 0.9em; opacity: 0.9;">
+                                    Lvl ${char.level} ${char.race} ${char.class}
+                                </div>
+                            </div>
+                            <div class="char-card-body">
+                                <div class="char-summary">
+                                    <span>Background: ${char.background || 'Unknown'}</span>
+                                </div>
+                                
+                                <div class="char-stats-preview">
+                                    ${Object.entries(char.stats).map(([stat, val]) => {
+                        const mod = Math.floor((val - 10) / 2);
+                        return `
+                                            <div class="stat-box-mini">
+                                                <span class="stat-label-mini">${stat}</span>
+                                                <span class="stat-val-mini">${val}</span>
+                                                <span style="font-size:0.7em; color:${mod >= 0 ? '#4caf50' : '#f44336'}">
+                                                    ${mod >= 0 ? '+' : ''}${mod}
+                                                </span>
+                                            </div>
+                                        `;
+                    }).join('')}
+                                </div>
+                                
+                                <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="font-weight: bold; color: var(--primary-gold);">
+                                        HP: ${char.hp.current} / ${char.hp.max}
+                                    </div>
+                                    <button class="btn btn-secondary btn-sm delete-btn" data-id="${char.id}">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    // Bind Events
+                    document.querySelectorAll('.char-card').forEach(card => {
+                        card.addEventListener('click', (e) => {
+                            if (e.target.closest('.delete-btn')) return;
+                            const id = card.dataset.id;
+                            const pendingCode = sessionStorage.getItem('pending_join_code');
+
+                            let url = `character-sheet.html?id=${id}`;
+                            if (pendingCode) {
+                                url += `&session=${pendingCode}`;
+                                sessionStorage.removeItem('pending_join_code');
+                            }
+                            window.location.href = url;
+                        });
+                    });
+
+                    document.querySelectorAll('.delete-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            if (confirm('Delete this character?')) {
+                                const id = parseFloat(e.target.dataset.id);
+                                const newChars = characters.filter(c => c.id !== id);
+                                localStorage.setItem(key, JSON.stringify(newChars));
+                                loadCharacters();
+                            }
+                        });
+                    });
+                }
+            }
+        }
+
+        window.addEventListener('load', () => {
+            loadCharacters();
+
+            // Join Modal Logic
+            const joinBtn = document.getElementById('join-session-btn');
+            const modal = document.getElementById('join-modal');
+            const closeBtn = document.getElementById('close-join-modal');
+            const connectBtn = document.getElementById('connect-btn');
+            const codeInput = document.getElementById('campaign-code-input');
+
+            if (joinBtn) {
+                joinBtn.addEventListener('click', () => {
+                    if (modal) {
+                        modal.style.display = 'flex';
+                        setTimeout(() => modal.classList.add('active'), 10);
+                        if (codeInput) codeInput.focus();
+                    }
+                });
+            }
+
+            const closeModal = () => {
+                if (modal) {
+                    modal.classList.remove('active');
+                    setTimeout(() => modal.style.display = 'none', 300);
+                }
+            };
+
+            if (closeBtn) closeBtn.addEventListener('click', closeModal);
+            if (modal) modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+
+            if (connectBtn) {
+                connectBtn.addEventListener('click', () => {
+                    const code = codeInput.value.trim().toUpperCase();
+                    if (!code.match(/^[A-Z0-9]{4}-[A-Z0-9]{4}$/)) {
+                        alert('Invalid code format. Expected: XXXX-XXXX');
+                        return;
+                    }
+                    sessionStorage.setItem('pending_join_code', code);
+                    alert('Code accepted! Select a character to join with.');
+                    closeModal();
+
+                    document.querySelectorAll('.char-card').forEach(card => {
+                        card.style.borderColor = 'var(--success)';
+                        card.style.animation = 'pulse 2s infinite';
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

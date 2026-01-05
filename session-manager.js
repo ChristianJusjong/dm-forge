@@ -1,128 +1,167 @@
-import { db } from './cloud-store.js';
-
 /**
- * SESSION MANAGER
- * Orchestrates saving/loading of the entire game table state.
- * Bundles: Initiative Tracker, Session Notes, Active Campaign state.
+ * session-manager.js
+ * Handles real-time synchronization between DM and Players using PeerJS (WebRTC).
+ * Enables cross-device connection without a custom backend.
  */
 
+// Import PeerJS from ESM CDN
+import Peer from 'https://esm.sh/peerjs@1.5.4?bundle-deps';
+
 export class SessionManager {
-    constructor() {
-        console.log('📜 SessionManager initialized');
+    constructor(role, campaignCode) {
+        this.role = role; // 'host' (DM) or 'client' (Player)
+        this.campaignCode = campaignCode;
+        this.peer = null;
+        this.conn = null; // For Client: connection to Host
+        this.connections = []; // For Host: list of Player connections
+        this.listeners = [];
+
+        // Generate a clean ID for the host based on campaign code
+        // ID must be alphanumeric/dashes. Campaign code is already XXXX-XXXX.
+        // Prefix with 'dm-forge-' to ensure uniqueness in PeerJS public server
+        this.hostId = `dm-forge-${this.campaignCode.replace(/[^a-zA-Z0-9-]/g, '')}`;
     }
 
-    /**
-     * Save the current active session state completely
-     * @param {string} sessionId - ID of the session
-     * @param {string} notes - Optional closing notes
-     */
-    async saveSessionState(sessionId, notes = '') {
-        console.log(`💾 Saving session state for ${sessionId}...`);
+    async connect() {
+        if (!this.campaignCode) {
+            console.error("SessionManager: No campaign code provided.");
+            return;
+        }
 
-        // 1. Gather all local state
-        const initiativeData = safeLocalStorageGet('initiative_tracker', { combatants: [], round: 1 });
-        const encounterData = safeLocalStorageGet('encounters', []); // All saved encounters
-        const partyData = safeLocalStorageGet('party_members', []);
-        const sessionNotesData = safeLocalStorageGet('session_notes', []); // Capture the actual notes
+        console.log(`📡 [${this.role}] Initializing PeerJS...`);
 
-        // 2. Identify active campaign
-        const currentUser = safeLocalStorageGet('dm_codex_current_user');
-        if (!currentUser) throw new Error('User not logged in');
+        if (this.role === 'host') {
+            await this.initHost();
+        } else {
+            await this.initClient();
+        }
+    }
 
-        const campaigns = safeLocalStorageGet('dm_codex_campaigns', []);
-        const activeCampaign = campaigns.find(c => c.dmId === currentUser.id); // Simplified lookup
+    initHost() {
+        // Host tries to open the specific Peer ID
+        this.peer = new Peer(this.hostId, {
+            debug: 2
+        });
 
-        // 3. Construct the session bundle
-        const sessionSnapshot = {
-            id: sessionId,
-            campaignId: activeCampaign ? activeCampaign.id : 'unknown',
-            dmId: currentUser.id,
-            timestamp: Date.now(),
-            status: 'active', // or 'closed'
-            closingNotes: notes,
+        this.peer.on('open', (id) => {
+            console.log(`✅ [Host] Session Active. Peer ID: ${id}`);
+            console.log(`🔗 Players can join with Campaign Code: ${this.campaignCode}`);
+        });
 
-            // The "State"
-            state: {
-                initiative: initiativeData,
-                party: partyData,
-                sessionNotes: sessionNotesData,
-                // We don't save ALL encounters, just the potentially active ones or reference to them
-                // For simplicity in Vercel/Local version, we snapshot pending combat
-                activeCombat: initiativeData.combatants.length > 0
+        this.peer.on('connection', (conn) => {
+            console.log(`🤝 [Host] Incoming connection from: ${conn.peer}`);
+            this.handleConnection(conn);
+        });
+
+        this.peer.on('error', (err) => {
+            console.error('PeerJS Error:', err);
+            if (err.type === 'unavailable-id') {
+                console.warn('⚠️ Session ID already taken. Are you already hosting in another tab?');
             }
+        });
+    }
+
+    initClient() {
+        // Client gets a random ID
+        this.peer = new Peer(null, {
+            debug: 2
+        });
+
+        this.peer.on('open', (id) => {
+            console.log(`👤 [Client] Peer ID: ${id}`);
+            console.log(`⏳ Connecting to Host: ${this.hostId}...`);
+
+            const conn = this.peer.connect(this.hostId, {
+                reliable: true
+            });
+
+            this.handleConnection(conn);
+        });
+
+        this.peer.on('error', (err) => {
+            console.error('PeerJS Error:', err);
+            if (err.type === 'peer-unavailable') {
+                alert('❌ Could not find the Session Host. \n\nEnsure the DM has the Campaign open and the code is correct.');
+            }
+        });
+    }
+
+    handleConnection(conn) {
+        if (this.role === 'host') {
+            this.connections.push(conn);
+        } else {
+            this.conn = conn; // Client only has one connection (to host)
+        }
+
+        conn.on('open', () => {
+            console.log(`🔗 Connected to: ${conn.peer}`);
+
+            // If Client, send JOIN message immediately
+            if (this.role === 'client') {
+                this.send('PLAYER_JOIN', {
+                    peerId: this.peer.id,
+                    userAgent: navigator.userAgent
+                });
+            }
+        });
+
+        conn.on('data', (data) => {
+            console.log(`📥 Received:`, data);
+
+            // If Host receives data, verify/broadcast it?
+            // For now, Host just listens.
+            // But if Host wants to echo to other players, it could.
+
+            if (data && data.type) {
+                this.notifyListeners(data.type, data.payload);
+            }
+        });
+
+        conn.on('close', () => {
+            console.log(`🔌 Connection closed: ${conn.peer}`);
+            if (this.role === 'host') {
+                this.connections = this.connections.filter(c => c !== conn);
+            }
+        });
+    }
+
+    send(type, payload = {}) {
+        const message = {
+            type,
+            payload,
+            timestamp: Date.now()
         };
 
-        // 4. Persist via CloudStore (abstraction)
-        await db.setDoc('sessions', sessionId, sessionSnapshot);
-        console.log('✅ Session saved successfully');
-        return true;
+        if (this.role === 'client') {
+            if (this.conn && this.conn.open) {
+                this.conn.send(message);
+            } else {
+                console.warn('⚠️ Cannot send, connection not open.');
+            }
+        } else {
+            // Host Broadcasts to ALL
+            this.connections.forEach(conn => {
+                if (conn.open) {
+                    conn.send(message);
+                }
+            });
+        }
     }
 
-    /**
-     * Close the current session (Save & Reset)
-     */
-    async closeSession(sessionId, summaryNotes) {
-        // 1. Final Save
-        const sessionData = await this.saveSessionState(sessionId, summaryNotes);
-
-        // 2. Mark as closed
-        await db.updateDoc('sessions', sessionId, { status: 'closed', endedAt: Date.now() });
-
-        // 3. Update Campaign "Last Session" pointer
-        // (In a real DB this would be a transaction)
-
-        // 4. Clear the "Board" (Initiative Tracker) but keep Party
-        localStorage.removeItem('initiative_tracker');
-        // We DO want to clear session notes so the next session starts fresh (or user creates a new one)
-        // However, users might prefer to keep them. "Closing" implies wrapping up.
-        // Let's clear them to enforce the "Episode" structure requested.
-        localStorage.removeItem('session_notes');
-        // We keep 'party_members' because the party persists between sessions
-        // We keep 'encounters' library because that's a library, not state
-
-        console.log('🚪 Session closed and board cleared');
-        return true;
+    onMessage(callback) {
+        this.listeners.push(callback);
     }
 
-    /**
-     * Restore a previous session
-     * @param {string} sessionId 
-     */
-    async restoreSession(sessionId) {
-        console.log(`📂 Restoring session ${sessionId}...`);
-
-        // 1. Fetch data
-        const session = await db.getDoc('sessions', sessionId);
-        if (!session) throw new Error('Session not found');
-
-        // 2. Hydrate LocalStorage
-        if (session.state.initiative) {
-            safeLocalStorageSet('initiative_tracker', session.state.initiative);
-        }
-
-        if (session.state.party) {
-            // Optional: Ask if they want to overwrite current party?
-            // For now, we restore it to ensure consistency with that session
-            safeLocalStorageSet('party_members', session.state.party);
-        }
-
-        if (session.state.sessionNotes) {
-            safeLocalStorageSet('session_notes', session.state.sessionNotes);
-        }
-
-        console.log('✅ Session restored. Redirecting...');
-        return true;
+    notifyListeners(type, payload) {
+        this.listeners.forEach(cb => cb(type, payload));
     }
 
-    /**
-     * Get list of all sessions for current campaign
-     */
-    async getSessionHistory() {
-        // This query filter relies on the simple implementation in cloud-store.js
-        // In a real DB, we'd query by 'campaignId'
-        const allSessions = await db.getCollection('sessions');
-        return allSessions.sort((a, b) => b.timestamp - a.timestamp);
+    disconnect() {
+        if (this.peer) {
+            this.peer.destroy();
+            this.peer = null;
+        }
+        this.connections = [];
+        this.conn = null;
     }
 }
-
-export const sessionManager = new SessionManager();

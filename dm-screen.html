@@ -57,10 +57,36 @@
         <span class="tab-icon">📝</span>
         <span class="tab-label" data-i18n="notes">Notes</span>
       </button>
+      <button class="tab-button" data-tab="players">
+        <span class="tab-icon">👥</span>
+        <span class="tab-label">Players</span>
+      </button>
     </nav>
 
     <!-- Tab Content Container -->
     <main class="tab-content">
+
+      <!-- Live Players Tab -->
+      <div id="tab-players" class="tab-pane">
+        <div class="initiative-tracker">
+          <div class="tracker-header">
+            <h2>👥 Live Party Dashboard</h2>
+            <div class="combat-info">
+              <span style="font-size: 0.9rem; opacity: 0.8;">Campaign Code: <strong id="display-campaign-code"
+                  style="color: var(--primary-gold); font-family: monospace; font-size: 1.2rem;">LOADING...</strong></span>
+            </div>
+          </div>
+
+          <div id="live-party-list" class="encounters-list" style="margin-top: 1rem;">
+            <!-- Live Players Rendered Here -->
+          </div>
+
+          <div id="no-players" class="empty-state">
+            <p>Waiting for heroes to join...</p>
+            <small style="opacity: 0.6;">Share the Campaign Code with your players.</small>
+          </div>
+        </div>
+      </div>
 
       <!-- Initiative Tracker Tab -->
       <div id="tab-initiative" class="tab-pane active">
@@ -1517,9 +1543,86 @@ Format as clear sections. Be creative and specific!`;
   </script>
   <script type="module">
                 import { InitiativeTracker } from './initiative-tracker.js';
+                import { SessionManager } from './session-manager.js';
 
                 // Initialize Tracker for DM Screen
                 window.addEventListener('load', () => {
+                  // Session Hosting
+                  const campaignCode = localStorage.getItem('activeCampaignCode');
+                  const campaignDisplay = document.getElementById('display-campaign-code');
+                  if (campaignDisplay && campaignCode) campaignDisplay.textContent = campaignCode;
+
+                  const livePlayers = new Map(); // Store player data: { id -> {name, hp, ac, ...} }
+
+                  if (campaignCode) {
+                    const session = new SessionManager('host', campaignCode);
+                    session.connect();
+                    window.sessionManager = session;
+
+                    // Listen for players
+                    session.onMessage((type, payload) => {
+                      if (type === 'PLAYER_JOIN') {
+                        console.log(`Player joined: ${payload.peerId}`);
+                        // Request full update from new player? 
+                        // For now, they will send CHARACTER_UPDATE on join automatically
+                      }
+
+                      if (type === 'CHARACTER_UPDATE') {
+                        livePlayers.set(payload.id, payload);
+                        renderLivePlayers();
+                      }
+                    });
+                  }
+
+                  function renderLivePlayers() {
+                    const list = document.getElementById('live-party-list');
+                    const empty = document.getElementById('no-players');
+
+                    if (livePlayers.size === 0) {
+                      if (list) list.innerHTML = '';
+                      if (empty) empty.style.display = 'block';
+                      return;
+                    }
+
+                    if (empty) empty.style.display = 'none';
+                    if (list) {
+                      list.innerHTML = Array.from(livePlayers.values()).map(p => `
+                            <div class="encounter-item" style="display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--primary-gold);">
+                                <div>
+                                    <h3>${p.name}</h3>
+                                    <div style="font-size: 0.9em; opacity: 0.8;">
+                                        Lvl ${p.level} ${p.class} | AC: <strong style="color: var(--accent-blue);">${p.ac}</strong>
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-weight: bold; font-size: 1.2em; color: ${p.hp.current < p.hp.max / 2 ? 'var(--love-red)' : 'var(--success)'};">
+                                        HP: ${p.hp.current} <span style="font-size: 0.8em; opacity: 0.6;">/ ${p.hp.max}</span>
+                                    </div>
+                                    <button class="btn btn-tiny btn-secondary add-live-combatant" data-id="${p.id}">+ Initiative</button>
+                                </div>
+                            </div>
+                          `).join('');
+
+                      // Bind "Add to Initiative" buttons
+                      list.querySelectorAll('.add-live-combatant').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                          const pid = parseInt(e.target.dataset.id);
+                          const p = livePlayers.get(pid);
+                          if (p) {
+                            tracker.addCombatant({
+                              name: p.name,
+                              hp: p.hp.max, // Add with Max HP? Or Current? Usually start combat fresh or current
+                              ac: p.ac,
+                              initiative: Math.floor(Math.random() * 20) + 1 // Random init for now
+                            });
+                            alert(`${p.name} added to Initiative!`);
+                            tracker.render(document.getElementById('combatants-list'));
+                          }
+                        });
+                      });
+                    }
+                  }
+
                   const tracker = new InitiativeTracker({
                     containerId: 'combatants-list',
                     noCombatantsId: 'no-combatants'

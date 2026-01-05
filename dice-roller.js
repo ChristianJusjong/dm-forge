@@ -19,6 +19,8 @@ export class GlobalDiceRoller {
 
     init() {
         if (document.getElementById('global-dice-roller-fab')) return; // Already exists
+        if (window.globalDiceRoller) return; // Prevent double init
+        window.globalDiceRoller = this;
 
         this.injectCSS();
         this.injectHTML();
