@@ -34,11 +34,19 @@
         Encounter</button>
 
       <div id="encounters-list" class="encounters-grid">
-        <!-- Encounters will be rendered here -->
-      </div>
-
-      <div id="no-encounters" class="empty-state" style="display: none;">
-        <p>No encounters yet. Create your first encounter!</p>
+        <!-- Empty State -->
+        <div id="no-encounters" class="empty-state"
+          style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; background: rgba(0,0,0,0.2); border-radius: var(--border-radius-lg); border: 2px dashed var(--color-gold-light);">
+          <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.7;">⚔️</div>
+          <h3 class="text-gold" style="margin-bottom: 0.5rem;">No Encounters Yet</h3>
+          <p
+            style="color: var(--color-parchment); margin-bottom: 1.5rem; max-width: 500px; margin-left: auto; margin-right: auto;">
+            Create balanced combat scenarios for your party. We'll track initiative, HP, and XP automatically.
+          </p>
+          <button class="btn btn-primary" onclick="showCreateModal()">
+            <span class="icon">➕</span> Create First Encounter
+          </button>
+        </div>
       </div>
 
       <!-- New Encounter Modal -->

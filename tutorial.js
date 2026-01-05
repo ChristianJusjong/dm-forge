@@ -15,6 +15,9 @@ const STEPS = {
     COMPLETED: 'completed'
 };
 
+// Integration with Help System
+import { initHelpSystem } from './help-system.js';
+
 // Get current state
 function getTutorialState() {
     return localStorage.getItem(TUTORIAL_KEY) || STEPS.WELCOME;

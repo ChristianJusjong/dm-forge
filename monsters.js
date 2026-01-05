@@ -8,88 +8,96 @@ let monsters = [];
 let currentMonster = null;
 
 export function initMonsters() {
-    // Event listeners
-    document.getElementById('search-btn').addEventListener('click', searchMonsters);
-    document.getElementById('monster-search').addEventListener('keyup', (e) => {
-        if (e.key === 'Enter') searchMonsters();
-    });
-    document.getElementById('close-modal-btn').addEventListener('click', closeModal);
-    document.getElementById('monster-modal').addEventListener('click', (e) => {
-        if (e.target.id === 'monster-modal') closeModal();
-    });
+  // Event listeners
+  document.getElementById('search-btn').addEventListener('click', searchMonsters);
+  document.getElementById('monster-search').addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') searchMonsters();
+  });
+  document.getElementById('close-modal-btn').addEventListener('click', closeModal);
+  document.getElementById('monster-modal').addEventListener('click', (e) => {
+    if (e.target.id === 'monster-modal') closeModal();
+  });
 
-    // Load initial monsters
-    searchMonsters();
+  // Load initial monsters
+  searchMonsters();
 }
 
 async function searchMonsters() {
-    const searchTerm = document.getElementById('monster-search').value.trim();
-    const grid = document.getElementById('monsters-grid');
-    const loading = document.getElementById('loading');
-    const noMonsters = document.getElementById('no-monsters');
+  const searchTerm = document.getElementById('monster-search').value.trim();
+  const grid = document.getElementById('monsters-grid');
+  const loading = document.getElementById('loading');
+  const noMonsters = document.getElementById('no-monsters');
 
-    grid.innerHTML = '';
-    loading.style.display = 'block';
-    noMonsters.style.display = 'none';
+  grid.innerHTML = '';
+  loading.style.display = 'block';
+  noMonsters.style.display = 'none';
 
-    try {
-        const url = searchTerm
-            ? `https://api.open5e.com/v1/monsters/?search=${encodeURIComponent(searchTerm)}&limit=50`
-            : 'https://api.open5e.com/v1/monsters/?limit=50';
+  try {
+    const url = searchTerm
+      ? `https://api.open5e.com/v1/monsters/?search=${encodeURIComponent(searchTerm)}&limit=50`
+      : 'https://api.open5e.com/v1/monsters/?limit=50';
 
-        const response = await fetch(url);
-        if (!response.ok) throw new Error('API Error');
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('API Error');
 
-        const data = await response.json();
-        monsters = sortMonsters(data.results, searchTerm);
+    const data = await response.json();
+    monsters = sortMonsters(data.results, searchTerm);
 
-        loading.style.display = 'none';
+    loading.style.display = 'none';
 
-        if (monsters.length === 0) {
-            noMonsters.style.display = 'block';
-            return;
-        }
-
-        renderMonsters();
-
-    } catch (error) {
-        loading.style.display = 'none';
-        grid.innerHTML = `<div class="error-message">Error loading monsters: ${error.message}. Try again later.</div>`;
+    if (monsters.length === 0) {
+      noMonsters.style.display = 'block';
+      noMonsters.innerHTML = `
+        <div style="text-align: center; padding: 3rem; color: var(--color-parchment-dark);">
+          <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;">🐉</div>
+          <h3>The Bestiary is Empty</h3>
+          <p>No monsters matched your search.</p>
+          <p style="font-size: 0.9em; opacity: 0.8;">Try searching for generic terms like "Dragon", "Goblin", or "Undead".</p>
+        </div>
+      `;
+      return;
     }
+
+    renderMonsters();
+
+  } catch (error) {
+    loading.style.display = 'none';
+    grid.innerHTML = `<div class="error-message">Error loading monsters: ${error.message}. Try again later.</div>`;
+  }
 }
 
 function sortMonsters(monsters, searchTerm) {
-    if (!searchTerm) return monsters;
-    const term = searchTerm.toLowerCase();
-    return monsters.sort((a, b) => {
-        const nameA = a.name.toLowerCase();
-        const nameB = b.name.toLowerCase();
+  if (!searchTerm) return monsters;
+  const term = searchTerm.toLowerCase();
+  return monsters.sort((a, b) => {
+    const nameA = a.name.toLowerCase();
+    const nameB = b.name.toLowerCase();
 
-        // Exact match
-        if (nameA === term && nameB !== term) return -1;
-        if (nameB === term && nameA !== term) return 1;
+    // Exact match
+    if (nameA === term && nameB !== term) return -1;
+    if (nameB === term && nameA !== term) return 1;
 
-        // Starts with
-        if (nameA.startsWith(term) && !nameB.startsWith(term)) return -1;
-        if (nameB.startsWith(term) && !nameA.startsWith(term)) return 1;
+    // Starts with
+    if (nameA.startsWith(term) && !nameB.startsWith(term)) return -1;
+    if (nameB.startsWith(term) && !nameA.startsWith(term)) return 1;
 
-        // Contains in name
-        if (nameA.includes(term) && !nameB.includes(term)) return -1;
-        if (nameB.includes(term) && !nameA.includes(term)) return 1;
+    // Contains in name
+    if (nameA.includes(term) && !nameB.includes(term)) return -1;
+    if (nameB.includes(term) && !nameA.includes(term)) return 1;
 
-        return 0;
-    });
+    return 0;
+  });
 }
 
 function renderMonsters() {
-    const grid = document.getElementById('monsters-grid');
+  const grid = document.getElementById('monsters-grid');
 
-    grid.innerHTML = monsters.map(monster => {
-        const dndBeyondSlug = monster.name.toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/^-|-$/g, '');
+  grid.innerHTML = monsters.map(monster => {
+    const dndBeyondSlug = monster.name.toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
 
-        return `
+    return `
       <div class="monster-card" data-slug="${monster.slug}">
         <h3>${monster.name}</h3>
         <p class="monster-meta">
@@ -109,50 +117,50 @@ function renderMonsters() {
         </div>
       </div>
     `;
-    }).join('');
+  }).join('');
 
-    // Add click listeners
-    document.querySelectorAll('.monster-card').forEach(card => {
-        card.addEventListener('click', () => {
-            const slug = card.dataset.slug;
-            const monster = monsters.find(m => m.slug === slug);
-            if (monster) showMonsterDetails(monster);
-        });
+  // Add click listeners
+  document.querySelectorAll('.monster-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const slug = card.dataset.slug;
+      const monster = monsters.find(m => m.slug === slug);
+      if (monster) showMonsterDetails(monster);
     });
+  });
 }
 
 async function showMonsterDetails(monster) {
-    currentMonster = monster;
+  currentMonster = monster;
 
-    // Show modal immediately
-    document.getElementById('monster-modal').style.display = 'flex';
-    document.getElementById('monster-name').textContent = monster.name;
-    document.getElementById('monster-type').textContent = `${monster.size} ${monster.type}, ${monster.alignment}`;
+  // Show modal immediately
+  document.getElementById('monster-modal').style.display = 'flex';
+  document.getElementById('monster-name').textContent = monster.name;
+  document.getElementById('monster-type').textContent = `${monster.size} ${monster.type}, ${monster.alignment}`;
 
-    document.getElementById('monster-ac').textContent = monster.armor_class;
-    document.getElementById('monster-hp').textContent = `${monster.hit_points} (${monster.hit_dice})`;
-    document.getElementById('monster-cr').textContent = monster.challenge_rating;
+  document.getElementById('monster-ac').textContent = monster.armor_class;
+  document.getElementById('monster-hp').textContent = `${monster.hit_points} (${monster.hit_dice})`;
+  document.getElementById('monster-cr').textContent = monster.challenge_rating;
 
-    try {
-        // Keep ALL monster content in English (names AND descriptions)
-        let abilities = [];
-        if (monster.special_abilities && monster.special_abilities.length > 0) {
-            abilities = monster.special_abilities.slice(0, 5).map(ability => ({
-                name: ability.name,
-                desc: ability.desc
-            }));
-        }
+  try {
+    // Keep ALL monster content in English (names AND descriptions)
+    let abilities = [];
+    if (monster.special_abilities && monster.special_abilities.length > 0) {
+      abilities = monster.special_abilities.slice(0, 5).map(ability => ({
+        name: ability.name,
+        desc: ability.desc
+      }));
+    }
 
-        let actions = [];
-        if (monster.actions && monster.actions.length > 0) {
-            actions = monster.actions.slice(0, 5).map(action => ({
-                name: action.name,
-                desc: action.desc
-            }));
-        }
+    let actions = [];
+    if (monster.actions && monster.actions.length > 0) {
+      actions = monster.actions.slice(0, 5).map(action => ({
+        name: action.name,
+        desc: action.desc
+      }));
+    }
 
-        // Build stats display
-        const stats = `
+    // Build stats display
+    const stats = `
       <div class="card">
         <h4 class="section-title">Ability Scores</h4>
         <div class="ability-score-grid">
@@ -192,21 +200,21 @@ async function showMonsterDetails(monster) {
       ` : ''}
     `;
 
-        document.getElementById('monster-stats').innerHTML = stats;
+    document.getElementById('monster-stats').innerHTML = stats;
 
-    } catch (error) {
-        console.error('Error displaying monster details:', error);
-        document.getElementById('monster-stats').innerHTML = '<p class="text-danger text-shadow-sm">Error loading monster details. Please try again.</p>';
-    }
+  } catch (error) {
+    console.error('Error displaying monster details:', error);
+    document.getElementById('monster-stats').innerHTML = '<p class="text-danger text-shadow-sm">Error loading monster details. Please try again.</p>';
+  }
 
-    // Set D&D Beyond link
-    const dndBeyondSlug = monster.name.toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '');
-    document.getElementById('dndbeyond-link').href = `https://www.dndbeyond.com/monsters/${dndBeyondSlug}`;
+  // Set D&D Beyond link
+  const dndBeyondSlug = monster.name.toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+  document.getElementById('dndbeyond-link').href = `https://www.dndbeyond.com/monsters/${dndBeyondSlug}`;
 }
 
 function closeModal() {
-    document.getElementById('monster-modal').style.display = 'none';
-    currentMonster = null;
+  document.getElementById('monster-modal').style.display = 'none';
+  currentMonster = null;
 }

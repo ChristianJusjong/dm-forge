@@ -97,16 +97,21 @@ function updateTranslations() {
 }
 
 // Initialize navigation bar
+import { initHelpSystem } from './help-system.js';
+
 function initializeNav() {
   const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
+  // Initialize Help System
+  initHelpSystem();
 
   const navHTML = `
     <nav class="main-nav">
       <div class="nav-container">
         <!-- Brand/Logo -->
         <a href="dashboard.html" class="nav-brand">
-          <img src="logo-icon.svg" alt="Dungeon Master Forge" style="width: 32px; height: 32px; margin-right: 0.5rem;">
-          <span>Dungeon Master Forge</span>
+          <img src="logo-icon.svg" alt="Dungeon Master Forge" class="nav-logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZDRhZjM3IiBzdHJva2Utd2lkdGg9IjIiPjxwYXRoIGQ9Ik0xMiAyTDIgN2wxMCA1IDEwLTUtMTAtNXpNMiAxN2wxMCA1IDEwLTVNMTIgMTJsLTEwIDUgMTAgNSAxMC01LTEwLTV6Ii8+PC9zdmc+'">
+          <span class="brand-text">DM Forge</span>
         </a>
 
         <!-- Mobile Toggle -->
@@ -115,15 +120,23 @@ function initializeNav() {
         </button>
 
         <!-- Navigation Links -->
-        <ul class="nav-links" id="nav-links">
-          <li><a href="configuration.html" class="nav-link ${currentPage === 'configuration.html' ? 'active' : ''}" data-i18n="configuration">Configuration</a></li>
-          <li><a href="initiative.html" class="nav-link ${currentPage === 'initiative.html' ? 'active' : ''}" data-i18n="initiative">Initiative</a></li>
-          <li><a href="encounters.html" class="nav-link ${currentPage === 'encounters.html' ? 'active' : ''}" data-i18n="encounters">Encounters</a></li>
-          <li><a href="monsters.html" class="nav-link ${currentPage === 'monsters.html' ? 'active' : ''}" data-i18n="monsters">Monsters</a></li>
-          <li><a href="npcs.html" class="nav-link ${currentPage === 'npcs.html' ? 'active' : ''}" data-i18n="npcs">NPCs</a></li>
-          <li><a href="inspiration.html" class="nav-link ${currentPage === 'inspiration.html' ? 'active' : ''}" data-i18n="inspiration">Inspiration</a></li>
-          <li><a href="notes.html" class="nav-link ${currentPage === 'notes.html' ? 'active' : ''}" data-i18n="notes">Notes</a></li>
-        </ul>
+        <div class="nav-links" id="nav-links">
+          <a href="dashboard.html" class="nav-link ${currentPage === 'dashboard.html' ? 'active' : ''}">
+            <span class="icon">📊</span> ${t('dashboard')}
+          </a>
+          <a href="monsters.html" class="nav-link ${currentPage === 'monsters.html' ? 'active' : ''}">
+            <span class="icon">🐉</span> ${t('monsters')}
+          </a>
+          <a href="encounters.html" class="nav-link ${currentPage === 'encounters.html' ? 'active' : ''}">
+            <span class="icon">⚔️</span> ${t('encounters')}
+          </a>
+          <a href="dm-screen.html" class="nav-link ${currentPage === 'dm-screen.html' ? 'active' : ''}">
+            <span class="icon">🛡️</span> ${t('dmScreen')}
+          </a>
+          <a href="notes.html" class="nav-link ${currentPage === 'notes.html' ? 'active' : ''}">
+             <span class="icon">📝</span> ${t('notes')}
+          </a>
+        </div>
 
         <!-- Controls -->
         <div class="nav-controls">
